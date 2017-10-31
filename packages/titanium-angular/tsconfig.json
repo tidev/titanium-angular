@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitUseStrict": true,
+        "declaration": true,
+        "removeComments": false,
+        "noEmitOnError": true,
+        "noImplicitAny": false,
+        "lib": [
+            "dom",
+            "es6",
+            "es2015"
+        ],
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "typeRoots": [
+            "./node_modules/@types/",
+            "./node_modules/types-titanium"
+        ]
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "angularCompilerOptions": {
+        "genDir": "aot",
+        "skipMetadataEmit": false,
+        "skipTemplateCodegen": true,
+        "strictMetadataEmit": true
+    }
+}
