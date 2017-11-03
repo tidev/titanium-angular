@@ -87,8 +87,10 @@ export class TitaniumRenderer extends Renderer2 {
         console.log(`TitaniumRenderer.nextSibling`);
     }
 
-    setAttribute(el: any, name: string, value: string, namespace?: string | null): void {
+    setAttribute(el: ElementNode, name: string, value: string, namespace?: string | null): void {
         console.log(`TitaniumRenderer.setAttribute(${el}, ${name}, ${value})`);
+        // @todo consider namespace
+        el.setAttribute(name, value);
     }
 
     removeAttribute(el: any, name: string, namespace?: string | null): void {
@@ -119,8 +121,11 @@ export class TitaniumRenderer extends Renderer2 {
         console.log(`TitaniumRenderer.setValue`);
     }
 
-    listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void {
-        console.log(`TitaniumRenderer.listen`);
-        return null;
+    listen(target: ElementNode, eventName: string, callback: (event: any) => boolean | void): () => void {
+        console.log(`TitaniumRenderer.listen ${eventName}`);
+
+        target.on(eventName, callback);
+
+        return () => target.off(eventName, callback);
     }
 }

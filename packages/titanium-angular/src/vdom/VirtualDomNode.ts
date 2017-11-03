@@ -110,6 +110,8 @@ export class ElementNode extends AbstractNode {
 
     attributes: Map<string, any>;
 
+    events: Map<string, Set<Function>>;
+
     styles: Map<string, any>;
 
     constructor(nodeName: string) {
@@ -117,14 +119,42 @@ export class ElementNode extends AbstractNode {
 
         this.nodeName = nodeName;
         this.nodeType = NodeType.Element;
+
+        this.attributes = new Map<string, any>();
+        this.events = new Map<string, Set<Function>>();
+        this.styles = new Map<string, any>();
     }
 
-    setAttribute(key, value) {
-        this.attributes.set(key, value);
+    getAttribute(name: string): any {
+        return this.attributes.get(name);
     }
 
-    setStyle(property, value) {
-        this.styles.set(property, value);
+    setAttribute(name: string, value: any): void{
+        this.attributes.set(name, value);
+    }
+
+    getStyle(propertyName: string): any {
+        return this.styles.get(propertyName);
+    }
+
+    setStyle(propertyName: string, value: any): void {
+        this.styles.set(propertyName, value);
+    }
+
+    on(eventName: string, handler: Function): void {
+        let eventHandlers = this.events.get(eventName);
+        if (!eventHandlers) {
+            eventHandlers = new Set<Function>();
+            this.events.set(eventName, eventHandlers);
+        }
+        eventHandlers.add(handler);
+    }
+
+    off(eventName: string, handler: Function): void {
+        const eventHandlers = this.events.get(eventName);
+        if (eventHandlers) {
+            eventHandlers.delete(handler);
+        }
     }
 
     toString(): string {
@@ -139,23 +169,46 @@ export class TitaniumElementNode extends ElementNode {
 
     titaniumView: any;
 
-    constructor(tagName: string, titaniumView: any) {
-        super(tagName);
+    constructor(nodeName: string, titaniumView: any) {
+        super(nodeName);
 
         this.titaniumView = titaniumView;
     }
 
+    setAttribute(name: string, value: any): void {
+        super.setAttribute(name, value);
+
+        let propertyName = camelize(name);
+        let setterName = 'set' + capitalizeFirstLetter(propertyName);
+
+        if (this.titaniumView[setterName] && typeof this.titaniumView[setterName] === 'function') {
+            console.log(`${this}.setAttribute via setter: ${setterName}(${JSON.stringify(value)})`);
+            this.titaniumView[setterName](value);
+            return;
+        }
+
+        if (this.titaniumView[propertyName]) {
+            console.log(`${this}.setAttribute via property: ${propertyName}(${JSON.stringify(value)})`);
+            this.titaniumView[propertyName] = value;
+            return;
+        }
+
+        console.log(`${this.nodeName} has no property ${propertyName} or matching setter ${setterName} to set attribute ${name}.`);
+    }
+
+    hasAttributeAccessor(name: string): boolean {
+        let acessorNames = [name, `set${capitalizeFirstLetter(camelize(name))}`];
+        return acessorNames.some(accessorName => Reflect.has(this.titaniumView, accessorName));
+    }
+
     setText(text: string): void {
-        /*
         let possibleProperties = ['text', 'title'];
         for (let textProperty of possibleProperties) {
-            if (this.hasAttribute(textProperty)) {
+            if (this.hasAttributeAccessor(textProperty)) {
                 this.setAttribute(textProperty, text);
                 break;
             }
         }
-        */
-        this.titaniumView.setText(text);
     }
 
     appendChild(childNode: NodeInterface): void {
@@ -172,6 +225,18 @@ export class TitaniumElementNode extends ElementNode {
 
             parentView.add(childView);
         }
+    }
+
+    on(eventName: string, handler: Function): void {
+        super.on(eventName, handler);
+
+        this.titaniumView.addEventListener(eventName, handler)
+    }
+
+    off(eventName: string, handler: Function): void {
+        super.off(eventName, handler);
+
+        this.titaniumView.removeEventListener(eventName, handler);
     }
 }
 
@@ -215,4 +280,12 @@ export class TitaniumElementRegistry {
 
         return this.elements.get(tagName).resolveFactoryFunction();
     }
+}
+
+function camelize(value: string): string {
+    return value.replace(/-(\w)/g, (match, firstSubMatch) => firstSubMatch ? firstSubMatch.toUpperCase() : '');
+}
+
+function capitalizeFirstLetter(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
 }
