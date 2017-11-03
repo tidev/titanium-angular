@@ -10,8 +10,7 @@ import {
 
 import {
     RootViewService,
-    TitaniumRenderer,
-    ViewManager
+    TitaniumRenderer
 } from '.';
 
 import {
