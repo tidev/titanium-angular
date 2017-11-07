@@ -22,17 +22,21 @@ export interface NodeInterface {
 
     lastChild: NodeInterface;
 
+    previousSibling: NodeInterface;
+
     nextSibling: NodeInterface;
 
     nodeName: string;
 
     nodeType: NodeType;
 
-    parentNode; NodeInterface;
+    parentNode: NodeInterface;
 
     ngCssClasses: Map<string, boolean>;
 
     appendChild(childNode: NodeInterface): void;
+
+    removeChild(childNode: NodeInterface): void;
 }
 
 export abstract class AbstractNode implements NodeInterface {
@@ -43,13 +47,15 @@ export abstract class AbstractNode implements NodeInterface {
 
     lastChild: NodeInterface;
 
+    previousSibling: NodeInterface;
+
     nextSibling: NodeInterface;
 
     nodeName: string;
 
     nodeType: NodeType;
 
-    parentNode; NodeInterface;
+    parentNode: NodeInterface;
 
     ngCssClasses: Map<string, boolean>;
 
@@ -63,15 +69,44 @@ export abstract class AbstractNode implements NodeInterface {
         }
 
         if (childNode.parentNode) {
-            throw new Error(`Child node ${childNode} already has a parent`);
+            throw new Error(`Node ${childNode} already has a parent`);
         }
 
         childNode.parentNode = this;
         this.childNodes.push(childNode);
+
+        if (!this.firstChild) {
+            this.firstChild = childNode;
+        }
+
+        if (this.lastChild) {
+            childNode.previousSibling = this.lastChild;
+            this.lastChild.nextSibling = childNode
+        }
+        this.lastChild = childNode;
     }
 
     removeChild(childNode: NodeInterface): void {
+        if (!childNode.parentNode) {
+            throw new Error(`Cannot remove node ${childNode} because it has no parent.`);
+        }
 
+        if (childNode.parentNode !== this) {
+            throw new Error(`Cannot remove node ${childNode} because it is no child of ${this}.`);
+        }
+
+        childNode.parentNode = null;
+        this.childNodes = this.childNodes.splice(this.childNodes.indexOf(childNode));
+
+        if (this.firstChild === childNode) {
+            this.firstChild = childNode.nextSibling;
+            this.firstChild.previousSibling = null;
+        }
+
+        if (this.lastChild === childNode) {
+            this.lastChild = childNode.previousSibling;
+            this.lastChild.nextSibling = null;
+        }
     }
 
 }
@@ -86,7 +121,7 @@ export abstract class AbstractTextualNode extends AbstractNode {
     }
 
     toString(): string {
-        return `${this.constructor.name}(${this.text});`
+        return `${this.constructor.name}("${this.text}")`;
     }
 }
 
@@ -108,6 +143,14 @@ export class CommentNode extends AbstractTextualNode {
 
 export class ElementNode extends AbstractNode {
 
+    firstElementChild: ElementNode;
+
+    lastElementChild: ElementNode;
+
+    previousElementSibling: ElementNode;
+
+    nextElementSibling: ElementNode;
+
     attributes: Map<string, any>;
 
     events: Map<string, Set<Function>>;
@@ -125,6 +168,17 @@ export class ElementNode extends AbstractNode {
         this.styles = new Map<string, any>();
     }
 
+    get children(): ElementNode[] {
+        let children: ElementNode[];
+        for (const child of this.childNodes) {
+            if (child.nodeType === NodeType.Element) {
+                children.push(<ElementNode>child);
+            }
+        }
+
+        return children;
+    }
+
     getAttribute(name: string): any {
         return this.attributes.get(name);
     }
@@ -139,6 +193,35 @@ export class ElementNode extends AbstractNode {
 
     setStyle(propertyName: string, value: any): void {
         this.styles.set(propertyName, value);
+    }
+
+    appendChild(childNode: NodeInterface): void {
+        super.appendChild(childNode);
+
+        if (childNode.nodeType !== NodeType.Element) {
+            return;
+        }
+
+        const elementNode = <ElementNode>childNode;
+        if (!this.firstElementChild) {
+            this.firstElementChild = elementNode;
+        }
+
+        if (this.lastElementChild) {
+            elementNode.previousElementSibling = this.lastElementChild;
+            this.lastElementChild.nextElementSibling = elementNode;
+        }
+        this.lastElementChild = elementNode;
+    }
+
+    removeChild(childNode: NodeInterface): void {
+        super.appendChild(childNode);
+
+        if (childNode.nodeType !== NodeType.Element) {
+            return;
+        }
+
+        // @TODO implement
     }
 
     on(eventName: string, handler: Function): void {
@@ -201,7 +284,7 @@ export class TitaniumElementNode extends ElementNode {
         return acessorNames.some(accessorName => Reflect.has(this.titaniumView, accessorName));
     }
 
-    setText(text: string): void {
+    public setText(text: string): void {
         let possibleProperties = ['text', 'title'];
         for (let textProperty of possibleProperties) {
             if (this.hasAttributeAccessor(textProperty)) {
@@ -211,17 +294,37 @@ export class TitaniumElementNode extends ElementNode {
         }
     }
 
+    /**
+     * Updates the text when new TextNodes where added as a child
+     */
+    private updateText(): void {
+        let updatedText = '';
+        for (const child of this.childNodes) {
+            if (child instanceof TextNode) {
+                updatedText = child.text;
+            }
+        }
+        updatedText = updatedText.replace(/^\s+|\s+$/g, '');
+        if (updatedText !== '') {
+            this.setText(updatedText);
+        }
+    }
+
     appendChild(childNode: NodeInterface): void {
         super.appendChild(childNode);
 
         if (childNode instanceof TextNode) {
-            this.setText(childNode.text);
+            this.updateText();
             return;
         }
 
         if (childNode instanceof TitaniumElementNode) {
+            if (childNode.meta.skipAddToDom) {
+                return;
+            }
+
             let parentView = this.titaniumView;
-            let childView = (<TitaniumElementNode>childNode).titaniumView;
+            let childView = childNode.titaniumView;
 
             parentView.add(childView);
         }
@@ -240,14 +343,22 @@ export class TitaniumElementNode extends ElementNode {
     }
 }
 
+export class EmulatedRootNode extends ElementNode {
+    constructor() {
+        super('Root');
+    }
+}
+
 export class RootNode extends TitaniumElementNode {
     constructor(titaniumView: any) {
         super('Root', titaniumView);
+
+        this.meta = {};
     }
 }
 
 export interface TitaniumViewElementMeta {
-    resolveFactoryFunction: Function
+    resolveFactory: Function
     meta: ViewMetadata
 }
 
@@ -255,16 +366,16 @@ export const ELEMENT_REGISTRY = new InjectionToken<TitaniumElementRegistry>('Tit
 
 @Injectable()
 export class TitaniumElementRegistry {
-    elements: Map<any, any>;
+    elements: Map<any, TitaniumViewElementMeta>;
 
     constructor() {
         this.elements = new Map();
     }
 
-    registerElement(tagName: string, resolveFactoryFunction: Function, meta: ViewMetadata): void {
-        console.log(`Registering Titanium view as ${tagName} tag (meta: ${JSON.stringify(meta)})`);
+    registerElement(tagName: string, resolveFactory: Function, meta: ViewMetadata): void {
+        console.log(`Registering Titanium view ${tagName} (meta: ${JSON.stringify(meta)})`);
         this.elements.set(tagName, {
-            resolveFactoryFunction,
+            resolveFactory,
             meta
         });
     }
@@ -274,11 +385,19 @@ export class TitaniumElementRegistry {
     }
 
     getViewFactory(tagName): Function {
-        if (!this.isTitaniumView) {
+        if (!this.isTitaniumView(tagName)) {
             throw new Error(`No titanium view registerd for tag ${tagName}`);
         }
 
-        return this.elements.get(tagName).resolveFactoryFunction();
+        return this.elements.get(tagName).resolveFactory();
+    }
+
+    getViewMetadata(tagName): ViewMetadata {
+        if (!this.isTitaniumView(tagName)) {
+            throw new Error(`No titanium view registerd for tag ${tagName}`);
+        }
+
+        return this.elements.get(tagName).meta;
     }
 }
 

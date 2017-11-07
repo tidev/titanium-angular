@@ -41,7 +41,9 @@ export class TitaniumRenderer extends Renderer2 {
         console.log(`TitaniumRenderer.createElement ${name}`);
         if (this.elementRegistry.isTitaniumView(name)) {
             let createView = this.elementRegistry.getViewFactory(name);
-            return new TitaniumElementNode(name, createView());
+            const node = new TitaniumElementNode(name, createView());
+            node.meta = this.elementRegistry.getViewMetadata(name);
+            return node;
         } else {
             return new ElementNode(name);
         }

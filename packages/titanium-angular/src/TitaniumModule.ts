@@ -7,6 +7,10 @@ import {
     SystemJsNgModuleLoader,
 } from '@angular/core';
 
+import {
+    TitaniumCommonModule
+} from './TitaniumCommonModule';
+
 import { 
     RootViewService,
     TitaniumRendererFactory
@@ -16,22 +20,27 @@ import {
     TitaniumElementRegistry
 } from './vdom';
 
-export function errorHandlerFactory() {
-    return new ErrorHandler();
+class MyErrorHandler extends ErrorHandler {
+    handleError(error: any): void {
+        console.error(error.message);
+        console.error(error.stack);
+    }
 }
 
 @NgModule({
     providers: [
-        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [RootViewService, TitaniumElementRegistry]},
         SystemJsNgModuleLoader,
-        { provide: ErrorHandler, useFactory: errorHandlerFactory },
-        { provide: RendererFactory2, useExisting: TitaniumRendererFactory },
+        { provide: ErrorHandler, useClass: MyErrorHandler },
+        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [RootViewService, TitaniumElementRegistry] },
+        { provide: RendererFactory2, useExisting: TitaniumRendererFactory }
     ],
     imports: [
-        ApplicationModule
+        ApplicationModule,
+        TitaniumCommonModule
     ],
     exports: [
-        ApplicationModule
+        ApplicationModule,
+        TitaniumCommonModule
     ],
     schemas: [NO_ERRORS_SCHEMA]
 })

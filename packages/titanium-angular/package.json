@@ -21,6 +21,7 @@
     "zone.js": "^0.8.18"
   },
   "dependencies": {
+    "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
     "@angular/common": "^5.0.0",

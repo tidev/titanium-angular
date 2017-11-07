@@ -28,8 +28,6 @@ export class TitaniumRendererFactory implements RendererFactory2 {
     private defaultRenderer: TitaniumRenderer;
 
     constructor(rootViewService: RootViewService, titaniumElementRegistry: TitaniumElementRegistry) {
-        console.log('TitaniumRendererFactory');
-
         this.setAngularRootView(rootViewService.getRootView());
         this.titaniumElementRegistry = titaniumElementRegistry;
         this.defaultRenderer = new TitaniumRenderer(this.rootView, this.titaniumElementRegistry);

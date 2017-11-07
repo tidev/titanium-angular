@@ -80,7 +80,10 @@ export class TitaniumPlatformRef extends PlatformRef {
         console.log('registerTitaniumViews');
         const titaniumElementRegistry: TitaniumElementRegistry = this.injector.get(ELEMENT_REGISTRY);
         titaniumElementRegistry.registerElement('View', () => Ti.UI.createView, {});
+        titaniumElementRegistry.registerElement('Window', () => Ti.UI.createWindow, {skipAddToDom: true});
         titaniumElementRegistry.registerElement('Label', () => Ti.UI.createLabel, {});
+        titaniumElementRegistry.registerElement('TabGroup', () => Ti.UI.createTabGroup, {skipAddToDom: true});
+        titaniumElementRegistry.registerElement('Tab', () => Ti.UI.createTab, {skipAddToDom: true});
     }
 
     onDestroy(callback: () => void): void {
