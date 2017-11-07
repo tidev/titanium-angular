@@ -68,7 +68,7 @@ export class TitaniumPlatformRef extends PlatformRef {
         this._bootstrapper().then(moduleRef => {
             console.log('ANGULAR BOOTSTRAP DONE!');
 
-            rootView.open();
+            //rootView.open();
         }, err => {
             console.log('ERROR BOOTSTRAPPING ANGULAR!');
             const errorMessage = err.message + "\n\n" + err.stack;

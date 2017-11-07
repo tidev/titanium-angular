@@ -6,6 +6,7 @@ import {
 import {
     CommentNode,
     ElementNode,
+    EmulatedRootNode,
     NodeInterface,
     RootNode,
     TitaniumElementNode,
@@ -72,19 +73,23 @@ export class TitaniumRenderer extends Renderer2 {
 
     removeChild(parent: NodeInterface, oldChild: NodeInterface): void {
         console.log('TitaniumRenderer.removeChild ${newChild} -> ${parent}');
+        parent.removeChild(oldChild);
     }
 
-    selectRootElement(selectorOrNode: string | any): RootNode {
+    selectRootElement(selectorOrNode: string | any): ElementNode {
         console.log(`TitaniumRenderer.selectRootElement ${selectorOrNode}`);
-        return this.rootView;
+        //return this.rootView;
+        return new EmulatedRootNode();
     }
 
-    parentNode(node: any): any {
+    parentNode(node: NodeInterface): any {
         console.log('TitaniumRenderer.parentNode');
+        return node.parentNode;
     }
 
-    nextSibling(node: any): any {
+    nextSibling(node: NodeInterface): any {
         console.log(`TitaniumRenderer.nextSibling`);
+        return node.nextSibling;
     }
 
     setAttribute(el: ElementNode, name: string, value: string, namespace?: string | null): void {
@@ -93,7 +98,7 @@ export class TitaniumRenderer extends Renderer2 {
         el.setAttribute(name, value);
     }
 
-    removeAttribute(el: any, name: string, namespace?: string | null): void {
+    removeAttribute(el: ElementNode, name: string, namespace?: string | null): void {
         console.log(`TitaniumRenderer.removeAttribute`);
     }
 
