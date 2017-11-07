@@ -1,0 +1,12 @@
+<TabGroup backgroundColor="white" (open)="onOpen()">
+    <Tab title="Tab 1" icon="assets/images/tab1.png">
+        <Window title="Tab 1">
+            <Label color="#999" (click)="onLabelClick($event)">Hello from Angular!</Label>
+        </Window>
+    </Tab>
+    <Tab title="Tab 2" icon="assets/images/tab2.png">
+        <Window title="Tab 2">
+            <Label color="#999">I am Window 2!</Label>
+        </Window>
+    </Tab>
+</TabGroup>
