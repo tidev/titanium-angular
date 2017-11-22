@@ -8,24 +8,19 @@ import {
     ElementNode,
     EmulatedRootNode,
     NodeInterface,
-    RootNode,
     TitaniumElementNode,
     TitaniumElementRegistry,
     TextNode
 } from '../vdom';
 
 export class TitaniumRenderer extends Renderer2 {
-
-    private rootView: RootNode;
-
     private elementRegistry: TitaniumElementRegistry;
 
-    constructor(rootView: RootNode, elementRegistry: TitaniumElementRegistry) {
+    constructor(elementRegistry: TitaniumElementRegistry) {
         super();
 
         console.log('TitaniumRenderer created');
 
-        this.rootView = rootView;
         this.elementRegistry = elementRegistry;
     }
 

@@ -9,12 +9,10 @@ import {
 } from '@angular/core';
 
 import {
-    RootViewService,
     TitaniumRenderer
 } from '.';
 
 import {
-    RootNode,
     TitaniumElementRegistry
 } from '../vdom';
 
@@ -23,18 +21,11 @@ export class TitaniumRendererFactory implements RendererFactory2 {
 
     private titaniumElementRegistry: TitaniumElementRegistry
 
-    private rootView: RootNode;
-
     private defaultRenderer: TitaniumRenderer;
 
-    constructor(rootViewService: RootViewService, titaniumElementRegistry: TitaniumElementRegistry) {
-        this.setAngularRootView(rootViewService.getRootView());
+    constructor(titaniumElementRegistry: TitaniumElementRegistry) {
         this.titaniumElementRegistry = titaniumElementRegistry;
-        this.defaultRenderer = new TitaniumRenderer(this.rootView, this.titaniumElementRegistry);
-    }
-
-    private setAngularRootView(rootView: any): void {
-        this.rootView = new RootNode(rootView);
+        this.defaultRenderer = new TitaniumRenderer(this.titaniumElementRegistry);
     }
 
     createRenderer(hostElement: any, type: RendererType2): TitaniumRenderer {
@@ -43,7 +34,7 @@ export class TitaniumRendererFactory implements RendererFactory2 {
         if (!hostElement || !type) {
             return this.defaultRenderer;
         }
-        return new TitaniumRenderer(this.rootView, this.titaniumElementRegistry);
+        return new TitaniumRenderer(this.titaniumElementRegistry);
     }
 
 }

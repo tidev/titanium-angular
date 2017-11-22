@@ -18,11 +18,6 @@ import {
 } from '../compiler';
 
 import {
-    RootViewService,
-    ROOT_VIEW_SERVICE
-} from '../renderer';
-
-import {
     ELEMENT_REGISTRY,
     TitaniumElementRegistry
 } from '../vdom';
@@ -30,8 +25,6 @@ import {
 import { TitaniumSanitizer } from './TitaniumSanitizer';
 
 export const COMMON_PROVIDERS = [
-    { provide: RootViewService, useClass: RootViewService, deps: []},
-    { provide: ROOT_VIEW_SERVICE, useExisting: RootViewService},
     { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: []},
     { provide: ELEMENT_REGISTRY, useExisting: TitaniumElementRegistry},
     { provide: Sanitizer, useClass: TitaniumSanitizer, deps: [] }

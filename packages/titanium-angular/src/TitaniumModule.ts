@@ -12,7 +12,6 @@ import {
 } from './TitaniumCommonModule';
 
 import { 
-    RootViewService,
     TitaniumRendererFactory
 } from './renderer';
 
@@ -31,7 +30,7 @@ class MyErrorHandler extends ErrorHandler {
     providers: [
         SystemJsNgModuleLoader,
         { provide: ErrorHandler, useClass: MyErrorHandler },
-        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [RootViewService, TitaniumElementRegistry] },
+        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [TitaniumElementRegistry] },
         { provide: RendererFactory2, useExisting: TitaniumRendererFactory }
     ],
     imports: [

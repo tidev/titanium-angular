@@ -10,10 +10,6 @@ import {
 } from '@angular/core';
 
 import {
-    ROOT_VIEW_SERVICE
-} from '../renderer';
-
-import {
     ELEMENT_REGISTRY,
     TitaniumElementRegistry
 } from '../vdom';
@@ -61,14 +57,9 @@ export class TitaniumPlatformRef extends PlatformRef {
 
     bootstrapApp(): void {
         this.registerTitaniumViews();
-        
-        const rootViewService = this.injector.get(ROOT_VIEW_SERVICE);
-        const rootView = rootViewService.getRootView();
 
         this._bootstrapper().then(moduleRef => {
             console.log('ANGULAR BOOTSTRAP DONE!');
-
-            //rootView.open();
         }, err => {
             console.log('ERROR BOOTSTRAPPING ANGULAR!');
             const errorMessage = err.message + "\n\n" + err.stack;
