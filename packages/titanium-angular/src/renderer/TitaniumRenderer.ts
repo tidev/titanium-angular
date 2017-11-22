@@ -55,7 +55,7 @@ export class TitaniumRenderer extends Renderer2 {
     }
 
     appendChild(parent: NodeInterface, newChild: NodeInterface): void {
-        console.log(`TitaniumRenderer.appendChild ${newChild} to ${parent}`);
+        console.log(`TitaniumRenderer.appendChild ${newChild} -> ${parent}`);
         if (!parent) {
             console.log('no parent');
             return;
@@ -64,28 +64,28 @@ export class TitaniumRenderer extends Renderer2 {
         parent.appendChild(newChild);
     }
 
-    insertBefore(parent: NodeInterface, newChild: NodeInterface, refChild: any): void {
-        console.log('TitaniumRenderer.insertBefore ${newChild} -> ${parent}');
+    insertBefore(parent: NodeInterface, newChild: NodeInterface, refChild: NodeInterface): void {
+        console.log(`TitaniumRenderer.insertBefore ${newChild} before ${refChild} in ${parent}`);
+
     }
 
     removeChild(parent: NodeInterface, oldChild: NodeInterface): void {
-        console.log('TitaniumRenderer.removeChild ${newChild} -> ${parent}');
+        console.log(`TitaniumRenderer.removeChild ${oldChild} from ${parent}`);
         parent.removeChild(oldChild);
     }
 
     selectRootElement(selectorOrNode: string | any): ElementNode {
         console.log(`TitaniumRenderer.selectRootElement ${selectorOrNode}`);
-        //return this.rootView;
         return new EmulatedRootNode();
     }
 
     parentNode(node: NodeInterface): any {
-        console.log('TitaniumRenderer.parentNode');
+        console.log(`TitaniumRenderer.parentNode(${node}) -> ${node.parentNode}`);
         return node.parentNode;
     }
 
     nextSibling(node: NodeInterface): any {
-        console.log(`TitaniumRenderer.nextSibling`);
+        console.log(`TitaniumRenderer.nextSibling(${node}) -> ${node.nextSibling}`);
         return node.nextSibling;
     }
 
@@ -97,6 +97,7 @@ export class TitaniumRenderer extends Renderer2 {
 
     removeAttribute(el: ElementNode, name: string, namespace?: string | null): void {
         console.log(`TitaniumRenderer.removeAttribute`);
+        
     }
 
     addClass(el: any, name: string): void {
@@ -119,8 +120,8 @@ export class TitaniumRenderer extends Renderer2 {
         console.log(`TitaniumRenderer.setProperty`);
     }
 
-    setValue(node: any, value: string): void {
-        console.log(`TitaniumRenderer.setValue`);
+    setValue(node: NodeInterface, value: string): void {
+        console.log(`TitaniumRenderer.setValue(${node}, ${value})`);
     }
 
     listen(target: ElementNode, eventName: string, callback: (event: any) => boolean | void): () => void {
