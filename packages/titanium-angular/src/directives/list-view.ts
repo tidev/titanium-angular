@@ -15,6 +15,8 @@ import {
 
 import {
     AbstractTextualNode,
+    ElementNode,
+    NodeInterface,
     TitaniumElementNode,
     TitaniumElementRegistry
 } from '../vdom';
@@ -61,7 +63,7 @@ export class ListViewComponent implements AfterContentInit {
 
     private _sections: any[];
 
-    private _templates: Map<string, ListItemTemplate>;
+    private _templateFactories: Map<string, Function>;
 
     private _initialized: Boolean;
 
@@ -70,7 +72,7 @@ export class ListViewComponent implements AfterContentInit {
         this.listView = this.element.titaniumView;
         this._elementRegistry = elementRegistry;
         this._sections = [];
-        this._templates = new Map<string, any>();
+        this._templateFactories = new Map<string, any>();
         this._initialized = false;
     }
 
@@ -83,52 +85,52 @@ export class ListViewComponent implements AfterContentInit {
 
     registerTemplate(name: string, template: TemplateRef<any>) {
         console.log(`Register ListView template ${name}`);
-        const viewRef = this.loader.createEmbeddedView(template, new ListItemContext(), 0);
-        const itemTemplate: ListItemTemplate = {
-			childTemplates: this.convertNodesToTemplates(viewRef.rootNodes)
-        };
-        this._templates.set(name, itemTemplate);
+        const createTemplate = () => {
+            const viewRef = this.loader.createEmbeddedView(template, new ListItemContext(), 0);
+            const templates: Array<ListItemViewTemplate> = [];
+            this.convertNodesToTemplatesRecursive(viewRef.rootNodes.filter(node => node instanceof ElementNode), templates);
+            const itemTemplate: ListItemTemplate = {
+                childTemplates: templates
+            };
+            return itemTemplate;
+        }
+        this._templateFactories.set(name, createTemplate);
     }
 
-    convertNodesToTemplates(nodes) {
-        let templates = [];
+    private convertNodesToTemplatesRecursive(nodes: Array<NodeInterface>, templates: Array<ListItemViewTemplate>): void {
         for (let node of nodes) {
-            if (node instanceof AbstractTextualNode) {
-                continue;
-            }
-
-            if (!(node instanceof TitaniumElementNode)) {
-                throw new Error('A list view item template may only contain other Titanium views.');
-            }
-
-            let meta = this._elementRegistry.getViewMetadata(node.nodeName);
-            let templateDefinition: ListItemViewTemplate = {
-                type: meta.typeName,
-                bindId: node.getElementAttribute('bindId')
-            };
-            let properties = {};
-            node.attributes.forEach((attributeValue, attributeName) => {
-                if (attributeName === 'bindId') {
-                    return;
-                } else if (attributeName === 'events') {
-                    templateDefinition.events = attributeValue;
-                } else {
-                    properties[attributeName] = attributeValue;
+            if (node instanceof TitaniumElementNode) {
+                let meta = this._elementRegistry.getViewMetadata(node.nodeName);
+                let templateDefinition: ListItemViewTemplate = {
+                    type: meta.typeName,
+                    bindId: node.getElementAttribute('bindId'),
+                    childTemplates: []
+                };
+                let properties = {};
+                node.attributes.forEach((attributeValue, attributeName) => {
+                    if (attributeName === 'bindId') {
+                        return;
+                    } else if (attributeName === 'events') {
+                        templateDefinition.events = attributeValue;
+                    } else {
+                        properties[attributeName] = attributeValue;
+                    }
+                });
+                templateDefinition.properties = properties;
+                if (node.children.length > 0) {
+                    this.convertNodesToTemplatesRecursive(node.children, templateDefinition.childTemplates);
                 }
-            });
-            templateDefinition.properties = properties;
-            if (node.children.length > 0) {
-                templateDefinition.childTemplates = this.convertNodesToTemplates(node.children);
+                templates.push(templateDefinition);
+            } else if (node instanceof ElementNode) {
+                this.convertNodesToTemplatesRecursive(node.children, templates);
             }
-            templates.push(templateDefinition);
         }
-        return templates;
     }
 
     ngAfterContentInit() {
         let templates = {};
-        this._templates.forEach((templateDefinition, templateName) => {
-            templates[templateName] = templateDefinition;
+        this._templateFactories.forEach((createTemplate, templateName) => {
+            templates[templateName] = createTemplate();
         });
         this.listView.setTemplates(templates);
         for (const section of this._sections) {
