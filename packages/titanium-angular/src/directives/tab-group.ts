@@ -25,7 +25,6 @@ export class TabGroupDirective implements AfterViewInit {
     private viewInitialized: boolean;
 
     constructor(el: ElementRef) {
-        console.log('new TabGroupDirective()');
         this.tabGroup = el.nativeElement;
     }
 
@@ -35,7 +34,6 @@ export class TabGroupDirective implements AfterViewInit {
     }
 
     addTab(tab: TabDirective) {
-        console.log(`Adding tab ${tab.tab.titaniumView.title}`);
         this.tabGroup.titaniumView.addTab(tab.tab.titaniumView);
     }
 
@@ -60,7 +58,6 @@ export class TabDirective implements OnInit {
     private owner: TabGroupDirective;
 
     constructor(el: ElementRef, owner: TabGroupDirective) {
-        console.log('TabDirective.constructor');
         this.tab = el.nativeElement
         this.owner = owner;
     }
@@ -71,7 +68,6 @@ export class TabDirective implements OnInit {
         }
 
         const windowElement: TitaniumElementNode = <TitaniumElementNode>this.tab.firstElementChild;
-        console.log(windowElement.titaniumView.apiName);
         this.tab.titaniumView.setWindow(windowElement.titaniumView);
         this.owner.addTab(this);
     }
