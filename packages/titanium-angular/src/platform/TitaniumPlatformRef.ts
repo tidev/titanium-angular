@@ -79,11 +79,13 @@ export class TitaniumPlatformRef extends PlatformRef {
     registerTitaniumViews() {
         console.log('registerTitaniumViews');
         const titaniumElementRegistry: TitaniumElementRegistry = this.injector.get(ELEMENT_REGISTRY);
-        titaniumElementRegistry.registerElement('View', () => Ti.UI.createView, {});
-        titaniumElementRegistry.registerElement('Window', () => Ti.UI.createWindow, {skipAddToDom: true});
-        titaniumElementRegistry.registerElement('Label', () => Ti.UI.createLabel, {});
-        titaniumElementRegistry.registerElement('TabGroup', () => Ti.UI.createTabGroup, {skipAddToDom: true});
-        titaniumElementRegistry.registerElement('Tab', () => Ti.UI.createTab, {skipAddToDom: true});
+        titaniumElementRegistry.registerElement('View', () => Ti.UI.createView, { typeName: 'Ti.UI.View' });
+        titaniumElementRegistry.registerElement('Window', () => Ti.UI.createWindow, { skipAddToDom: true, typeName: 'Ti.UI.Window'});
+        titaniumElementRegistry.registerElement('Label', () => Ti.UI.createLabel, { typeName: 'Ti.UI.Label'});
+        titaniumElementRegistry.registerElement('ListView', () => Ti.UI.createListView, { typeName: 'Ti.UI.ListView' });
+        titaniumElementRegistry.registerElement('ListSection', () => Ti.UI.createListSection, { skipAddToDom: true, typeName: 'Ti.UI.ListSection' });
+        titaniumElementRegistry.registerElement('TabGroup', () => Ti.UI.createTabGroup, { skipAddToDom: true, typeName: 'Ti.UI.TabGroup' });
+        titaniumElementRegistry.registerElement('Tab', () => Ti.UI.createTab, {skipAddToDom: true, typeName: 'Ti.UI.Tab'});
     }
 
     onDestroy(callback: () => void): void {

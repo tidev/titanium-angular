@@ -1,7 +1,13 @@
 <TabGroup backgroundColor="white" (open)="onOpen()">
     <Tab title="Tab 1" icon="assets/images/tab1.png">
         <Window title="Tab 1">
-            <Label color="#999" (click)="onLabelClick($event)">Hello from Angular!</Label>
+            <ListView (itemclick)="onItemClick()" defaultItemTemplate="test">
+                <ng-template tiTemplateName="test">
+                    <label bindId="name" top="10" left="10"></label>
+                </ng-template>
+            
+                <ListSection headerTitle="Fruits" [items]="fruitItems"></ListSection>
+            </ListView>
         </Window>
     </Tab>
     <Tab title="Tab 2" icon="assets/images/tab2.png">

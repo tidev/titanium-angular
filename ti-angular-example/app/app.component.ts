@@ -15,6 +15,15 @@ export class RendererTestComponent implements AfterViewInit {
 
     @ViewChild(TabGroupDirective) tabGroup: TabGroupDirective;
 
+    public fruitItems: Array<any>;
+
+    constructor() {
+        this.fruitItems = [
+            { name: { text: 'Apple' } },
+            { name: { text: 'Banana' } }
+        ];
+    }
+
     ngAfterViewInit() {
         this.tabGroup.open();
     }
