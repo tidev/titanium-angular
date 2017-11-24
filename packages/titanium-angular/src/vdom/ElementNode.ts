@@ -1,24 +1,22 @@
 import {
     AbstractNode,
+    ChildNodeInterface,
+    ElementCollection,
     NodeInterface,
-    NodeType
+    NodeType,
+    ParentNodeInterface
 } from '.';
+import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
 
-export class ElementNode extends AbstractNode {
-
-    firstElementChild: ElementNode;
-
-    lastElementChild: ElementNode;
-
-    previousElementSibling: ElementNode;
-
-    nextElementSibling: ElementNode;
+export class ElementNode extends AbstractNode implements ChildNodeInterface, ParentNodeInterface {
 
     attributes: Map<string, any>;
 
     events: Map<string, Set<Function>>;
 
     styles: Map<string, any>;
+
+    private _children: ElementCollection;
 
     constructor(nodeName: string) {
         super();
@@ -31,15 +29,62 @@ export class ElementNode extends AbstractNode {
         this.styles = new Map<string, any>();
     }
 
-    get children(): ElementNode[] {
-        let children = [];
-        for (const child of this.childNodes) {
+    get childElementCount() {
+        return this.children.length;
+    }
+
+    get firstElementChild(): ElementNode {
+        for (let child = this.firstChild; child !== null; child = child.nextSibling) {
             if (child.nodeType === NodeType.Element) {
-                children.push(<ElementNode>child);
+                return <ElementNode>child;
             }
         }
 
-        return children;
+        return null;
+    }
+
+    get lastElementChild(): ElementNode {
+        for(let child = this.lastChild; child !== null; child = child.previousSibling) {
+            if (child.nodeType === NodeType.Element) {
+                return <ElementNode>child;
+            }
+        }
+
+        return null;
+    }
+
+    get nextElementSibling(): ElementNode {
+        for (let child = this.nextSibling; child !== null; child = child.nextSibling) {
+            if (child.nodeType === NodeType.Element) {
+                return <ElementNode>child;
+            }
+        }
+
+        return null;
+    }
+
+    get previousElementSibling(): ElementNode {
+        for (let child = this.previousSibling; child !== null; child = child.previousSibling) {
+            if (child.nodeType === NodeType.Element) {
+                return <ElementNode>child;
+            }
+        }
+
+        return null;
+    }
+
+    get children(): ElementCollection {
+        if (!this._children) {
+            this._children = new ElementCollection(this);
+        }
+
+        return this._children;
+    }
+
+    insertBefore(newChild: AbstractNode, referenceChild: AbstractNode) {
+        super.insertBefore(newChild, referenceChild);
+        
+        this.children.invalidateCache();
     }
 
     getAttribute(name: string): any {
@@ -58,35 +103,6 @@ export class ElementNode extends AbstractNode {
         this.styles.set(propertyName, value);
     }
 
-    appendChild(childNode: NodeInterface): void {
-        super.appendChild(childNode);
-
-        if (childNode.nodeType !== NodeType.Element) {
-            return;
-        }
-
-        const elementNode = <ElementNode>childNode;
-        if (!this.firstElementChild) {
-            this.firstElementChild = elementNode;
-        }
-
-        if (this.lastElementChild) {
-            elementNode.previousElementSibling = this.lastElementChild;
-            this.lastElementChild.nextElementSibling = elementNode;
-        }
-        this.lastElementChild = elementNode;
-    }
-
-    removeChild(childNode: NodeInterface): void {
-        super.appendChild(childNode);
-
-        if (childNode.nodeType !== NodeType.Element) {
-            return;
-        }
-
-        // @TODO implement
-    }
-
     on(eventName: string, handler: Function): void {
         let eventHandlers = this.events.get(eventName);
         if (!eventHandlers) {
@@ -101,6 +117,10 @@ export class ElementNode extends AbstractNode {
         if (eventHandlers) {
             eventHandlers.delete(handler);
         }
+    }
+
+    remove() {
+        this.parentNode.removeChild(this);
     }
 
     toString(): string {
