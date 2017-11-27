@@ -1,4 +1,5 @@
 import {
+    AbstractNode,
     ElementNode,
     NodeInterface,
     TextNode
@@ -75,7 +76,7 @@ export class TitaniumElementNode extends ElementNode {
      */
     private updateText(): void {
         let updatedText = '';
-        for (const child of this.childNodes) {
+        for (let child = this.firstChild; child !== null; child = child.nextSibling) {
             if (child instanceof TextNode) {
                 updatedText = child.text;
             }
@@ -86,21 +87,21 @@ export class TitaniumElementNode extends ElementNode {
         }
     }
 
-    appendChild(childNode: NodeInterface): void {
-        super.appendChild(childNode);
+    insertBefore(newNode: NodeInterface, referenceNode: NodeInterface): void {
+        super.insertBefore(<AbstractNode>newNode, <AbstractNode>referenceNode);
 
-        if (childNode instanceof TextNode) {
+        if (newNode instanceof TextNode) {
             this.updateText();
             return;
         }
 
-        if (childNode instanceof TitaniumElementNode) {
-            if (childNode.meta.skipAddToDom) {
+        if (newNode instanceof TitaniumElementNode) {
+            if (newNode.meta.skipAddToDom) {
                 return;
             }
 
             let parentView = this.titaniumView;
-            let childView = childNode.titaniumView;
+            let childView = newNode.titaniumView;
 
             parentView.add(childView);
         }

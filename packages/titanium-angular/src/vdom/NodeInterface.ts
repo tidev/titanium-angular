@@ -1,3 +1,9 @@
+import {
+    ChildNodeList,
+    ElementNode,
+    NodeListInterface
+} from '.';
+
 export enum NodeType {
     Element = 1,
     Text = 3,
@@ -7,7 +13,15 @@ export enum NodeType {
 
 export interface NodeInterface {
 
-    childNodes: NodeInterface[];
+    nodeName: string;
+
+    nodeType: NodeType;
+
+    parentNode: NodeInterface;
+
+    parentElement: ElementNode;
+
+    childNodes: ChildNodeList;
 
     firstChild: NodeInterface;
 
@@ -17,15 +31,11 @@ export interface NodeInterface {
 
     nextSibling: NodeInterface;
 
-    nodeName: string;
-
-    nodeType: NodeType;
-
-    parentNode: NodeInterface;
-
     ngCssClasses: Map<string, boolean>;
 
     appendChild(childNode: NodeInterface): void;
 
     removeChild(childNode: NodeInterface): void;
+
+    insertBefore(newNode: NodeInterface, referenceNode: NodeInterface): void;
 }

@@ -65,7 +65,7 @@ export class ListViewComponent implements AfterContentInit {
 
     private _templateFactories: Map<string, Function>;
 
-    private _initialized: Boolean;
+    private _initialized: boolean;
 
     constructor(el: ElementRef, @Inject(TitaniumElementRegistry) elementRegistry: TitaniumElementRegistry) {
         this.element = el.nativeElement;
@@ -97,7 +97,7 @@ export class ListViewComponent implements AfterContentInit {
         this._templateFactories.set(name, createTemplate);
     }
 
-    private convertNodesToTemplatesRecursive(nodes: Array<NodeInterface>, templates: Array<ListItemViewTemplate>): void {
+    private convertNodesToTemplatesRecursive(nodes: Iterable<NodeInterface>, templates: Array<ListItemViewTemplate>): void {
         for (let node of nodes) {
             if (node instanceof TitaniumElementNode) {
                 let meta = this._elementRegistry.getViewMetadata(node.nodeName);
