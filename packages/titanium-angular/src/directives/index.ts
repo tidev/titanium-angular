@@ -6,11 +6,18 @@ import {
 } from './list-view';
 
 import {
+  PickerDirective,
+  PickerColumnDirective,
+  PickerRowDirective
+} from './picker'
+
+import {
   TabGroupDirective,
   TabDirective
 } from './tab-group';
 
 export * from './list-view';
+export * from './picker';
 export * from './tab-group';
 
 export const TITANIUM_DIRECTIVES = [
@@ -18,6 +25,9 @@ export const TITANIUM_DIRECTIVES = [
   ListSectionDirective,
   ListItemTemplateDirective,
   ListRefreshControlDirective,
+  PickerDirective,
+  PickerColumnDirective,
+  PickerRowDirective,
   TabGroupDirective,
   TabDirective
 ];
