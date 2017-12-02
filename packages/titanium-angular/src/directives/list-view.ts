@@ -2,6 +2,7 @@ import {
     AfterContentInit,
     AfterViewInit,
     Component,
+    ContentChild,
     Directive,
     ElementRef,
     Host,
@@ -12,6 +13,10 @@ import {
     ViewChild,
     ViewContainerRef
 } from '@angular/core';
+
+import {
+    Observable
+} from 'rxjs';
 
 import {
     AbstractTextualNode,
@@ -38,11 +43,6 @@ export class ListItemContext {
     public item: any;
 }
 
-/*
-@Directive({
-    selector: 'ListView'
-})
-*/
 @Component({
     selector: 'ListView',
     template: `
@@ -136,6 +136,7 @@ export class ListViewComponent implements AfterContentInit {
         for (const section of this._sections) {
             this.listView.appendSection(section);
         }
+        this._initialized = true;
     }
 }
 
@@ -162,13 +163,16 @@ export class ListSectionDirective implements OnInit {
 
     set items(value: any) {
         this._items = value;
+
+        // todo: Add support for observable arrays
+
+        this.element.titaniumView.setItems(this._items);
     }
 
     ngOnInit() {
         this.element.titaniumView.items = this.items;
         this.owner.appendSection(this.element.titaniumView);
     }
-
 }
 
 @Directive({
@@ -190,5 +194,24 @@ export class ListItemTemplateDirective {
         if (this.listView && this.templateRef) {
             this.listView.registerTemplate(name, this.templateRef);
         }
+    }
+}
+
+@Directive({
+    selector: 'ListView > RefreshControl'
+})
+export class ListRefreshControlDirective implements AfterViewInit {
+
+    private refreshControl: TitaniumElementNode;
+
+    private listView: ListViewComponent;
+
+    constructor(el: ElementRef, @Host() listView: ListViewComponent) {
+        this.refreshControl = el.nativeElement;
+        this.listView = listView;
+    }
+
+    ngAfterViewInit() {
+        this.listView.listView.setRefreshControl(this.refreshControl.titaniumView);
     }
 }

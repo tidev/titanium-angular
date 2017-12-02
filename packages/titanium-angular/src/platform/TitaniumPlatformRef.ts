@@ -75,6 +75,7 @@ export class TitaniumPlatformRef extends PlatformRef {
         titaniumElementRegistry.registerElement('Label', () => Ti.UI.createLabel, { typeName: 'Ti.UI.Label'});
         titaniumElementRegistry.registerElement('ListView', () => Ti.UI.createListView, { typeName: 'Ti.UI.ListView' });
         titaniumElementRegistry.registerElement('ListSection', () => Ti.UI.createListSection, { skipAddToDom: true, typeName: 'Ti.UI.ListSection' });
+        titaniumElementRegistry.registerElement('RefreshControl', () => Ti.UI.createRefreshControl, { skipAddToDom: true, typeName: 'Ti.UI.RefreshControl' });
         titaniumElementRegistry.registerElement('TabGroup', () => Ti.UI.createTabGroup, { skipAddToDom: true, typeName: 'Ti.UI.TabGroup' });
         titaniumElementRegistry.registerElement('Tab', () => Ti.UI.createTab, {skipAddToDom: true, typeName: 'Ti.UI.Tab'});
     }
