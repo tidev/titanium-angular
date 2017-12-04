@@ -77,7 +77,6 @@ export class TitaniumPlatformRef extends PlatformRef {
         titaniumElementRegistry.registerElement('ImageView', () => Ti.UI.createImageView, { typeName: 'Ti.UI.ImageView' });
         titaniumElementRegistry.registerElement('Label', () => Ti.UI.createLabel, { typeName: 'Ti.UI.Label' });
         titaniumElementRegistry.registerElement('ListView', () => Ti.UI.createListView, { typeName: 'Ti.UI.ListView' });
-        titaniumElementRegistry.registerElement('ListItem', () => Ti.UI.createListItem, { skipAddToDom: true, typeName: 'Ti.UI.ListItem' });
         titaniumElementRegistry.registerElement('ListSection', () => Ti.UI.createListSection, { skipAddToDom: true, typeName: 'Ti.UI.ListSection' });
         titaniumElementRegistry.registerElement('OptionDialog', () => Ti.UI.createOptionDialog, { typeName: 'Ti.UI.OptionDialog' });
         titaniumElementRegistry.registerElement('Picker', () => Ti.UI.createPicker, { typeName: 'Ti.UI.Picker' });

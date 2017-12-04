@@ -2,13 +2,14 @@ import {
     AfterContentInit,
     AfterViewInit,
     Component,
-    ContentChild,
+    ContentChildren,
     Directive,
     ElementRef,
     Host,
     Inject,
     Input,
     OnInit,
+    QueryList,
     TemplateRef,
     ViewChild,
     ViewContainerRef
@@ -141,11 +142,24 @@ export class ListViewComponent implements AfterContentInit {
 }
 
 @Directive({
+    selector: 'ListItem'
+})
+export class ListItemDirective {
+    public element: ElementNode;
+
+    contructor(el: ElementRef, owner: ListSectionDirective) {
+        this.element = el.nativeElement;
+    }
+}
+
+@Directive({
     selector: 'ListSection'
 })
-export class ListSectionDirective implements OnInit {
+export class ListSectionDirective implements OnInit, AfterContentInit {
 
     public element: TitaniumElementNode;
+
+    @ContentChildren(ListItemDirective) contentItems: QueryList<ListItemDirective>
 
     private owner: ListViewComponent;
 
@@ -170,8 +184,20 @@ export class ListSectionDirective implements OnInit {
     }
 
     ngOnInit() {
-        this.element.titaniumView.items = this.items;
+        this.element.titaniumView.setItems(this.items);
         this.owner.appendSection(this.element.titaniumView);
+    }
+
+    ngAfterContentInit() {
+        if (this.contentItems.length > 0) {
+            this.element.titaniumView.setItems(this.contentItems.map(listItem => {
+                let itemProperties = {};
+                listItem.element.attributes.forEach((attributeValue, attributeName) => {
+                    itemProperties[attributeName] = attributeValue;
+                });
+                return itemProperties;
+            }));
+        }
     }
 }
 

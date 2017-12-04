@@ -1,5 +1,6 @@
 import {
   ListViewComponent,
+  ListItemDirective,
   ListSectionDirective,
   ListItemTemplateDirective,
   ListRefreshControlDirective
@@ -22,6 +23,7 @@ export * from './tab-group';
 
 export const TITANIUM_DIRECTIVES = [
   ListViewComponent,
+  ListItemDirective,
   ListSectionDirective,
   ListItemTemplateDirective,
   ListRefreshControlDirective,
