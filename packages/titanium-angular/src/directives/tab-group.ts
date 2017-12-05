@@ -16,7 +16,7 @@ import {
 @Directive({
     selector: 'TabGroup'
 })
-export class TabGroupDirective implements AfterViewInit {
+export class TabGroupDirective {
 
     public tabGroup: TitaniumElementNode;
 
@@ -39,11 +39,6 @@ export class TabGroupDirective implements AfterViewInit {
 
     open() {
         this.tabGroup.titaniumView.open();
-    }
-
-    ngAfterViewInit() {
-        console.log('TabGroupDirective.ngAfterViewInit');
-        
     }
 
 }
