@@ -16,6 +16,10 @@ import {
     TitaniumElementRegistry
 } from '../vdom';
 
+import {
+    Logger
+} from '../log';
+
 @Injectable()
 export class TitaniumRendererFactory implements RendererFactory2 {
 
@@ -23,18 +27,20 @@ export class TitaniumRendererFactory implements RendererFactory2 {
 
     private defaultRenderer: TitaniumRenderer;
 
-    constructor(titaniumElementRegistry: TitaniumElementRegistry) {
+    private logger: Logger;
+
+    constructor(titaniumElementRegistry: TitaniumElementRegistry, logger: Logger) {
         this.titaniumElementRegistry = titaniumElementRegistry;
-        this.defaultRenderer = new TitaniumRenderer(this.titaniumElementRegistry);
+        this.logger = logger;
+        this.defaultRenderer = new TitaniumRenderer(this.titaniumElementRegistry, this.logger);
     }
 
     createRenderer(hostElement: any, type: RendererType2): TitaniumRenderer {
-        console.log('TitaniumRendererFactory.createRenderer');
-        console.log(hostElement, type);
+        this.logger.debug('TitaniumRendererFactory.createRenderer');
         if (!hostElement || !type) {
             return this.defaultRenderer;
         }
-        return new TitaniumRenderer(this.titaniumElementRegistry);
+        return new TitaniumRenderer(this.titaniumElementRegistry, this.logger);
     }
 
 }

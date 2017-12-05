@@ -19,18 +19,30 @@ import {
     TitaniumElementRegistry
 } from './vdom';
 
+import {
+    Logger
+} from './log'
+
 class MyErrorHandler extends ErrorHandler {
+
+    private logger: Logger;
+
+    constructor(logger: Logger) {
+        super();
+        this.logger = logger;
+    }
+
     handleError(error: any): void {
-        console.error(error.message);
-        console.error(error.stack);
+        this.logger.error(error.message);
+        this.logger.error(error.stack);
     }
 }
 
 @NgModule({
     providers: [
         SystemJsNgModuleLoader,
-        { provide: ErrorHandler, useClass: MyErrorHandler },
-        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [TitaniumElementRegistry] },
+        { provide: ErrorHandler, useClass: MyErrorHandler, deps: [Logger] },
+        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [TitaniumElementRegistry, Logger] },
         { provide: RendererFactory2, useExisting: TitaniumRendererFactory }
     ],
     imports: [

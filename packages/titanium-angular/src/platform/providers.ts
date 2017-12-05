@@ -24,8 +24,13 @@ import {
 
 import { TitaniumSanitizer } from './TitaniumSanitizer';
 
+import {
+    Logger
+} from '../log';
+
 export const COMMON_PROVIDERS = [
-    { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: []},
+    { provide: Logger, useClass: Logger, deps: [] },
+    { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: [Logger]},
     { provide: ELEMENT_REGISTRY, useExisting: TitaniumElementRegistry},
     { provide: Sanitizer, useClass: TitaniumSanitizer, deps: [] }
 ];

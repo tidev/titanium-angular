@@ -1,4 +1,5 @@
 import {
+    Inject,
     Injectable,
     InjectionToken
 } from '@angular/core';
@@ -6,6 +7,10 @@ import {
 import {
     ViewMetadata
 } from '.';
+
+import {
+    Logger
+} from '../log'
 
 export interface TitaniumViewElementMeta {
     resolveFactory: Function
@@ -16,14 +21,17 @@ export const ELEMENT_REGISTRY = new InjectionToken<TitaniumElementRegistry>('Tit
 
 @Injectable()
 export class TitaniumElementRegistry {
+    logger: Logger;
+
     elements: Map<any, TitaniumViewElementMeta>;
 
-    constructor() {
+    constructor(@Inject(Logger) logger: Logger) {
+        this.logger = logger;
         this.elements = new Map();
     }
 
     registerElement(tagName: string, resolveFactory: Function, meta: ViewMetadata): void {
-        console.log(`Registering Titanium view ${tagName} (meta: ${JSON.stringify(meta)})`);
+        this.logger.trace(`Registering Titanium view ${tagName} (meta: ${JSON.stringify(meta)})`);
         this.elements.set(tagName.toLowerCase(), {
             resolveFactory,
             meta

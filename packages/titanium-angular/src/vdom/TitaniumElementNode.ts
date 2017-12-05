@@ -6,6 +6,10 @@ import {
 } from '.';
 
 import {
+    Logger
+} from '../log';
+
+import {
     camelize,
     capitalizeFirstLetter
 } from '../utility/string';
@@ -21,10 +25,13 @@ export class TitaniumElementNode extends ElementNode {
 
     titaniumView: any;
 
-    constructor(nodeName: string, titaniumView: any) {
+    private logger: Logger;
+
+    constructor(nodeName: string, titaniumView: any, logger: Logger) {
         super(nodeName);
 
         this.titaniumView = titaniumView;
+        this.logger = logger;
     }
 
     getAttribute(name: string): any {
@@ -42,18 +49,18 @@ export class TitaniumElementNode extends ElementNode {
         let setterName = 'set' + capitalizeFirstLetter(propertyName);
 
         if (this.titaniumView[setterName] && typeof this.titaniumView[setterName] === 'function') {
-            console.log(`${this}.setAttribute via setter: ${setterName}(${JSON.stringify(value)})`);
+            this.logger.debug(`${this}.setAttribute via setter: ${setterName}(${JSON.stringify(value)})`);
             this.titaniumView[setterName](value);
             return;
         }
 
         if (this.titaniumView[propertyName]) {
-            console.log(`${this}.setAttribute via property: ${propertyName}(${JSON.stringify(value)})`);
+            this.logger.debug(`${this}.setAttribute via property: ${propertyName}(${JSON.stringify(value)})`);
             this.titaniumView[propertyName] = value;
             return;
         }
 
-        console.log(`${this.nodeName} has no property ${propertyName} or matching setter ${setterName} to set attribute ${name}.`);
+        this.logger.debug(`${this.nodeName} has no property ${propertyName} or matching setter ${setterName} to set attribute ${name}.`);
     }
 
     hasAttributeAccessor(name: string): boolean {

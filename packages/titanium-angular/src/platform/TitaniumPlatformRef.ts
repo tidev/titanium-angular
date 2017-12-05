@@ -10,6 +10,10 @@ import {
 } from '@angular/core';
 
 import {
+    Logger
+} from '../log';
+
+import {
     ELEMENT_REGISTRY,
     TitaniumElementRegistry
 } from '../vdom';
@@ -37,10 +41,22 @@ export class TitaniumPlatformRef extends PlatformRef {
         this._platform = platform;
     }
 
+    get injector(): Injector {
+        return this._platform.injector;
+    }
+
+    get logger(): Logger {
+        return this.injector.get(Logger);
+    }
+
+    get destroyed() {
+        return this._platform.destroyed;
+    }
+
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>, options?: BootstrapOptions): Promise<NgModuleRef<M>> {
         this._runBootstrap = () => this._platform.bootstrapModuleFactory(moduleFactory);
 
-        console.log('bootstrapModuleFactory');
+        this.logger.trace('Bootstrapping module using factory');
         this.bootstrapApp();
 
         return null;
@@ -49,7 +65,7 @@ export class TitaniumPlatformRef extends PlatformRef {
     bootstrapModule<M>(moduleType: Type<M>, compilerOptions: CompilerOptions | CompilerOptions[] = []): Promise<NgModuleRef<M>> {
         this._runBootstrap = () => this._platform.bootstrapModule(moduleType, compilerOptions);
 
-        console.log('bootstrapModule');
+        this.logger.trace('Bootstrapping module');
         this.bootstrapApp();
 
         return null;
@@ -59,11 +75,11 @@ export class TitaniumPlatformRef extends PlatformRef {
         this.registerTitaniumViews();
 
         this._runBootstrap().then(moduleRef => {
-            console.log('ANGULAR BOOTSTRAP DONE!');
+            this.logger.info('ANGULAR BOOTSTRAP DONE!');
         }, err => {
-            console.log('ERROR BOOTSTRAPPING ANGULAR!');
+            this.logger.error('ERROR BOOTSTRAPPING ANGULAR!');
             const errorMessage = err.message + "\n\n" + err.stack;
-            console.error(errorMessage);
+            this.logger.error(errorMessage);
         });
     }
 
@@ -104,15 +120,7 @@ export class TitaniumPlatformRef extends PlatformRef {
         this._platform.onDestroy(callback);
     }
 
-    get injector(): Injector {
-        return this._platform.injector;
-    }
-
     destroy() {
-        console.log('destroy TitaniumPlatformRef');
-    }
-
-    get destroyed() {
-        return this._platform.destroyed;
+        this.logger.debug('destroy TitaniumPlatformRef');
     }
 }
