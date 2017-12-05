@@ -85,7 +85,6 @@ export class ListViewComponent implements AfterContentInit {
     }
 
     registerTemplate(name: string, template: TemplateRef<any>) {
-        console.log(`Register ListView template ${name}`);
         const createTemplate = () => {
             const viewRef = this.loader.createEmbeddedView(template, new ListItemContext(), 0);
             const templates: Array<ListItemViewTemplate> = [];
@@ -147,7 +146,7 @@ export class ListViewComponent implements AfterContentInit {
 export class ListItemDirective {
     public element: ElementNode;
 
-    contructor(el: ElementRef, owner: ListSectionDirective) {
+    constructor(el: ElementRef) {
         this.element = el.nativeElement;
     }
 }
@@ -155,7 +154,7 @@ export class ListItemDirective {
 @Directive({
     selector: 'ListSection'
 })
-export class ListSectionDirective implements OnInit, AfterContentInit {
+export class ListSectionDirective implements AfterContentInit {
 
     public element: TitaniumElementNode;
 
@@ -183,21 +182,18 @@ export class ListSectionDirective implements OnInit, AfterContentInit {
         this.element.titaniumView.setItems(this._items);
     }
 
-    ngOnInit() {
-        this.element.titaniumView.setItems(this.items);
-        this.owner.appendSection(this.element.titaniumView);
-    }
-
     ngAfterContentInit() {
         if (this.contentItems.length > 0) {
-            this.element.titaniumView.setItems(this.contentItems.map(listItem => {
+            this.items = this.contentItems.map(listItem => {
                 let itemProperties = {};
                 listItem.element.attributes.forEach((attributeValue, attributeName) => {
                     itemProperties[attributeName] = attributeValue;
                 });
-                return itemProperties;
-            }));
+                return { properties: itemProperties };
+            });
         }
+        
+        this.owner.appendSection(this.element.titaniumView);
     }
 }
 
