@@ -13,12 +13,16 @@ import {
 } from '.';
 
 import {
-    TitaniumElementRegistry
-} from '../vdom';
-
-import {
     Logger
 } from '../log';
+
+import {
+    DeviceEnvironment
+} from '../services';
+
+import {
+    TitaniumElementRegistry
+} from '../vdom';
 
 @Injectable()
 export class TitaniumRendererFactory implements RendererFactory2 {
@@ -29,10 +33,13 @@ export class TitaniumRendererFactory implements RendererFactory2 {
 
     private logger: Logger;
 
-    constructor(titaniumElementRegistry: TitaniumElementRegistry, logger: Logger) {
+    private device: DeviceEnvironment;
+
+    constructor(titaniumElementRegistry: TitaniumElementRegistry, logger: Logger, device: DeviceEnvironment) {
         this.titaniumElementRegistry = titaniumElementRegistry;
         this.logger = logger;
-        this.defaultRenderer = new TitaniumRenderer(this.titaniumElementRegistry, this.logger);
+        this.device = device;
+        this.defaultRenderer = new TitaniumRenderer(this.titaniumElementRegistry, this.logger, this.device);
     }
 
     createRenderer(hostElement: any, type: RendererType2): TitaniumRenderer {
@@ -40,7 +47,7 @@ export class TitaniumRendererFactory implements RendererFactory2 {
         if (!hostElement || !type) {
             return this.defaultRenderer;
         }
-        return new TitaniumRenderer(this.titaniumElementRegistry, this.logger);
+        return new TitaniumRenderer(this.titaniumElementRegistry, this.logger, this.device);
     }
 
 }

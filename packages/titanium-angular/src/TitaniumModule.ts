@@ -8,20 +8,24 @@ import {
 } from '@angular/core';
 
 import {
-    TitaniumCommonModule
-} from './TitaniumCommonModule';
+    Logger
+} from './log'
 
 import { 
     TitaniumRendererFactory
 } from './renderer';
 
 import {
+    DeviceEnvironment
+} from './services';
+
+import {
     TitaniumElementRegistry
 } from './vdom';
 
 import {
-    Logger
-} from './log'
+    TitaniumCommonModule
+} from './TitaniumCommonModule';
 
 class MyErrorHandler extends ErrorHandler {
 
@@ -42,7 +46,7 @@ class MyErrorHandler extends ErrorHandler {
     providers: [
         SystemJsNgModuleLoader,
         { provide: ErrorHandler, useClass: MyErrorHandler, deps: [Logger] },
-        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [TitaniumElementRegistry, Logger] },
+        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [TitaniumElementRegistry, Logger, DeviceEnvironment] },
         { provide: RendererFactory2, useExisting: TitaniumRendererFactory }
     ],
     imports: [

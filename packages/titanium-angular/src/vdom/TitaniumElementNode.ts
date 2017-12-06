@@ -10,6 +10,10 @@ import {
 } from '../log';
 
 import {
+    DeviceEnvironment
+} from '../services';
+
+import {
     camelize,
     capitalizeFirstLetter
 } from '../utility/string';
@@ -27,11 +31,14 @@ export class TitaniumElementNode extends ElementNode {
 
     private logger: Logger;
 
-    constructor(nodeName: string, titaniumView: any, logger: Logger) {
+    private device: DeviceEnvironment;
+
+    constructor(nodeName: string, titaniumView: any, logger: Logger, device: DeviceEnvironment) {
         super(nodeName);
 
         this.titaniumView = titaniumView;
         this.logger = logger;
+        this.device = device;
     }
 
     getAttribute(name: string): any {
@@ -42,19 +49,23 @@ export class TitaniumElementNode extends ElementNode {
         return super.getAttribute(name);
     }
 
-    setAttribute(name: string, value: any): void {
-        super.setAttribute(name, value);
+    setAttribute(name: string, value: any, namespace?: string | null): void {
+        super.setAttribute(name, value, namespace);
+
+        if (namespace && !this.device.runsIn(namespace)) {
+            return;
+        }
 
         let propertyName = camelize(name);
         let setterName = 'set' + capitalizeFirstLetter(propertyName);
 
-        if (this.titaniumView[setterName] && typeof this.titaniumView[setterName] === 'function') {
+        if (Reflect.has(this.titaniumView, setterName) && typeof this.titaniumView[setterName] === 'function') {
             this.logger.debug(`${this}.setAttribute via setter: ${setterName}(${JSON.stringify(value)})`);
             this.titaniumView[setterName](value);
             return;
         }
 
-        if (this.titaniumView[propertyName]) {
+        if (Reflect.has(this.titaniumView, propertyName)) {
             this.logger.debug(`${this}.setAttribute via property: ${propertyName}(${JSON.stringify(value)})`);
             this.titaniumView[propertyName] = value;
             return;
@@ -72,7 +83,7 @@ export class TitaniumElementNode extends ElementNode {
         let possibleProperties = ['text', 'title'];
         for (let textProperty of possibleProperties) {
             if (this.hasAttributeAccessor(textProperty)) {
-                this.setAttribute(textProperty, text);
+                this.setAttribute(textProperty, text, null);
                 break;
             }
         }

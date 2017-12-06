@@ -91,7 +91,7 @@ export class ElementNode extends AbstractNode implements ChildNodeInterface, Par
         return this.attributes.get(name);
     }
 
-    setAttribute(name: string, value: any): void {
+    setAttribute(name: string, value: any, namespace?: string | null): void {
         this.attributes.set(name, value);
     }
 

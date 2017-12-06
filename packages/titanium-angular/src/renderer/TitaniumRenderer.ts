@@ -8,6 +8,10 @@ import {
 } from '../log';
 
 import {
+    DeviceEnvironment
+} from '../services';
+
+import {
     CommentNode,
     ElementNode,
     EmulatedRootNode,
@@ -22,11 +26,15 @@ export class TitaniumRenderer extends Renderer2 {
 
     private logger: Logger;
 
-    constructor(elementRegistry: TitaniumElementRegistry, logger: Logger) {
+    private device: DeviceEnvironment;
+
+    constructor(elementRegistry: TitaniumElementRegistry, logger: Logger, device: DeviceEnvironment) {
         super();
 
-        this.logger = logger;
+        
         this.elementRegistry = elementRegistry;
+        this.logger = logger;
+        this.device = device;
 
         this.logger.trace('Created a new TitaniumRenderer instance');
     }
@@ -43,7 +51,7 @@ export class TitaniumRenderer extends Renderer2 {
         this.logger.debug(`TitaniumRenderer.createElement ${name}`);
         if (this.elementRegistry.isTitaniumView(name)) {
             let createView = this.elementRegistry.getViewFactory(name);
-            const node = new TitaniumElementNode(name, createView(), this.logger);
+            const node = new TitaniumElementNode(name, createView(), this.logger, this.device);
             node.meta = this.elementRegistry.getViewMetadata(name);
             return node;
         } else {
@@ -97,9 +105,8 @@ export class TitaniumRenderer extends Renderer2 {
     }
 
     setAttribute(el: ElementNode, name: string, value: string, namespace?: string | null): void {
-        this.logger.debug(`TitaniumRenderer.setAttribute(${el}, ${name}, ${value})`);
-        // @todo consider namespace
-        el.setAttribute(name, value);
+        this.logger.debug(`TitaniumRenderer.setAttribute(${el}, ${name}, ${value}, ${namespace})`);
+        el.setAttribute(name, value, namespace);
     }
 
     removeAttribute(el: ElementNode, name: string, namespace?: string | null): void {

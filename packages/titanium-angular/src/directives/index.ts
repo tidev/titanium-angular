@@ -10,7 +10,11 @@ import {
   PickerDirective,
   PickerColumnDirective,
   PickerRowDirective
-} from './picker'
+} from './picker';
+
+import {
+  PlatformFilterDirective
+} from './platform';
 
 import {
   TabGroupDirective,
@@ -19,6 +23,7 @@ import {
 
 export * from './list-view';
 export * from './picker';
+export * from './platform';
 export * from './tab-group';
 
 export const TITANIUM_DIRECTIVES = [
@@ -30,6 +35,7 @@ export const TITANIUM_DIRECTIVES = [
   PickerDirective,
   PickerColumnDirective,
   PickerRowDirective,
+  PlatformFilterDirective,
   TabGroupDirective,
   TabDirective
 ];
