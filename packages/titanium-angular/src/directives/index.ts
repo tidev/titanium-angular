@@ -1,4 +1,9 @@
 import {
+  HorizontalLayout,
+  VerticalLayout
+} from './layout';
+
+import {
   ListViewComponent,
   ListItemDirective,
   ListSectionDirective,
@@ -21,12 +26,14 @@ import {
   TabDirective
 } from './tab-group';
 
+export * from './layout';
 export * from './list-view';
 export * from './picker';
 export * from './platform';
 export * from './tab-group';
 
 export const TITANIUM_DIRECTIVES = [
+  HorizontalLayout,
   ListViewComponent,
   ListItemDirective,
   ListSectionDirective,
@@ -37,5 +44,6 @@ export const TITANIUM_DIRECTIVES = [
   PickerRowDirective,
   PlatformFilterDirective,
   TabGroupDirective,
-  TabDirective
+  TabDirective,
+  VerticalLayout
 ];
