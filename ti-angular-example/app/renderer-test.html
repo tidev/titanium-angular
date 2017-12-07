@@ -1,18 +1,39 @@
 <TabGroup backgroundColor="white" (open)="onOpen()">
-    <Tab title="Tab 1" icon="assets/images/tab1.png">
-        <Window title="Tab 1">
-            <ListView (itemclick)="onItemClick()" defaultItemTemplate="test">
-                <ng-template tiTemplateName="test">
-                    <label bindId="name" top="10" left="10"></label>
-                </ng-template>
-            
-                <ListSection headerTitle="Fruits" [items]="fruitItems"></ListSection>
-            </ListView>
+    <Tab title="Dialogs">
+        <Window title="Dialogs">
+            <VerticalLayout>
+                <Button title="Alert" (click)="openAlertDialog()">Alert</Button>
+                <Button title="Confirm" (click)="openConfirmDialog()">Confirm</Button>
+                <Button title="Prompt" (click)="openPromptDialog()">Prompt</Button>
+                <Button title="Androd custom view" *platform="'android'" (click)="openCustomDialog()">Android custom view</Button>
+            </VerticalLayout>
         </Window>
     </Tab>
-    <Tab title="Tab 2" icon="assets/images/tab2.png">
-        <Window title="Tab 2">
-            <Label color="#999">I am Window 2!</Label>
+    <Tab title="Picker" icon="assets/images/tab1.png">
+        <Window title="Picker">
+            <Picker>
+                <PickerColumn>
+                    <PickerRow *ngFor="let fruit of ['Bananas', 'Apples']" [attr.title]="fruit"></PickerRow>
+                </PickerColumn>
+            </Picker>
+        </Window>
+    </Tab>
+    <Tab title="List view" icon="assets/images/tab2.png">
+        <Window title="List view">
+            <ListView (itemclick)="onItemClick()">
+                <ng-template tiTemplateName="test">
+                    <ItemComponent></ItemComponent>
+                </ng-template>
+            
+                <RefreshControl (refreshstart)="onRefreshStart($event)"></RefreshControl>
+            
+                <ListSection headerTitle="Fruits" [items]="fruitItems"></ListSection>
+
+                <ListSection headerTitle="Static Items" >
+                    <ListItem title="First item"></ListItem>
+                    <ListItem title="Second item"></ListItem>
+                </ListSection>
+            </ListView>
         </Window>
     </Tab>
 </TabGroup>
