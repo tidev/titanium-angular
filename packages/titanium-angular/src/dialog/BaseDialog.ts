@@ -1,0 +1,62 @@
+import {
+    AbstractDialog
+} from '.';
+
+
+export class BaseDialog extends AbstractDialog {
+
+    title: string;
+
+    message: string;
+
+    private _alertDialog: any;
+
+    constructor(title: string, message: string) {
+        super();
+
+        this.title = title;
+        this.message = message;
+        this._alertDialog = Ti.UI.createAlertDialog({
+            title: this.title,
+            message: this.message
+        });
+        this._alertDialog.addEventListener('click', event => this.handleButtonClick(event));
+    }
+
+    /**
+     * @todo set view from template
+     */
+    set androidView(androidView: any) {
+        this._alertDialog.setAndroidView(androidView);
+    }
+
+    set style(iosAlertStyle: number) {
+        this._alertDialog.setStyle(iosAlertStyle);
+    }
+
+    show(): void {
+        const buttonNames = [];
+        this._actions.forEach((action, index) => {
+            buttonNames.push(action.title);
+            if (action.isCancelAction) {
+                this._alertDialog.cancel = index;
+            }
+            if (action.isDestructiveAction) {
+                this._alertDialog.destructive = index;
+            }
+        });
+        if (buttonNames.length > 0) {
+            this._alertDialog.setButtonNames(buttonNames);
+        }
+        this._alertDialog.show();
+    }
+
+    private handleButtonClick(event: any) {
+        if (this._actions.length === 0) {
+            return;
+        }
+
+        const targetAction = this._actions[event.index];
+        targetAction.handler(event);
+    }
+}
