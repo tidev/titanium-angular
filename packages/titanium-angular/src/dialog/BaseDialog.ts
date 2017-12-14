@@ -23,6 +23,10 @@ export class BaseDialog extends AbstractDialog {
         this._alertDialog.addEventListener('click', event => this.handleButtonClick(event));
     }
 
+    get titaniumView(): any {
+        return this._alertDialog;
+    }
+
     /**
      * @todo set view from template
      */
