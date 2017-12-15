@@ -7,6 +7,7 @@ import {
 import {
     AlertDialog,
     ConfirmDialog,
+    AlertDialogDirective,
     ConfirmResult,
     TabGroupDirective,
     ListSectionDirective
@@ -22,6 +23,8 @@ export class RendererTestComponent implements AfterViewInit {
     @ViewChild(TabGroupDirective) tabGroup: TabGroupDirective;
 
     @ViewChild(ListSectionDirective) listSection: ListSectionDirective;
+
+    @ViewChild('templateAlertDialog') templateAlertDialog: AlertDialogDirective;
 
     public fruitItems: Array<any>;
 
@@ -82,6 +85,18 @@ export class RendererTestComponent implements AfterViewInit {
             message: 'Not implemented yet, check back later!'
         });
         dialog.show();
+    }
+
+    openBasicCustomDialog() {
+        this.templateAlertDialog.show();
+    }
+
+    handleOkButton(event: any) {
+        console.log('Yep, coll stuff indeed!', event);
+    }
+
+    handleCancelButton(event: any) {
+        console.log('You don\'t seem to be impressed, bummer.', event);
     }
 
     onLabelClick(event: any) {
