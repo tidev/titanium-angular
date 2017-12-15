@@ -41,6 +41,10 @@ export class CollectionIndexCache<T extends NodeListInterface> {
         return this._cachedList[index];
     }
 
+    indexOf(node: NodeInterface): number {
+        return this._cachedList.indexOf(node);
+    }
+
     updateNodeCountAndListCache() {
         let nodeCount = 0;
         for (let child = this._collection.collectionBegin(); child !== null; child = this._collection.traverseForward(child)) {

@@ -14,7 +14,6 @@ import {
 } from '../log';
 
 import {
-    ELEMENT_REGISTRY,
     TitaniumElementRegistry
 } from '../vdom';
 
@@ -84,12 +83,13 @@ export class TitaniumPlatformRef extends PlatformRef {
     }
 
     registerTitaniumViews() {
-        const titaniumElementRegistry: TitaniumElementRegistry = this.injector.get(ELEMENT_REGISTRY);
+        const titaniumElementRegistry: TitaniumElementRegistry = this.injector.get(TitaniumElementRegistry);
         titaniumElementRegistry.registerElement('ActivityIndicator', () => Ti.UI.createActivityIndicator, { typeName: 'Ti.UI.ActivityIndicator' });
         titaniumElementRegistry.registerElement('AlertDialog', () => Ti.UI.createAlertDialog, { typeName: 'Ti.UI.AlertDialog' });
         titaniumElementRegistry.registerElement('Button', () => Ti.UI.createButton, { typeName: 'Ti.UI.Button' });
         titaniumElementRegistry.registerElement('DashboardView', () => Ti.UI.createDashboardView, { typeName: 'Ti.UI.DashboardView' });
         titaniumElementRegistry.registerElement('DashboardItem', () => Ti.UI.createDashboardItem, { typeName: 'Ti.UI.DashboardItem' });
+        titaniumElementRegistry.registerElement('DetachedView', () => Ti.UI.createView, { skipAddToDom: true, typeName: 'Ti.UI.View' });
         titaniumElementRegistry.registerElement('ImageView', () => Ti.UI.createImageView, { typeName: 'Ti.UI.ImageView' });
         titaniumElementRegistry.registerElement('Label', () => Ti.UI.createLabel, { typeName: 'Ti.UI.Label' });
         titaniumElementRegistry.registerElement('ListView', () => Ti.UI.createListView, { typeName: 'Ti.UI.ListView' });

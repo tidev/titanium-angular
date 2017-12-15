@@ -26,19 +26,15 @@ import {
 } from '../services';
 
 import {
-    ELEMENT_REGISTRY,
     TitaniumElementRegistry
 } from '../vdom';
 
 import { TitaniumSanitizer } from './TitaniumSanitizer';
 
-
-
 export const COMMON_PROVIDERS = [
     { provide: Logger, useClass: Logger, deps: [] },
     { provide: DeviceEnvironment, useClass: DeviceEnvironment, deps: [] },
     { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: [Logger]},
-    { provide: ELEMENT_REGISTRY, useExisting: TitaniumElementRegistry},
     { provide: Sanitizer, useClass: TitaniumSanitizer, deps: [] }
 ];
 

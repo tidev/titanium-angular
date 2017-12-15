@@ -1,8 +1,11 @@
 import {
-    ChildNodeList,
-    ElementNode,
-    NodeListInterface
+    ElementNode
 } from '.';
+
+import {
+    ChildNodeList,
+    NodeListInterface
+} from '..';
 
 export enum NodeType {
     Element = 1,
@@ -16,6 +19,8 @@ export interface NodeInterface {
     nodeName: string;
 
     nodeType: NodeType;
+
+    nodeValue: string;
 
     parentNode: NodeInterface;
 
@@ -38,4 +43,5 @@ export interface NodeInterface {
     removeChild(childNode: NodeInterface): void;
 
     insertBefore(newNode: NodeInterface, referenceNode: NodeInterface): void;
+
 }

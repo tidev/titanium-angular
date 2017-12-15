@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 
 import {
-    TitaniumElementNode
+    TitaniumElement
 } from '../vdom';
 
 @Directive({
@@ -18,7 +18,7 @@ import {
 })
 export class TabGroupDirective {
 
-    public tabGroup: TitaniumElementNode;
+    public tabGroup: TitaniumElement;
 
     private _selectedIndex: number;
 
@@ -48,7 +48,7 @@ export class TabGroupDirective {
 })
 export class TabDirective implements OnInit {
 
-    public tab: TitaniumElementNode;
+    public tab: TitaniumElement;
 
     private owner: TabGroupDirective;
 
@@ -62,7 +62,7 @@ export class TabDirective implements OnInit {
             throw new Error('The first child of a Tab always must be a Window');
         }
 
-        const windowElement: TitaniumElementNode = <TitaniumElementNode>this.tab.firstElementChild;
+        const windowElement: TitaniumElement = <TitaniumElement>this.tab.firstElementChild;
         this.tab.titaniumView.setWindow(windowElement.titaniumView);
         this.owner.addTab(this);
     }

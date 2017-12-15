@@ -1,5 +1,8 @@
 import {
-    ElementCollection,
+    ElementCollection
+} from '..';
+
+import {
     ElementNode
 } from '.';
 

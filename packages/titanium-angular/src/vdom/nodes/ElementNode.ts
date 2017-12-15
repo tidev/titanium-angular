@@ -1,13 +1,21 @@
 import {
     AbstractNode,
     ChildNodeInterface,
-    ElementCollection,
     NodeInterface,
     NodeType,
     ParentNodeInterface
 } from '.';
-import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
 
+import {
+    ElementCollection
+} from '..';
+
+/**
+ * Represents a default element inside our vdom.
+ * 
+ * Indivudal elements inherit from this class and add features in their
+ * implementation.
+ */
 export class ElementNode extends AbstractNode implements ChildNodeInterface, ParentNodeInterface {
 
     attributes: Map<string, any>;
@@ -84,7 +92,7 @@ export class ElementNode extends AbstractNode implements ChildNodeInterface, Par
     insertBefore(newChild: AbstractNode, referenceChild: AbstractNode) {
         super.insertBefore(newChild, referenceChild);
         
-        this.children.invalidateCache();
+        this.children.invalidateCache();   
     }
 
     getAttribute(name: string): any {
@@ -119,8 +127,12 @@ export class ElementNode extends AbstractNode implements ChildNodeInterface, Par
         }
     }
 
-    remove() {
+    remove(): void {
         this.parentNode.removeChild(this);
+    }
+
+    updateText(): void {
+        // Overriden by actual element implementations
     }
 
     toString(): string {

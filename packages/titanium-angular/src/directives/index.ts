@@ -1,6 +1,6 @@
 import {
-  HorizontalLayout,
-  VerticalLayout
+  HorizontalLayoutComponent,
+  VerticalLayoutComponent
 } from './layout';
 
 import {
@@ -33,7 +33,7 @@ export * from './platform';
 export * from './tab-group';
 
 export const TITANIUM_DIRECTIVES = [
-  HorizontalLayout,
+  HorizontalLayoutComponent,
   ListViewComponent,
   ListItemDirective,
   ListSectionDirective,
@@ -45,5 +45,5 @@ export const TITANIUM_DIRECTIVES = [
   PlatformFilterDirective,
   TabGroupDirective,
   TabDirective,
-  VerticalLayout
+  VerticalLayoutComponent
 ];

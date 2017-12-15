@@ -1,9 +1,11 @@
 import {
-    ChildNodeList,
+    ChildNodeList
+} from '..';
+
+import {
     NodeInterface,
     NodeType,
-    ElementNode,
-    EmulatedRootNode
+    ElementNode
 } from '.'
 
 export abstract class AbstractNode implements NodeInterface {
@@ -18,6 +20,8 @@ export abstract class AbstractNode implements NodeInterface {
 
     ngCssClasses: Map<string, boolean>;
 
+    protected _nodeValue;
+
     private _childNodes: ChildNodeList;
 
     private _nextSibling: NodeInterface;
@@ -31,9 +35,17 @@ export abstract class AbstractNode implements NodeInterface {
         this._previousSibling = this;
     }
 
+    get nodeValue() {
+        return null;
+    }
+
+    set nodeValue(value: string) {
+        // Will be overriden by comment and text nodes
+    }
+
     get parentElement(): ElementNode {
         const ancestor = this.parentNode;
-        return ancestor.nodeType === NodeType.Element ? <ElementNode>ancestor : null;
+        return ancestor !== null && ancestor.nodeType === NodeType.Element ? <ElementNode>ancestor : null;
     }
 
     get childNodes(): ChildNodeList {
@@ -107,9 +119,9 @@ export abstract class AbstractNode implements NodeInterface {
 
         if (referenceNode) {
             newNode._previousSibling = referenceNode._previousSibling;
-            newNode._nextSibling = referenceNode._nextSibling;
+            newNode._nextSibling = referenceNode;
             (<AbstractNode>referenceNode._previousSibling)._nextSibling = newNode;
-            referenceNode._previousSibling = newNode._previousSibling;
+            referenceNode._previousSibling = newNode;
         } else {
             this.firstChild = newNode;
         }

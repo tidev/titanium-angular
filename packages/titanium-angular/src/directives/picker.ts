@@ -8,14 +8,14 @@ import {
 } from '@angular/core';
 
 import {
-    TitaniumElementNode
+    TitaniumElement
 } from '../vdom';
 
 @Directive({
     selector: 'PickerRow'
 })
 export class PickerRowDirective {
-    element: TitaniumElementNode;
+    element: TitaniumElement;
 
     constructor(el: ElementRef) {
         this.element = el.nativeElement;
@@ -26,7 +26,7 @@ export class PickerRowDirective {
     selector: 'PickerColumn'
 })
 export class PickerColumnDirective implements AfterContentInit {
-    element: TitaniumElementNode;
+    element: TitaniumElement;
 
     @ContentChildren(PickerRowDirective) rows: QueryList<PickerRowDirective>;
 
@@ -46,7 +46,7 @@ export class PickerColumnDirective implements AfterContentInit {
 })
 export class PickerDirective implements AfterContentInit {
 
-    private element: TitaniumElementNode;
+    private element: TitaniumElement;
 
     @ContentChildren(PickerRowDirective) rows: QueryList<PickerRowDirective>;
 

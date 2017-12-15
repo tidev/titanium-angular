@@ -9,10 +9,6 @@ import {
 } from '@angular/core';
 
 import {
-    TitaniumRenderer
-} from '.';
-
-import {
     Logger
 } from '../log';
 
@@ -23,6 +19,11 @@ import {
 import {
     TitaniumElementRegistry
 } from '../vdom';
+
+import {
+    TitaniumRenderer,
+    TitaniumRendererConfiguration
+} from '.';
 
 @Injectable()
 export class TitaniumRendererFactory implements RendererFactory2 {
@@ -39,7 +40,11 @@ export class TitaniumRendererFactory implements RendererFactory2 {
         this.titaniumElementRegistry = titaniumElementRegistry;
         this.logger = logger;
         this.device = device;
-        this.defaultRenderer = new TitaniumRenderer(this.titaniumElementRegistry, this.logger, this.device);
+        this.defaultRenderer = new TitaniumRenderer({
+            elementRegistry: this.titaniumElementRegistry,
+            logger: this.logger,
+            device: this.device
+        });
     }
 
     createRenderer(hostElement: any, type: RendererType2): TitaniumRenderer {
@@ -47,7 +52,11 @@ export class TitaniumRendererFactory implements RendererFactory2 {
         if (!hostElement || !type) {
             return this.defaultRenderer;
         }
-        return new TitaniumRenderer(this.titaniumElementRegistry, this.logger, this.device);
+        return new TitaniumRenderer({
+            elementRegistry: this.titaniumElementRegistry,
+            logger: this.logger,
+            device: this.device
+        });
     }
 
 }

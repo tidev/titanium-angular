@@ -23,7 +23,7 @@ import {
     AbstractTextualNode,
     ElementNode,
     NodeInterface,
-    TitaniumElementNode,
+    TitaniumElement,
     TitaniumElementRegistry
 } from '../vdom';
 
@@ -47,14 +47,14 @@ export class ListItemContext {
 @Component({
     selector: 'ListView',
     template: `
-        <ListWrapper>
-            <TemplateLoadingContainer #loader></TemplateLoadingContainer>
-        </ListWrapper>
+        <DetachedView>
+            <Placeholder #loader></Placeholder>
+        </DetachedView>
     `
 })
 export class ListViewComponent implements AfterContentInit {
 
-    public element: TitaniumElementNode;
+    public element: TitaniumElement;
 
     public listView: any;
 
@@ -99,7 +99,7 @@ export class ListViewComponent implements AfterContentInit {
 
     private convertNodesToTemplatesRecursive(nodes: Iterable<NodeInterface>, templates: Array<ListItemViewTemplate>): void {
         for (let node of nodes) {
-            if (node instanceof TitaniumElementNode) {
+            if (node instanceof TitaniumElement) {
                 let meta = this._elementRegistry.getViewMetadata(node.nodeName);
                 let templateDefinition: ListItemViewTemplate = {
                     type: meta.typeName,
@@ -156,7 +156,7 @@ export class ListItemDirective {
 })
 export class ListSectionDirective implements AfterContentInit {
 
-    public element: TitaniumElementNode;
+    public element: TitaniumElement;
 
     @ContentChildren(ListItemDirective) contentItems: QueryList<ListItemDirective>
 
@@ -224,7 +224,7 @@ export class ListItemTemplateDirective {
 })
 export class ListRefreshControlDirective implements AfterViewInit {
 
-    private refreshControl: TitaniumElementNode;
+    private refreshControl: TitaniumElement;
 
     private listView: ListViewComponent;
 

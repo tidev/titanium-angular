@@ -24,6 +24,10 @@ export class ElementCollection implements NodeListInterface {
         return <ElementNode>this._indexCache.nodeAt(index);
     }
 
+    indexOf(node: NodeInterface) {
+        return this._indexCache.indexOf(node);
+    }
+
     collectionBegin(): ElementNode {
         return this._rootNode.firstElementChild;
     }

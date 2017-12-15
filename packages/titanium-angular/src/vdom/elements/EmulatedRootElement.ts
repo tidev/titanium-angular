@@ -1,8 +1,8 @@
 import {
     ElementNode
-} from '.';
+} from '..';
 
-export class EmulatedRootNode extends ElementNode {
+export class EmulatedRootElement extends ElementNode {
     constructor() {
         super('Root');
     }

@@ -1,29 +1,35 @@
 import {
+    AbstractAngularElement,
+    InvisibleElement
+} from '.';
+
+import {
     AbstractNode,
     ElementNode,
     NodeInterface,
     TextNode
-} from '.';
+} from '..';
 
 import {
     Logger
-} from '../log';
+} from '../../log';
 
 import {
     DeviceEnvironment
-} from '../services';
+} from '../../services';
 
 import {
     camelize,
     capitalizeFirstLetter
-} from '../utility/string';
+} from '../../utility/string';
+import { Directive } from '@angular/core/src/metadata/directives';
 
 export interface ViewMetadata {
     skipAddToDom?: boolean,
     typeName: String
 }
 
-export class TitaniumElementNode extends ElementNode {
+export class TitaniumElement extends AbstractAngularElement {
 
     meta: ViewMetadata;
 
@@ -76,7 +82,9 @@ export class TitaniumElementNode extends ElementNode {
 
     hasAttributeAccessor(name: string): boolean {
         let acessorNames = [name, `set${capitalizeFirstLetter(camelize(name))}`];
-        return acessorNames.some(accessorName => Reflect.has(this.titaniumView, accessorName));
+        return acessorNames.some(accessorName => {
+            return Reflect.has(this.titaniumView, accessorName)
+        });
     }
 
     public setText(text: string): void {
@@ -90,13 +98,14 @@ export class TitaniumElementNode extends ElementNode {
     }
 
     /**
-     * Updates the text when new TextNodes where added as a child
+     * Reads text from all text child nodes and updates the title or text property of the 
+     * underlying Titanium view
      */
-    private updateText(): void {
+    updateText(): void {
         let updatedText = '';
         for (let child = this.firstChild; child !== null; child = child.nextSibling) {
             if (child instanceof TextNode) {
-                updatedText = child.text;
+                updatedText = child.nodeValue;
             }
         }
         updatedText = updatedText.replace(/^\s+|\s+$/g, '');
@@ -113,15 +122,20 @@ export class TitaniumElementNode extends ElementNode {
             return;
         }
 
-        if (newNode instanceof TitaniumElementNode) {
-            if (newNode.meta.skipAddToDom) {
-                return;
-            }
+        if (newNode instanceof TitaniumElement) {
+            this.insertChild(newNode);
+        }
 
-            let parentView = this.titaniumView;
-            let childView = newNode.titaniumView;
+        if (newNode instanceof InvisibleElement) {
+            // @todo Lift up any Titanium child elements into the visual tree
+        }
+    }
 
-            parentView.add(childView);
+    insertIntoVisualTree(child: AbstractAngularElement, atIndex?: number) {
+        this.logger.trace(`TitaniumElement.insertIntoVisualTree(${child})`);
+
+        if (child instanceof TitaniumElement) {
+            this.insertChild(child, atIndex);
         }
     }
 
@@ -135,5 +149,24 @@ export class TitaniumElementNode extends ElementNode {
         super.off(eventName, handler);
 
         this.titaniumView.removeEventListener(eventName, handler);
+    }
+
+    private insertChild(element: TitaniumElement, atIndex?: number): void {
+        if (element.meta.skipAddToDom) {
+            this.logger.trace(`Element ${element} is detached from the visual tree, skip adding to parent ${this}`);
+            return;
+        }
+
+        let parentView = this.titaniumView;
+        let childView = element.titaniumView;
+
+        if (atIndex === null) {
+            parentView.add(childView);
+        } else {
+            parentView.insertAt({
+                view: childView,
+                position: atIndex
+            });
+        }
     }
 }

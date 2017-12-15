@@ -13,13 +13,20 @@ import {
 
 import {
     CommentNode,
+    InvisibleElement,
     ElementNode,
-    EmulatedRootNode,
+    EmulatedRootElement,
     NodeInterface,
-    TitaniumElementNode,
+    TitaniumElement,
     TitaniumElementRegistry,
     TextNode
 } from '../vdom';
+
+export interface TitaniumRendererConfiguration {
+    elementRegistry: TitaniumElementRegistry,
+    logger: Logger,
+    device: DeviceEnvironment
+}
 
 export class TitaniumRenderer extends Renderer2 {
     private elementRegistry: TitaniumElementRegistry;
@@ -28,13 +35,12 @@ export class TitaniumRenderer extends Renderer2 {
 
     private device: DeviceEnvironment;
 
-    constructor(elementRegistry: TitaniumElementRegistry, logger: Logger, device: DeviceEnvironment) {
+    constructor(configuration: TitaniumRendererConfiguration) {
         super();
 
-        
-        this.elementRegistry = elementRegistry;
-        this.logger = logger;
-        this.device = device;
+        this.elementRegistry = configuration.elementRegistry;
+        this.logger = configuration.logger;
+        this.device = configuration.device;
 
         this.logger.trace('Created a new TitaniumRenderer instance');
     }
@@ -49,14 +55,14 @@ export class TitaniumRenderer extends Renderer2 {
 
     createElement(name: string, namespace?: string | null): NodeInterface {
         this.logger.debug(`TitaniumRenderer.createElement ${name}`);
-        if (this.elementRegistry.isTitaniumView(name)) {
+        if (this.elementRegistry.hasElement(name)) {
             let createView = this.elementRegistry.getViewFactory(name);
-            const node = new TitaniumElementNode(name, createView(), this.logger, this.device);
+            const node = new TitaniumElement(name, createView(), this.logger, this.device);
             node.meta = this.elementRegistry.getViewMetadata(name);
             return node;
-        } else {
-            return new ElementNode(name);
         }
+
+        return new InvisibleElement(name);
     }
 
     createComment(value: string): CommentNode {
@@ -91,7 +97,7 @@ export class TitaniumRenderer extends Renderer2 {
 
     selectRootElement(selectorOrNode: string | any): ElementNode {
         this.logger.debug(`TitaniumRenderer.selectRootElement ${selectorOrNode}`);
-        return new EmulatedRootNode();
+        return new EmulatedRootElement();
     }
 
     parentNode(node: NodeInterface): any {
@@ -130,11 +136,13 @@ export class TitaniumRenderer extends Renderer2 {
     }
 
     setProperty(el: any, name: string, value: any): void {
-        this.logger.debug(`TitaniumRenderer.setProperty`);
+        this.logger.debug(`TitaniumRenderer.setProperty(${el}, ${name}, ${value})`);
+        el.setAttribute(name, value);
     }
 
     setValue(node: NodeInterface, value: string): void {
         this.logger.debug(`TitaniumRenderer.setValue(${node}, ${value})`);
+        node.nodeValue = value;
     }
 
     listen(target: ElementNode, eventName: string, callback: (event: any) => boolean | void): () => void {
