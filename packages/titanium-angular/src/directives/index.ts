@@ -1,4 +1,9 @@
 import {
+  AlertDialogDirective,
+  DialogActionDirective
+} from './dialog';
+
+import {
   HorizontalLayoutComponent,
   VerticalLayoutComponent
 } from './layout';
@@ -26,6 +31,7 @@ import {
   TabDirective
 } from './tab-group';
 
+export * from './dialog';
 export * from './layout';
 export * from './list-view';
 export * from './picker';
@@ -33,6 +39,8 @@ export * from './platform';
 export * from './tab-group';
 
 export const TITANIUM_DIRECTIVES = [
+  AlertDialogDirective,
+  DialogActionDirective,
   HorizontalLayoutComponent,
   ListViewComponent,
   ListItemDirective,
