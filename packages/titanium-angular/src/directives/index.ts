@@ -27,6 +27,10 @@ import {
 } from './platform';
 
 import {
+  ScrollableViewDirective
+} from './scrollable-view';
+
+import {
   TabGroupDirective,
   TabDirective
 } from './tab-group';
@@ -51,6 +55,7 @@ export const TITANIUM_DIRECTIVES = [
   PickerColumnDirective,
   PickerRowDirective,
   PlatformFilterDirective,
+  ScrollableViewDirective,
   TabGroupDirective,
   TabDirective,
   VerticalLayoutComponent
