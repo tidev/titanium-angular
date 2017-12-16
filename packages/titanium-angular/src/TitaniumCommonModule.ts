@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
 
 import {
-    NgModule
+    NgModule,
+    NO_ERRORS_SCHEMA
 } from '@angular/core';
 
 import { TITANIUM_DIRECTIVES } from './directives';
@@ -16,7 +17,8 @@ import { TITANIUM_DIRECTIVES } from './directives';
     exports: [
         CommonModule,
         ...TITANIUM_DIRECTIVES
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class TitaniumCommonModule {
 
