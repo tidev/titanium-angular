@@ -99,6 +99,10 @@ export class RendererTestComponent implements AfterViewInit {
         console.log('You don\'t seem to be impressed, bummer.', event);
     }
 
+    onItemClick(event: any) {
+        
+    }
+
     onLabelClick(event: any) {
         alert(`Label text: ${event.source.text}`);
     }
