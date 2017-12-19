@@ -1,3 +1,7 @@
+// Explicitly require this early, otherwise Angular DI doens't work properly
+import 'reflect-metadata';
+import 'zone.js';
+
 import {
     ApplicationModule,
     ErrorHandler,

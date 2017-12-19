@@ -1,6 +1,3 @@
-// Explicitly require this early, otherwise Angular DI doens't work properly
-import 'reflect-metadata';
-
 export * from './dialog';
 export * from './directives';
 export * from './log';
