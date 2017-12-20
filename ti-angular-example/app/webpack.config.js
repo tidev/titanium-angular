@@ -3,12 +3,12 @@
 const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const path = require('path');
 const webpack = require('webpack');
-const { GenerateAppJsPlugin, titaniumTarget } = require('webpack-dev-titanium');
+const { GenerateAppJsPlugin, titaniumTarget, WatchStateNotifierPlugin } = require('webpack-dev-titanium');
 
 module.exports = env => {
 	const enableAot = env && env.production;
 	const tsConfigPath = enableAot ? 'tsconfig.aot.json' : 'tsconfig.json';
-	return {
+	const config = {
 		context: __dirname,
 		target: titaniumTarget,
 		entry: {
@@ -58,7 +58,12 @@ module.exports = env => {
 				entryModule: path.resolve('./src/app.module#AppModule'),
 				skipCodeGeneration: !enableAot
 			})
-			// @todo: Plugin for IPC communication with appc-daemon?
 		]
 	};
+
+	if (env && !env.production) {
+		config.plugins.push(new WatchStateNotifierPlugin());
+	}
+
+	return config;
 };
