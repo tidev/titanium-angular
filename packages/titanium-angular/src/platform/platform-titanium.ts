@@ -1,4 +1,24 @@
-import { platformCore, PlatformRef, createPlatformFactory, StaticProvider } from "@angular/core";
+import {
+    createPlatformFactory,
+    platformCore,
+    PlatformRef,
+    StaticProvider
+} from "@angular/core";
 
-export const platformTitanium: (extraProviders?: StaticProvider[]) => PlatformRef = 
-    createPlatformFactory(platformCore, "titanium", []);
+import {
+    TitaniumPlatformRef
+} from '.';
+
+import {
+    COMMON_PROVIDERS
+} from './providers';
+
+export const _platformTitanium = createPlatformFactory(
+    platformCore,
+    'titanium',
+    [...COMMON_PROVIDERS]
+);
+
+export function platformTitanium(): PlatformRef {
+    return new TitaniumPlatformRef(_platformTitanium());
+}
