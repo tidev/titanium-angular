@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 const spawn = require('child_process').spawn;
 
@@ -24,10 +26,9 @@ class WebpackBundler {
 			...this.generateEnvFlags(config)
 		];
 
-		console.log(args);
-
 		return new Promise((resolve, reject) => {
 			this.logger.info('Running initial Webpack build');
+			this.logger.trace(`Executing: node ${args.join(' ')}`);
 			const child = spawn('node', args, {
 				stdio: 'inherit',
 				cwd: path.join(this.cli.argv['project-dir'], 'app')
