@@ -1,3 +1,7 @@
+// Explicitly require this early, otherwise Angular DI doens't work properly
+import 'reflect-metadata';
+import 'zone.js';
+
 import {
     ApplicationModule,
     ErrorHandler,
@@ -27,25 +31,14 @@ import {
     TitaniumCommonModule
 } from './TitaniumCommonModule';
 
-class MyErrorHandler extends ErrorHandler {
-
-    private logger: Logger;
-
-    constructor(logger: Logger) {
-        super();
-        this.logger = logger;
-    }
-
-    handleError(error: any): void {
-        this.logger.error(error.message);
-        this.logger.error(error.stack);
-    }
-}
+import {
+    TitaniumErrorHandler
+} from './TitaniumErrorHandler';
 
 @NgModule({
     providers: [
         SystemJsNgModuleLoader,
-        { provide: ErrorHandler, useClass: MyErrorHandler, deps: [Logger] },
+        { provide: ErrorHandler, useClass: TitaniumErrorHandler, deps: [Logger] },
         { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [TitaniumElementRegistry, Logger, DeviceEnvironment] },
         { provide: RendererFactory2, useExisting: TitaniumRendererFactory }
     ],

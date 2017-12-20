@@ -1,12 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es2015",
-        "module": "es2015",
+        "target": "es5",
+        "module": "commonjs",
         "moduleResolution": "node",
         "sourceMap": true,
+        "downlevelIteration": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "noImplicitUseStrict": true,
+        "noEmitHelpers": false,
         "declaration": true,
         "removeComments": false,
         "noEmitOnError": true,
@@ -14,7 +16,7 @@
         "lib": [
             "dom",
             "es6",
-            "es2015"
+            "es2015.iterable"
         ],
         "rootDir": "./src",
         "outDir": "./dist",
@@ -27,7 +29,7 @@
         "src/**/*"
     ],
     "angularCompilerOptions": {
-        "genDir": "aot",
+        "genDir": "./dist",
         "skipMetadataEmit": false,
         "skipTemplateCodegen": true,
         "strictMetadataEmit": true

@@ -22,7 +22,6 @@ import {
     camelize,
     capitalizeFirstLetter
 } from '../../utility/string';
-import { Directive } from '@angular/core/src/metadata/directives';
 
 export interface ViewMetadata {
     skipAddToDom?: boolean,

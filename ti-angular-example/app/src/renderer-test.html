@@ -28,7 +28,7 @@
     </Tab>
     <Tab title="List view" icon="assets/images/tab2.png">
         <Window title="List view" barColor="#1976d2" [titleAttributes]="{ color: '#FFF' }">
-            <ListView (itemclick)="onItemClick()">
+            <ListView (itemclick)="onItemClick($event)">
                 <ng-template tiTemplateName="test">
                     <ItemComponent></ItemComponent>
                 </ng-template>

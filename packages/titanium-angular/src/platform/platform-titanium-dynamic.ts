@@ -1,5 +1,4 @@
 import { 
-    COMPILER_OPTIONS,
     createPlatformFactory,
     PlatformRef,
     StaticProvider
@@ -24,6 +23,6 @@ export const _platformTitaniumDynamic = createPlatformFactory(
     [...COMMON_PROVIDERS, ...TITANIUM_COMPILER_PROVIDERS]
 );
 
-export function platformTitaniumDynamic(extraProviders?: any[]) {
-    return new TitaniumPlatformRef(_platformTitaniumDynamic(extraProviders));
+export function platformTitaniumDynamic(): PlatformRef {
+    return new TitaniumPlatformRef(_platformTitaniumDynamic());
 }
