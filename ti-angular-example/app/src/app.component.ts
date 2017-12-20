@@ -14,11 +14,10 @@ import {
 } from 'titanium-angular';
 
 @Component({
-    //moduleId: module.id,
-    selector: "renderer-test",
-    templateUrl: "./renderer-test.html"
+    selector: "ti-app",
+    templateUrl: "./app-component.html"
 })
-export class RendererTestComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit {
 
     @ViewChild(TabGroupDirective) tabGroup: TabGroupDirective;
 
