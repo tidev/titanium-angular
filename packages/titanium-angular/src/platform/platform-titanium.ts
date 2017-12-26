@@ -7,7 +7,7 @@ import {
 
 import {
     TitaniumPlatformRef
-} from '.';
+} from './TitaniumPlatformRef';
 
 import {
     COMMON_PROVIDERS
