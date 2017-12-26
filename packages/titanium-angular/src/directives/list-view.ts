@@ -1,4 +1,5 @@
 import {
+    AfterContentChecked,
     AfterContentInit,
     AfterViewInit,
     Component,
@@ -10,8 +11,10 @@ import {
     Input,
     OnInit,
     QueryList,
+    SimpleChanges,
     TemplateRef,
     ViewChild,
+    ViewChildren,
     ViewContainerRef
 } from '@angular/core';
 
@@ -56,7 +59,7 @@ export class ListViewComponent implements AfterContentInit {
 
     public element: TitaniumElement;
 
-    public listView: any;
+    public listView: Titanium.UI.ListView;
 
     @ViewChild("loader", { read: ViewContainerRef }) loader: ViewContainerRef;
 
@@ -154,7 +157,7 @@ export class ListItemDirective {
 @Directive({
     selector: 'ListSection'
 })
-export class ListSectionDirective implements AfterContentInit {
+export class ListSectionDirective implements AfterContentInit, AfterContentChecked {
 
     public element: TitaniumElement;
 
@@ -182,7 +185,7 @@ export class ListSectionDirective implements AfterContentInit {
         this.element.titaniumView.setItems(this._items);
     }
 
-    ngAfterContentInit() {
+    private updateContentListitems() {
         if (this.contentItems.length > 0) {
             this.items = this.contentItems.map(listItem => {
                 let itemProperties = {};
@@ -192,8 +195,16 @@ export class ListSectionDirective implements AfterContentInit {
                 return { properties: itemProperties };
             });
         }
+    }
+
+    ngAfterContentInit() {
+        this.updateContentListitems();
         
         this.owner.appendSection(this.element.titaniumView);
+    }
+
+    ngAfterContentChecked() {
+        this.updateContentListitems();
     }
 }
 
