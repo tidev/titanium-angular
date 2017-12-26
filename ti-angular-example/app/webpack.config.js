@@ -3,6 +3,7 @@
 const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { GenerateAppJsPlugin, titaniumTarget, WatchStateNotifierPlugin } = require('webpack-dev-titanium');
 
 module.exports = env => {
@@ -47,6 +48,9 @@ module.exports = env => {
 			new webpack.optimize.CommonsChunkPlugin({
 				name: ['vendor'],
 			}),
+			new CopyWebpackPlugin([
+				{ from: 'assets/**' },
+			]),
 			new GenerateAppJsPlugin([
 				'vendor',
 				'bundle'
