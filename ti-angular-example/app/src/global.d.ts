@@ -1,0 +1,1 @@
+/// <reference path="../../../packages/types-titanium/index.d.ts" />

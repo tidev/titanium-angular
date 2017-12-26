@@ -6,8 +6,14 @@
 
 const Template = require("webpack/lib/Template");
 
+/**
+ * Modified JSONP main template plugin to work within Titanium.
+ * 
+ * Alters the require-ensure build step to load additional chunks via require
+ * instead with a jsonp script, removes the now unnecessary jsonp-template step
+ * and replaces window with global in the bootstrap step.
+ */
 class JsonpMainTemplatePlugin {
-
     apply(mainTemplate) {
         mainTemplate.plugin("local-vars", function (source, chunk) {
             if (chunk.chunks.length > 0) {
@@ -24,11 +30,9 @@ class JsonpMainTemplatePlugin {
             }
             return source;
         });
-        mainTemplate.plugin("jsonp-script", function (_, chunk, hash) {
+        mainTemplate.plugin("require-ensure", function (_, chunk, hash) {
             const chunkFilename = this.outputOptions.chunkFilename;
             const chunkMaps = chunk.getChunkMaps();
-            const crossOriginLoading = this.outputOptions.crossOriginLoading;
-            const chunkLoadTimeout = this.outputOptions.chunkLoadTimeout;
             const scriptSrcPath = this.applyPluginsWaterfall("asset-path", JSON.stringify(chunkFilename), {
                 hash: `" + ${this.renderCurrentHashCode(hash)} + "`,
                 hashWithLength: length => `" + ${this.renderCurrentHashCode(hash, length)} + "`,
@@ -47,66 +51,12 @@ class JsonpMainTemplatePlugin {
                 }
             });
             return this.asString([
-                "var script = document.createElement('script');",
-                "script.type = 'text/javascript';",
-                "script.charset = 'utf-8';",
-                "script.async = true;",
-                `script.timeout = ${chunkLoadTimeout};`,
-                crossOriginLoading ? `script.crossOrigin = ${JSON.stringify(crossOriginLoading)};` : "",
-                `if (${this.requireFn}.nc) {`,
-                this.indent(`script.setAttribute("nonce", ${this.requireFn}.nc);`),
-                "}",
-                `script.src = ${this.requireFn}.p + ${scriptSrcPath};`,
-                `var timeout = setTimeout(onScriptComplete, ${chunkLoadTimeout});`,
-                "script.onerror = script.onload = onScriptComplete;",
-                "function onScriptComplete() {",
+                "if (installedChunks[chunkId] !== 0) {",
                 this.indent([
-                    "// avoid mem leaks in IE.",
-                    "script.onerror = script.onload = null;",
-                    "clearTimeout(timeout);",
-                    "var chunk = installedChunks[chunkId];",
-                    "if(chunk !== 0) {",
-                    this.indent([
-                        "if(chunk) {",
-                        this.indent("chunk[1](new Error('Loading chunk ' + chunkId + ' failed.'));"),
-                        "}",
-                        "installedChunks[chunkId] = undefined;"
-                    ]),
-                    "}"
-                ]),
-                "};",
-            ]);
-        });
-        mainTemplate.plugin("require-ensure", function (_, chunk, hash) {
-            return this.asString([
-                "var installedChunkData = installedChunks[chunkId];",
-                "if(installedChunkData === 0) {",
-                this.indent([
-                    "return new Promise(function(resolve) { resolve(); });"
+                    "var chunk = require(" + scriptSrcPath + ");"
                 ]),
                 "}",
-                "",
-                "// a Promise means \"currently loading\".",
-                "if(installedChunkData) {",
-                this.indent([
-                    "return installedChunkData[2];"
-                ]),
-                "}",
-                "",
-                "// setup Promise in chunk cache",
-                "var promise = new Promise(function(resolve, reject) {",
-                this.indent([
-                    "installedChunkData = installedChunks[chunkId] = [resolve, reject];"
-                ]),
-                "});",
-                "installedChunkData[2] = promise;",
-                "",
-                "// start chunk loading",
-                "var head = document.getElementsByTagName('head')[0];",
-                this.applyPluginsWaterfall("jsonp-script", "", chunk, hash),
-                "head.appendChild(script);",
-                "",
-                "return promise;"
+                "return Promise.resolve();"
             ]);
         });
         mainTemplate.plugin("require-extensions", function (source, chunk) {

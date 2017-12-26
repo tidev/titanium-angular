@@ -64,7 +64,6 @@
   </deployment-targets>
   <sdk-version>7.0.0.v20171025151655</sdk-version>
   <plugins>
-    <plugin>ti.angular</plugin>
   </plugins>
   <property name="appc-app-id" type="string">59e8fe9118ef6f2d175907e6</property>
   <property name="acs-authbase-url-development" type="string">https://dolphin-secure-identity.cloud.appcelerator.com</property>

@@ -50,8 +50,9 @@ export class PlatformFilterDirective {
     private updateView() {
         this._viewContainer.clear();
 
-        if (typeof this._context.filter !== 'string') {
-            return;
+        const filterType = typeof this._context.filter;
+        if (filterType !== 'string') {
+            throw new Error(`Expected a string as the platform filter, but received ${typeof this._context}`);
         }
 
         let renderOnCurrentPlatform = false;
