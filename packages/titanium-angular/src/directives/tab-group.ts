@@ -18,14 +18,17 @@ import {
 })
 export class TabGroupDirective {
 
-    public tabGroup: TitaniumElement;
+    public element: TitaniumElement;
+
+    private tabGroup: Titanium.UI.TabGroup;
 
     private _selectedIndex: number;
 
     private viewInitialized: boolean;
 
     constructor(el: ElementRef) {
-        this.tabGroup = el.nativeElement;
+        this.element = el.nativeElement;
+        this.tabGroup = this.element.titaniumView;
     }
 
     @Input()
@@ -33,12 +36,16 @@ export class TabGroupDirective {
         return this._selectedIndex;
     }
 
+    get titaniumView(): Titanium.UI.TabGroup {
+        return this.tabGroup;
+    }
+
     addTab(tab: TabDirective) {
-        this.tabGroup.titaniumView.addTab(tab.tab.titaniumView);
+        this.tabGroup.addTab(tab.titaniumView);
     }
 
     open() {
-        this.tabGroup.titaniumView.open();
+        this.tabGroup.open();
     }
 
 }
@@ -48,7 +55,9 @@ export class TabGroupDirective {
 })
 export class TabDirective implements OnInit {
 
-    public tab: TitaniumElement;
+    public element: TitaniumElement;
+
+    private tab: Titanium.UI.Tab;
 
     private owner: TabGroupDirective;
 
@@ -57,13 +66,17 @@ export class TabDirective implements OnInit {
         this.owner = owner;
     }
 
+    get titaniumView() {
+        return this.tab;
+    }
+
     ngOnInit() {
-        if (this.tab.firstElementChild.nodeName !== 'Window') {
+        const windowElement: TitaniumElement = <TitaniumElement>this.element.firstElementChild;
+        if (!windowElement || windowElement.nodeName !== 'Window') {
             throw new Error('The first child of a Tab always must be a Window');
         }
-
-        const windowElement: TitaniumElement = <TitaniumElement>this.tab.firstElementChild;
-        this.tab.titaniumView.setWindow(windowElement.titaniumView);
+        
+        this.tab.setWindow(windowElement.titaniumView);
         this.owner.addTab(this);
     }
 
