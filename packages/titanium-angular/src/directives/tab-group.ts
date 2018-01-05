@@ -62,7 +62,8 @@ export class TabDirective implements OnInit {
     private owner: TabGroupDirective;
 
     constructor(el: ElementRef, owner: TabGroupDirective) {
-        this.tab = el.nativeElement
+        this.element = el.nativeElement;
+        this.tab = this.element.titaniumView;
         this.owner = owner;
     }
 
