@@ -1,3 +1,5 @@
+import { PlatformLocation } from '@angular/common';
+
 import {
     ElementSchemaRegistry,
     ResourceLoader
@@ -7,10 +9,16 @@ import {
     COMPILER_OPTIONS,
     InjectionToken,
     MissingTranslationStrategy,
+    PLATFORM_INITIALIZER,
     Sanitizer,
     StaticProvider,
     ViewEncapsulation
 } from '@angular/core';
+
+import {
+    StateLocationStrategy,
+    TitaniumPlatformLocation
+} from '../common';
 
 import {
     FileSystemResourceLoader,
@@ -26,15 +34,23 @@ import {
 } from '../services';
 
 import {
+    TitaniumDomAdapter,
     TitaniumElementRegistry
 } from '../vdom';
 
 import { TitaniumSanitizer } from './TitaniumSanitizer';
 
+export function initDomAdapter() {
+    TitaniumDomAdapter.makeCurrent();
+}
+
 export const COMMON_PROVIDERS = [
     { provide: Logger, useClass: Logger, deps: [] },
     { provide: DeviceEnvironment, useClass: DeviceEnvironment, deps: [] },
     { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: [Logger]},
+    { provide: PLATFORM_INITIALIZER, useValue: initDomAdapter, multi: true },
+    { provide: StateLocationStrategy, useClass: StateLocationStrategy, deps: [] },
+    { provide: PlatformLocation, useClass: TitaniumPlatformLocation, deps: [StateLocationStrategy] },
     { provide: Sanitizer, useClass: TitaniumSanitizer, deps: [] }
 ];
 

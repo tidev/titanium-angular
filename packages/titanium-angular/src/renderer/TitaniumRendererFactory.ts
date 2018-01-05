@@ -48,7 +48,7 @@ export class TitaniumRendererFactory implements RendererFactory2 {
     }
 
     createRenderer(hostElement: any, type: RendererType2): TitaniumRenderer {
-        this.logger.debug('TitaniumRendererFactory.createRenderer');
+        this.logger.debug(`TitaniumRendererFactory.createRenderer(${hostElement}, ${type})`);
         if (!hostElement || !type) {
             return this.defaultRenderer;
         }

@@ -94,11 +94,25 @@ export abstract class AbstractNode implements NodeInterface {
         this.insertBefore(childNode, null);
     }
 
-    removeChild(childNode: AbstractNode): void {
-        const previousSibling = childNode.previousSibling;
-        if (previousSibling === childNode) {
-            return;
+    removeChild(oldChild: AbstractNode): void {
+        if (oldChild.parentNode !== this) {
+            throw new Error(`Child node ${oldChild} not found inside ${this}`);
         }
+
+        const previousChild = <AbstractNode>oldChild.previousSibling;
+        const nextChild = <AbstractNode>oldChild.nextSibling;
+
+        if (nextChild) {
+            nextChild._previousSibling = previousChild;
+            oldChild._nextSibling = null;
+        }
+
+        if (previousChild) {
+            previousChild._nextSibling = nextChild;
+            oldChild._previousSibling = null;
+        }
+
+        oldChild.parentNode = null;
     }
 
     /**

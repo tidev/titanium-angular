@@ -4,6 +4,7 @@ export * from './log';
 export * from './platform/platform-titanium';
 export * from './platform/platform-titanium-dynamic';
 export * from './renderer';
+export * from './router';
 export * from './services';
 
 export { TitaniumCommonModule } from './TitaniumCommonModule';
