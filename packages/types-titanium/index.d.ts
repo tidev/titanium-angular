@@ -34,11 +34,59 @@ declare namespace Titanium {
         const LIST_ACCESSORY_TYPE_DETAIL = 2;
         const LIST_ACCESSORY_TYPE_DISCLOSURE = 3;
 
-        // UI types
+        // UI utility interfaces
 
         interface OpenWindowOptions {
 
         }
+
+        interface Point {
+            x: string | number;
+            y: string | number;
+        }
+
+        interface Gradient {
+            type?: string;
+            startPoint?: Point;
+            endPoint?: Point;
+            colors: Array<string | { color: string, offset: number }>;
+            startRadious?: number;
+            endRadious?: number;
+            backgillStart?: boolean;
+            backfillEnd?: boolean;
+        }
+
+        interface Matrix2D {
+            a: number;
+            b: number;
+            c: number;
+            tx: number;
+            ty: number;
+        }
+
+        interface Matrix3D {
+            m11: number;
+            m12: number;
+            m13: number;
+            m14: number;
+
+            m21: number;
+            m22: number;
+            m23: number;
+            m24: number;
+
+            m31: number;
+            m32: number;
+            m33: number;
+            m34: number;
+
+            m41: number;
+            m42: number;
+            m43: number;
+            m44: number;
+        }
+
+        // UI Views
 
         class ActivityIndicator {}
 
@@ -114,14 +162,18 @@ declare namespace Titanium {
         class Toolbar { }
         class WebView { }
 
-        class Window {
+        class Window extends View {
             open(options: OpenWindowOptions)
         }
 
-        class View {}
+        class View {
+            backgroundGradient: Gradient;
+            transform: Titanium.UI.Matrix2D | Titanium.UI.Matrix3D;
+        }
         
         // Factory functions
 
+        function create2DMatrix(options: any): Titanium.UI.Matrix2D;
         function createActivityIndicator(options: any): ActivityIndicator;
         function createAlertDialog(options: any): AlertDialog;
         function createButton(options: any): Button;
