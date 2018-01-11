@@ -25,8 +25,8 @@ export class TitaniumDomAdapter extends DomAdapter {
 
     logError(error: any): any { Ti.API.error(error); }
     log(error: any): any { Ti.API.trace(error); }
-    logGroup(error: any): any { Ti.API.trace(error); }
-    logGroupEnd(): any { }
+    logGroup(error: any): any { Ti.API.trace('--- ' + error); }
+    logGroupEnd(): any { Ti.API.trace('---') }
 
     contains(nodeA: any, nodeB: any): boolean { return throwNotSupportedError(); }
     parse(templateHtml: string): any { return throwNotSupportedError(); }
