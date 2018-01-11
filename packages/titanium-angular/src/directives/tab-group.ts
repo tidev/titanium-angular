@@ -67,7 +67,7 @@ export class TabDirective implements OnInit {
         this.owner = owner;
     }
 
-    get titaniumView() {
+    get titaniumView(): Titanium.UI.Tab {
         return this.tab;
     }
 
