@@ -5,11 +5,6 @@ import {
     ViewChild
 } from '@angular/core';
 
-import {
-    ElementNode,
-    TitaniumElement
-} from '../vdom';
-
 @Component({
     selector: 'HorizontalLayout',
     template: `
@@ -31,5 +26,5 @@ export class HorizontalLayoutComponent {
     `
 })
 export class VerticalLayoutComponent {
-
+    
 }
