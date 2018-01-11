@@ -10,6 +10,8 @@ import {
     UrlTree
 } from '@angular/router';
 
+import { Logger } from '../../log';
+
 @Directive({
     selector: '[tiRouterLink]'
 })
@@ -21,11 +23,13 @@ export class TitaniumRouterLinkDirective {
 
     private router: Router;
     private route: ActivatedRoute;
+    private logger: Logger;
     private commands: any[] = [];
 
-    constructor(router: Router, route: ActivatedRoute) {
+    constructor(router: Router, route: ActivatedRoute, logger: Logger) {
         this.router = router;
         this.route = route;
+        this.logger = logger;
     }
 
     @Input()
@@ -46,12 +50,14 @@ export class TitaniumRouterLinkDirective {
     }
 
     @HostListener('click')
-    onClick(): boolean {
+    onClick(): void {
         const extras = {
             // @todo: Figure what extras we need
         };
-        this.router.navigateByUrl(this.urlTree, extras);
-        return true;
+        this.router.navigateByUrl(this.urlTree, extras)
+            .catch(e => {
+                this.logger.error(e.message);
+            });
     }
 
 }

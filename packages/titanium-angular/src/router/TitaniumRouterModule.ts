@@ -3,6 +3,7 @@ import {
 } from '@angular/common';
 
 import {
+    FactoryProvider,
     ModuleWithProviders,
     NgModule,
     NO_ERRORS_SCHEMA,
@@ -14,6 +15,11 @@ import {
     RouterModule,
     Routes
 } from '@angular/router';
+import { LocationStrategy } from '@angular/common';
+
+import {
+    StateLocationStrategy
+} from '../common';
 
 import {
     TitaniumRouterLinkDirective,
@@ -28,7 +34,8 @@ const ROUTER_DIRECTIVES = [
 ];
 
 const ROUTER_PROVIDERS: Provider[] = [
-
+    StateLocationStrategy,
+    { provide: LocationStrategy, useExisting: StateLocationStrategy }
 ];
 
 @NgModule({
@@ -50,10 +57,43 @@ const ROUTER_PROVIDERS: Provider[] = [
 })
 export class TitaniumRouterModule {
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders {
-        return RouterModule.forRoot(routes, config);
+        return removeDefaultLocationStrategy(RouterModule.forRoot(routes, config));
     }
 
     static forChild(routes: Routes): ModuleWithProviders {
-        return RouterModule.forChild(routes);
+        return removeDefaultLocationStrategy(RouterModule.forChild(routes));
     }
+}
+
+/**
+ * Removes the default LocationStrategy provider from the list of providers.
+ * 
+ * By default the Angular router either uses a hash or path strategy which is
+ * not compatible with the Titanium platform. We loop through the list of
+ * providers and remove it so it won't override our previously defined
+ * location strategy in our own TitaniumRouterModule.
+ * 
+ * @param moduleWithProviders Router module with providers
+ */
+export function removeDefaultLocationStrategy(moduleWithProviders: ModuleWithProviders): ModuleWithProviders {
+    const scrubbedProviders = moduleWithProviders.providers.slice();
+    for (let i = 0; i < moduleWithProviders.providers.length; i++) {
+        const provider = moduleWithProviders.providers[i];
+        if (isLocationStrategyProvider(provider)) {
+            scrubbedProviders.splice(i, 1);
+            break;
+        }
+    }
+    moduleWithProviders.providers = scrubbedProviders;
+
+    return moduleWithProviders
+}
+
+/**
+ * Checks if the specified provider is the LocationStrategy provider.
+ * 
+ * @param provider A provider from the router module's list of providers
+ */
+function isLocationStrategyProvider(provider: Provider): provider is FactoryProvider {
+    return (<FactoryProvider>provider).provide === LocationStrategy;
 }

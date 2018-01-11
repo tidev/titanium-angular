@@ -19,7 +19,9 @@ export class StateLocationStrategy extends LocationStrategy {
 
     path(includeHash?: boolean): string {
         const state = this.peekState();
-        return state ? state.url : '/';
+        const path = state ? state.url : '/';
+        console.log(`StateLocationStrategy.path is ${path}`);
+        return path;
     }
 
     prepareExternalUrl(internal: string): string {
@@ -28,21 +30,39 @@ export class StateLocationStrategy extends LocationStrategy {
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
-        console.log('StateLocationStrategy.pushState');
+        console.log(`StateLocationStrategy.pushState(${state}, ${title}, ${url}, ${queryParams})`);
         this.states.push({
             state: state,
             title: title,
             url: url,
             queryString: queryParams
-        })
+        });
     }
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
-        console.log('StateLocationStrategy.replaceState');
+        console.log(`StateLocationStrategy.replaceState(${state}, ${title}, ${url}, ${queryParams})`);
+
+        if (this.states.length > 0) {
+            console.log(`replacing existing state`);
+            const topState = this.peekState();
+            topState.state = state;
+            topState.title = title;
+            topState.url = url;
+            topState.queryString = queryParams;
+        } else {
+            console.log('pushing new state');
+            this.states.push({
+                state: state,
+                title: title,
+                url: url,
+                queryString: queryParams
+            });
+        }
     }
 
     forward(): void {
-
+        console.log('StateLocationStrategy.forward');
+        throw new Error('Using forward() is not supported by the Titanium platform');
     }
 
     back(): void {
