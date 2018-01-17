@@ -34,10 +34,14 @@ declare namespace Titanium {
         const LIST_ACCESSORY_TYPE_DETAIL = 2;
         const LIST_ACCESSORY_TYPE_DISCLOSURE = 3;
 
-        // UI utility interfaces
+        // UI utility interfaces & classes
 
         interface OpenWindowOptions {
 
+        }
+
+        interface CloseWindowOptions {
+            
         }
 
         interface Point {
@@ -86,6 +90,22 @@ declare namespace Titanium {
             m44: number;
         }
 
+        interface ViewProxy {
+            apiName: string
+        }
+
+        abstract class AbstractViewProxy implements ViewProxy {
+            apiName: string;
+
+            addEventListener(name: string, handler: Function);
+            removeEventListener(name: string, handler: Function);
+        }
+
+        abstract class AbstractBaseView extends AbstractViewProxy {
+            backgroundGradient: Gradient;
+            transform: Titanium.UI.Matrix2D | Titanium.UI.Matrix3D;
+        }
+
         // UI Views
 
         class ActivityIndicator {}
@@ -99,7 +119,10 @@ declare namespace Titanium {
         class DashboardView {}
         class DashboardItem {}
         class ImageView {}
-        class Label { }
+        class Label extends AbstractBaseView {
+            color: string;
+            textAlign: number | string
+        }
 
         /**
          * A list view is used to present information, organized in to sections
@@ -139,7 +162,7 @@ declare namespace Titanium {
         class Slider { }
         class Switch { }
 
-        class Tab {
+        class Tab extends AbstractViewProxy {
             setWindow(window: Window): void;
 
             /**
@@ -150,9 +173,22 @@ declare namespace Titanium {
              * heavyweight window, obscuring the tab group.
              */
             open(window: Window, options?: OpenWindowOptions);
+
+            /**
+             * Closes the top-level window for this tab.
+             * 
+             * On iOS, this method should be used when closing a window opened
+             * from a tab, to correctly maintain the iOS tab group's navigation
+             * state. Note that the window to be closed must be passed in as a
+             * parameter.
+             * 
+             * On Android, this method does not take a window parameter.
+             */
+            close(window?: Window, options?: CloseWindowOptions);
         }
 
-        class TabGroup {
+        class TabGroup extends AbstractViewProxy {
+            activeTab: Tab;
             addTab(tab: Tab): void;
             open(): void;
         }
@@ -163,12 +199,12 @@ declare namespace Titanium {
         class WebView { }
 
         class Window extends View {
-            open(options: OpenWindowOptions)
+            open(options?: OpenWindowOptions);
+            close();
         }
 
-        class View {
-            backgroundGradient: Gradient;
-            transform: Titanium.UI.Matrix2D | Titanium.UI.Matrix3D;
+        class View extends AbstractBaseView {
+            
         }
         
         // Factory functions

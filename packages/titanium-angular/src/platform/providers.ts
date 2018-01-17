@@ -16,8 +16,8 @@ import {
 } from '@angular/core';
 
 import {
-    StateLocationStrategy,
-    TitaniumPlatformLocation
+    HistoryStack,
+    TitaniumPlatformLocation,
 } from '../common';
 
 import {
@@ -49,8 +49,8 @@ export const COMMON_PROVIDERS = [
     { provide: DeviceEnvironment, useClass: DeviceEnvironment, deps: [] },
     { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: [Logger]},
     { provide: PLATFORM_INITIALIZER, useValue: initDomAdapter, multi: true },
-    { provide: StateLocationStrategy, useClass: StateLocationStrategy, deps: [] },
-    { provide: PlatformLocation, useClass: TitaniumPlatformLocation, deps: [StateLocationStrategy] },
+    { provide: HistoryStack, useClass: HistoryStack, deps: [] },
+    { provide: PlatformLocation, useClass: TitaniumPlatformLocation, deps: [HistoryStack] },
     { provide: Sanitizer, useClass: TitaniumSanitizer, deps: [] }
 ];
 

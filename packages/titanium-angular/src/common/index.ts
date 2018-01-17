@@ -1,3 +1,4 @@
 export * from './DetachedLoaderComponent';
-export * from './StateLocationStrategy';
+export * from './EmulatedPathLocationStrategy';
+export * from './HistoryStack';
 export * from './TitaniumPlatformLocation';

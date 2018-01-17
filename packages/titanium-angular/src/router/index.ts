@@ -1,1 +1,3 @@
-export * from './TitaniumRouterModule'
+export * from './NavigationManager';
+export * from './TitaniumRouter';
+export * from './TitaniumRouterModule';

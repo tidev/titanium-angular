@@ -23,6 +23,7 @@ import {
 import { DetachedLoaderComponent } from '../../common';
 import { Logger } from '../../log';
 import { ElementNode, TitaniumElement } from '../../vdom';
+import { NavigationManager } from '../NavigationManager';
 
 @Directive({
     selector: 'ti-router-outlet'
@@ -33,7 +34,6 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
     private name: string;
     private detachedLoaderFactory: ComponentFactory<DetachedLoaderComponent>;
     private isInitialRoute = true;
-    private topLevelWindow = null;
 
     @Output('activate') activateEvents = new EventEmitter<any>();
     @Output('deactivate') deactivateEvents = new EventEmitter<any>();
@@ -44,7 +44,8 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
             private resolver: ComponentFactoryResolver,
             @Attribute('name') name: string,
             private changeDetector: ChangeDetectorRef,
-            private logger: Logger) {
+            private logger: Logger,
+            private navigationManager: NavigationManager) {
         this.name = name || PRIMARY_OUTLET;
         parentContexts.onChildOutletCreated(this.name, <any>this);
         this.detachedLoaderFactory = resolver.resolveComponentFactory(DetachedLoaderComponent);
@@ -109,7 +110,7 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
     }
 
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null) {
-        this.logger.trace('TitaniumRouterOutlet.activateWith');
+        this.logger.trace(`TitaniumRouterOutlet.activateWith - ${activatedRoute.pathFromRoot.join(' -> ')}`);
 
         if (this.isActivated) {
             throw new Error('Cannot activate an already activated outlet');
@@ -120,6 +121,7 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         const snapshot = activatedRoute.snapshot;
         const component = <any>snapshot.routeConfig!.component;
         resolver = resolver || this.resolver;
+        this.logger.debug(`Resolving component factory for ${component.name}`);
         const factory = resolver.resolveComponentFactory(component);
         const childContexts = this.parentContexts.getOrCreateContext(this.name).children;
         const injector = new OutletInjector(activatedRoute, childContexts, this.location.injector);
@@ -127,8 +129,8 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         if (this.isInitialRoute) {
             this.activated = this.location.createComponent(factory, this.location.length, injector);
             this.changeDetector.markForCheck();
-
-            this.openTopLevelWindow();
+            this.navigationManager.initializeRootNavigator(this.activated);
+            this.isInitialRoute = false;
         } else {
             const loaderRef = this.location.createComponent(this.detachedLoaderFactory, this.location.length, injector);
             this.changeDetector.markForCheck();
@@ -139,19 +141,7 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
             const appRef = this.activated.injector.get(ApplicationRef);
             appRef.tick();
 
-            // @todo: Implement proper handling of subsequent routes
-            const componentElement: ElementNode = this.activated.location.nativeElement;
-            componentElement.remove();
-            if (componentElement.firstElementChild instanceof TitaniumElement) {
-                const titaniumView = componentElement.firstElementChild.titaniumView;
-                if (typeof titaniumView.open === 'function') {
-                    //this.topLevelWindow.close();
-                    titaniumView.open();
-                }
-            } else {
-                console.log('Could not open route component');
-                console.log(componentElement.firstElementChild.nodeName);
-            }
+            this.navigationManager.open(this.activated);
         }
 
         this.activateEvents.emit(this.component);
@@ -176,6 +166,8 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
 
         this.activated = ref;
         this._activatedRoute = activedRoute;
+
+        this.navigationManager.nativeBackNavigation = false;
     }
 
     /**
@@ -192,29 +184,6 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         this.activated = null;
         this._activatedRoute = null;
         return componentRef;
-    }
-
-    private openTopLevelWindow() {
-        this.logger.trace('TitaniumRouterOutlet: Initial route, calling open() on component\'s top-level view');
-
-        let couldOpenView = false;
-        const componentElement: ElementNode = this.activated.location.nativeElement;
-        componentElement.parentElement.removeChild(componentElement);
-        if (componentElement.firstElementChild instanceof TitaniumElement) {
-            const titaniumView = componentElement.firstElementChild.titaniumView;
-            if (typeof titaniumView.open === 'function') {
-                titaniumView.open();
-                couldOpenView = true;
-            }
-        }
-
-        if (!couldOpenView) {
-            this.logger.warn('Could not automatically open the component from your initial route.');
-            this.logger.warn('Make sure the root view from your component is a Window or TabGroup');
-        }
-
-        this.topLevelWindow = (<TitaniumElement>componentElement.firstElementChild).titaniumView;
-        this.isInitialRoute = false;
     }
 }
 

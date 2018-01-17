@@ -1,7 +1,4 @@
-import {
-    PlatformLocation
-} from '@angular/common';
-
+import { LocationStrategy, PlatformLocation } from '@angular/common';
 import {
     FactoryProvider,
     ModuleWithProviders,
@@ -9,24 +6,17 @@ import {
     NO_ERRORS_SCHEMA,
     Provider
 } from '@angular/core';
+import { ExtraOptions, RouteReuseStrategy, RouterModule, Routes } from '@angular/router';
 
-import {
-    ExtraOptions,
-    RouterModule,
-    Routes
-} from '@angular/router';
-import { LocationStrategy } from '@angular/common';
-
-import {
-    StateLocationStrategy
-} from '../common';
-
-import {
-    TitaniumRouterLinkDirective,
-    TitaniumRouterOutletDirective
-} from './directives';
-
+import { EmulatedPathLocationStrategy } from '../common';
+import { Logger } from '../log';
 import { TitaniumCommonModule } from '../TitaniumCommonModule';
+import { TitaniumRouterLinkDirective, TitaniumRouterOutletDirective } from './directives';
+import { NavigationManager } from './NavigationManager';
+import { TitaniumRouter } from './TitaniumRouter';
+import { TabGroupNavigator } from './navigators/TabGroupNavigator';
+import { WindowNavigator } from './navigators/WindowNavigator';
+import { NavigationAwareRouteReuseStrategy } from './NavigationAwareRouteReuseStrategy';
 
 const ROUTER_DIRECTIVES = [
     TitaniumRouterLinkDirective,
@@ -34,8 +24,12 @@ const ROUTER_DIRECTIVES = [
 ];
 
 const ROUTER_PROVIDERS: Provider[] = [
-    StateLocationStrategy,
-    { provide: LocationStrategy, useExisting: StateLocationStrategy }
+    { provide: EmulatedPathLocationStrategy, useClass: EmulatedPathLocationStrategy, deps: [PlatformLocation] },
+    { provide: LocationStrategy, useExisting: EmulatedPathLocationStrategy },
+    NavigationManager,
+    { provide: NavigationAwareRouteReuseStrategy, useClass: NavigationAwareRouteReuseStrategy, deps: [NavigationManager, Logger] },
+    { provide: RouteReuseStrategy, useExisting: NavigationAwareRouteReuseStrategy },
+    TitaniumRouter
 ];
 
 @NgModule({

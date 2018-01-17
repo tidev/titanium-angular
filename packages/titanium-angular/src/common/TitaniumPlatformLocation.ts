@@ -3,8 +3,10 @@ import {
     LocationStrategy,
     PlatformLocation
 } from '@angular/common';
-
 import { Injectable } from '@angular/core';
+
+import { HistoryStack } from './HistoryStack';
+import { NavigationManager } from '../router';
 
 /**
  * 
@@ -12,12 +14,12 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class TitaniumPlatformLocation extends PlatformLocation {
 
-    private _locationStrategy: LocationStrategy;
+    private _history: HistoryStack;
 
-    constructor(locationStrategy: LocationStrategy) {
+    constructor(history: HistoryStack) {
         super();
         
-        this._locationStrategy = locationStrategy;
+        this._history = history;
     }
 
     getBaseHrefFromDOM(): string {
@@ -26,16 +28,19 @@ export class TitaniumPlatformLocation extends PlatformLocation {
 
     onPopState(fn: LocationChangeListener): void {
         console.log('TitaniumPlatformLocation.onPopState');
-        this._locationStrategy.onPopState(fn);
+        this._history.onPopState(fn);
     }
 
     onHashChange(fn: LocationChangeListener): void {
-        console.log('TitaniumPlatformLocation.onHashChange');
+        console.log('TitaniumPlatformLocation.onHashChange - not implemented');
     }
 
     get pathname(): string {
         console.log('TitaniumPlatformLocation.pathname');
-        return this._locationStrategy.path();
+        const state = this._history.state;
+        const path = state ? state.url : '/';
+        console.log(`TitaniumPlatformLocation.path is ${path}`);
+        return path;
     }
 
     get search(): string {
@@ -48,12 +53,12 @@ export class TitaniumPlatformLocation extends PlatformLocation {
 
     replaceState(state: any, title: string, url: string): void {
         console.log('TitaniumPlatformLocation.replaceState');
-        this._locationStrategy.replaceState(state, title, url, null);
+        this._history.replaceState(state, title, url, null);
     }
 
     pushState(state: any, title: string, url: string): void {
         console.log('TitaniumPlatformLocation.pushState');
-        this._locationStrategy.pushState(state, title, url, null);
+        this._history.pushState(state, title, url, null);
     }
 
     forward(): void {
@@ -63,6 +68,6 @@ export class TitaniumPlatformLocation extends PlatformLocation {
 
     back(): void {
         console.log('TitaniumPlatformLocation.back');
-        this._locationStrategy.back();
+        this._history.back();
     }
 }
