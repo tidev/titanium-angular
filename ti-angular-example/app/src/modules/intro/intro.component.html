@@ -1,0 +1,32 @@
+<Window backgroundColor="#fafafa">
+    <VerticalLayout>
+        <View height="300">
+            <View #gradient top="-40" height="260" width="120%"></View>
+            <HorizontalLayout top="0">
+                <View width="50%">
+                    <ImageView image="assets/images/angular.png" width="180" right="0"></ImageView>
+                </View>
+                <View width="50%">
+                    <Label color="white" [font]="{ fontSize: 32 }" top="100" left="10">Now on Titanium</Label>
+                </View>
+            </HorizontalLayout>
+        </View>
+        <View height="200">
+            <View backgroundColor="white" top="5" left="40" right="40" bottom="5" borderRadius="4" viewShadowColor="#5510141f" [viewShadowOffset]="{x: 0, y: 2}" viewShadowRadius="2">
+                <Label top="10" left="10" right="10">Welcome to the Titanium Angular demo application!</Label>
+            </View>
+        </View>
+        <View>
+            <Button
+                tiRouterLink="/home"
+                title="LET'S GO" 
+                bottom="40"
+                height="40" 
+                width="150" 
+                backgroundColor="#1976d2" 
+                color="white" 
+                borderRadius="20">
+            </Button>
+        </View>
+    </VerticalLayout>
+</Window>

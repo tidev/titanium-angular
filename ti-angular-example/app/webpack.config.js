@@ -24,6 +24,7 @@ module.exports = env => {
 		},
 		resolve: {
 			extensions: ['.ts', '.js', '.scss', '.css'],
+			modules: [path.resolve(__dirname, "node_modules")],
 			symlinks: false
 		},
 		resolveLoader: {
@@ -46,7 +47,7 @@ module.exports = env => {
 		},
 		plugins: [
 			new webpack.optimize.CommonsChunkPlugin({
-				name: ['vendor'],
+				name: 'vendor'
 			}),
 			new CopyWebpackPlugin([
 				{ from: 'assets/**' },
