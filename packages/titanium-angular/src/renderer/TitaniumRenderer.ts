@@ -87,6 +87,11 @@ export class TitaniumRenderer extends Renderer2 {
 
     insertBefore(parent: NodeInterface, newChild: NodeInterface, refChild: NodeInterface): void {
         this.logger.debug(`TitaniumRenderer.insertBefore ${newChild} before ${refChild} in ${parent}`);
+        if (!parent) {
+            this.logger.debug(`No parent to insert child ${newChild}, skipping.`);
+            return;
+        }
+
         parent.insertBefore(newChild, refChild);
     }
 

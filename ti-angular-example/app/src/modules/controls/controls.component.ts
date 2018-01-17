@@ -38,7 +38,6 @@ export class ControlsComponent implements AfterViewInit {
     }
 
     openItem(event) {
-        console.log('ControlsComponent.openItem');
         this.router.navigate(['controls', event.itemId]).catch(e => Ti.API.error(e.message));
     }
 }

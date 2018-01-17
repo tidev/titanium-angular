@@ -27,10 +27,10 @@ export class ScrollableViewDirective implements AfterContentInit {
 
     @ViewChild('container', { read: ElementRef }) container: ElementRef
 
-    scrollView: any;
+    titaniumView: Titanium.UI.ScrollableView;
     
     constructor(el: ElementRef) {
-        this.scrollView = el.nativeElement.titaniumView;
+        this.titaniumView = el.nativeElement.titaniumView;
     }
 
     ngAfterContentInit() {
@@ -41,11 +41,11 @@ export class ScrollableViewDirective implements AfterContentInit {
             if (child instanceof TitaniumElement) {
                 views.push(child.titaniumView)
             } else if (child instanceof InvisibleElement) {
-                const visualElement = (<AbstractAngularElement>child).findSingleVisualElement(child);
+                const visualElement = child.findSingleVisualElement(child);
                 views.push(visualElement.titaniumView);
             }
         }
 
-        this.scrollView.setViews(views);
+        this.titaniumView.setViews(views);
     }
 }

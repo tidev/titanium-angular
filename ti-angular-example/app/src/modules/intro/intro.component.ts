@@ -2,6 +2,7 @@ import {
     AfterViewInit,
     Component,
     ElementRef,
+    OnInit,
     ViewChild
 } from '@angular/core';
 import { TitaniumElement } from 'titanium-angular';
@@ -9,12 +10,14 @@ import { TitaniumElement } from 'titanium-angular';
 @Component({
     templateUrl: 'intro.component.html'
 })
-export class IntroComponent implements AfterViewInit {
+export class IntroComponent implements AfterViewInit, OnInit {
+
     @ViewChild('gradient') gradientElement: ElementRef;
 
-    ngAfterViewInit() {
-        const gradientView: Titanium.UI.View = this.gradientElement.nativeElement.titaniumView;
-        gradientView.backgroundGradient = {
+    skyGradient: Titanium.UI.Gradient;
+
+    ngOnInit() {
+        this.skyGradient = {
             type: 'linear',
             startPoint: { x: '0%', y: '50%' },
             endPoint: { x: '100%', y: '50%' },
@@ -23,6 +26,10 @@ export class IntroComponent implements AfterViewInit {
                 { color: '#42a5f5', offset: 1.0 }
             ]
         };
-        gradientView.transform = Titanium.UI.create2DMatrix({rotate: 8}); 
+    }
+
+    ngAfterViewInit() {
+        const gradientView: Titanium.UI.View = this.gradientElement.nativeElement.titaniumView;
+        gradientView.transform = Titanium.UI.create2DMatrix({rotate: 8});
     }
 }

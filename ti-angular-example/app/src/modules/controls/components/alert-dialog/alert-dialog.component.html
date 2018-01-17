@@ -1,0 +1,16 @@
+<Window title="Alert Dialogs" backgroundColor="#fafafa" barColor="#1976d2" [titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <VerticalLayout>
+        <Label top="20">Preset dialogs</Label>
+        <Button title="Alert" (click)="openAlertDialog()">Alert</Button>
+        <Button title="Confirm" (click)="openConfirmDialog()">Confirm</Button>
+        <Button title="Prompt" (click)="openPromptDialog()">Prompt</Button>
+        <Label top="20">Custom dialogs</Label>
+        <Button title="Alert" (click)="openBasicCustomDialog()"></Button>
+        <Button title="Androd custom view" *platform="'android'" (click)="openCustomDialog()">Android custom view</Button>
+    </VerticalLayout>
+    
+    <AlertDialog #templateAlertDialog title="Template alert" message="This is an alert defined via the <AlertDialog> directive">
+        <DialogAction title="Meh" cancel="true" (handler)="handleCancelButton($event)"></DialogAction>
+        <DialogAction title="Cool!" (handler)="handleOkButton($event)"></DialogAction>
+    </AlertDialog>
+</Window>

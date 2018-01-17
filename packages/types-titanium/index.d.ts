@@ -34,6 +34,11 @@ declare namespace Titanium {
         const LIST_ACCESSORY_TYPE_DETAIL = 2;
         const LIST_ACCESSORY_TYPE_DISCLOSURE = 3;
 
+        const LIST_ITEM_TEMPLATE_DEFAULT = 0;
+        const LIST_ITEM_TEMPLATE_CONTACTS = 1;
+        const LIST_ITEM_TEMPLATE_SETTINGS = 2;
+        const LIST_ITEM_TEMPLATE_SUBTITLE = 3;
+
         // UI utility interfaces & classes
 
         interface OpenWindowOptions {
@@ -106,6 +111,11 @@ declare namespace Titanium {
             transform: Titanium.UI.Matrix2D | Titanium.UI.Matrix3D;
         }
 
+        interface ListDataItem {
+            properties: any;
+            template: string | number;
+        }
+
         // UI Views
 
         class ActivityIndicator {}
@@ -128,11 +138,12 @@ declare namespace Titanium {
          * A list view is used to present information, organized in to sections
          * and items, in a vertically-scrolling view.
          */
-        class ListView {
+        class ListView extends AbstractBaseView {
             sections: ListSection[];
             appendSection(section: ListSection): void;
-            setTemplates(templates: any): void;
+            deselectItem(sectionIndex: number, itemIndex: number): void;
             setRefreshControl(refreshControl: RefreshControl): void;
+            setTemplates(templates: any): void;
         }
 
         /**
@@ -140,9 +151,10 @@ declare namespace Titanium {
          * items.
          */
         class ListSection {
-            items: ListItem[];
-            getItemAt(index: number);
-            updateItemAt(index: number, item: ListItem);
+            items: ListDataItem[];
+            getItemAt(index: number): ListDataItem;
+            setItems(items: ListDataItem[]): void;
+            updateItemAt(index: number, item: ListDataItem): void;
         }
 
         class ListItem {
@@ -156,7 +168,10 @@ declare namespace Titanium {
         class PickerRow { }
         class ProgressBar { }
         class RefreshControl { }
-        class ScrollableView { }
+        class ScrollableView extends AbstractBaseView {
+            currentPage: number;
+            setViews(views: any[]): void;
+        }
         class ScrollView { }
         class SearchBar { }
         class Slider { }
@@ -172,7 +187,7 @@ declare namespace Titanium {
              * window stack. On Android, the new window is opened as a new
              * heavyweight window, obscuring the tab group.
              */
-            open(window: Window, options?: OpenWindowOptions);
+            open(window: Window, options?: OpenWindowOptions): void;
 
             /**
              * Closes the top-level window for this tab.
@@ -184,7 +199,7 @@ declare namespace Titanium {
              * 
              * On Android, this method does not take a window parameter.
              */
-            close(window?: Window, options?: CloseWindowOptions);
+            close(window?: Window, options?: CloseWindowOptions): void;
         }
 
         class TabGroup extends AbstractViewProxy {
@@ -199,8 +214,8 @@ declare namespace Titanium {
         class WebView { }
 
         class Window extends View {
-            open(options?: OpenWindowOptions);
-            close();
+            open(options?: OpenWindowOptions): void;
+            close(): void;
         }
 
         class View extends AbstractBaseView {

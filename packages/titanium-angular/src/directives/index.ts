@@ -40,6 +40,7 @@ export * from './layout';
 export * from './list-view';
 export * from './picker';
 export * from './platform';
+export * from './scrollable-view';
 export * from './tab-group';
 
 export const TITANIUM_DIRECTIVES = [
