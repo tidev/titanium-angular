@@ -78,7 +78,7 @@ export class TitaniumRenderer extends Renderer2 {
     appendChild(parent: NodeInterface, newChild: NodeInterface): void {
         this.logger.debug(`TitaniumRenderer.appendChild ${newChild} -> ${parent}`);
         if (!parent) {
-            this.logger.debug('Parent is not available, skipping.');
+            this.logger.debug(`No parent to add child ${newChild}, skipping.`);
             return;
         }
 
@@ -92,6 +92,11 @@ export class TitaniumRenderer extends Renderer2 {
 
     removeChild(parent: NodeInterface, oldChild: NodeInterface): void {
         this.logger.debug(`TitaniumRenderer.removeChild ${oldChild} from ${parent}`);
+        if (!parent) {
+            this.logger.debug(`Child ${oldChild} has no parent, skipping.`);
+            return;
+        }
+
         parent.removeChild(oldChild);
     }
 

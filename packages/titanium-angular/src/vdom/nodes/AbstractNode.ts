@@ -58,7 +58,7 @@ export abstract class AbstractNode implements NodeInterface {
 
     get lastChild() {
         if (this.firstChild) {
-            return this.firstChild.previousSibling;
+            return (<AbstractNode>this.firstChild)._previousSibling;
         }
 
         return null;
@@ -83,7 +83,7 @@ export abstract class AbstractNode implements NodeInterface {
         }
 
         const previousSibling = this._previousSibling;
-        if (this.parentNode.firstChild === previousSibling) {
+        if (this.parentNode.lastChild === previousSibling) {
             return null;
         }
 
@@ -94,11 +94,22 @@ export abstract class AbstractNode implements NodeInterface {
         this.insertBefore(childNode, null);
     }
 
-    removeChild(childNode: AbstractNode): void {
-        const previousSibling = childNode.previousSibling;
-        if (previousSibling === childNode) {
+    removeChild(oldChild: AbstractNode): void {
+        if (oldChild.parentNode !== this) {
+            throw new Error(`Child node ${oldChild} not found inside ${this}`);
+        }
+
+        const previousChild = <AbstractNode>oldChild._previousSibling;
+        const nextChild = <AbstractNode>oldChild._nextSibling;
+        
+        if (previousChild === oldChild) {
             return;
         }
+        previousChild._nextSibling = nextChild;
+        nextChild._previousSibling = previousChild;
+        oldChild._previousSibling = oldChild._nextSibling = oldChild;
+
+        this.childNodes.invalidateCache();
     }
 
     /**

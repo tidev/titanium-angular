@@ -5,4 +5,5 @@ export * from './CollectionIndexCache';
 export * from './ElementCollection';
 export * from './NodeIterator';
 export * from './NodeListInterface';
+export * from './TitaniumDomAdapter';
 export * from './TitaniumElementRegistry';
