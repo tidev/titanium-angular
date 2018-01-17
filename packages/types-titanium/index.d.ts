@@ -34,11 +34,79 @@ declare namespace Titanium {
         const LIST_ACCESSORY_TYPE_DETAIL = 2;
         const LIST_ACCESSORY_TYPE_DISCLOSURE = 3;
 
-        // UI types
+        // UI utility interfaces & classes
 
         interface OpenWindowOptions {
 
         }
+
+        interface CloseWindowOptions {
+            
+        }
+
+        interface Point {
+            x: string | number;
+            y: string | number;
+        }
+
+        interface Gradient {
+            type?: string;
+            startPoint?: Point;
+            endPoint?: Point;
+            colors: Array<string | { color: string, offset: number }>;
+            startRadious?: number;
+            endRadious?: number;
+            backgillStart?: boolean;
+            backfillEnd?: boolean;
+        }
+
+        interface Matrix2D {
+            a: number;
+            b: number;
+            c: number;
+            tx: number;
+            ty: number;
+        }
+
+        interface Matrix3D {
+            m11: number;
+            m12: number;
+            m13: number;
+            m14: number;
+
+            m21: number;
+            m22: number;
+            m23: number;
+            m24: number;
+
+            m31: number;
+            m32: number;
+            m33: number;
+            m34: number;
+
+            m41: number;
+            m42: number;
+            m43: number;
+            m44: number;
+        }
+
+        interface ViewProxy {
+            apiName: string
+        }
+
+        abstract class AbstractViewProxy implements ViewProxy {
+            apiName: string;
+
+            addEventListener(name: string, handler: Function);
+            removeEventListener(name: string, handler: Function);
+        }
+
+        abstract class AbstractBaseView extends AbstractViewProxy {
+            backgroundGradient: Gradient;
+            transform: Titanium.UI.Matrix2D | Titanium.UI.Matrix3D;
+        }
+
+        // UI Views
 
         class ActivityIndicator {}
 
@@ -51,7 +119,10 @@ declare namespace Titanium {
         class DashboardView {}
         class DashboardItem {}
         class ImageView {}
-        class Label { }
+        class Label extends AbstractBaseView {
+            color: string;
+            textAlign: number | string
+        }
 
         /**
          * A list view is used to present information, organized in to sections
@@ -91,7 +162,7 @@ declare namespace Titanium {
         class Slider { }
         class Switch { }
 
-        class Tab {
+        class Tab extends AbstractViewProxy {
             setWindow(window: Window): void;
 
             /**
@@ -102,9 +173,22 @@ declare namespace Titanium {
              * heavyweight window, obscuring the tab group.
              */
             open(window: Window, options?: OpenWindowOptions);
+
+            /**
+             * Closes the top-level window for this tab.
+             * 
+             * On iOS, this method should be used when closing a window opened
+             * from a tab, to correctly maintain the iOS tab group's navigation
+             * state. Note that the window to be closed must be passed in as a
+             * parameter.
+             * 
+             * On Android, this method does not take a window parameter.
+             */
+            close(window?: Window, options?: CloseWindowOptions);
         }
 
-        class TabGroup {
+        class TabGroup extends AbstractViewProxy {
+            activeTab: Tab;
             addTab(tab: Tab): void;
             open(): void;
         }
@@ -114,14 +198,18 @@ declare namespace Titanium {
         class Toolbar { }
         class WebView { }
 
-        class Window {
-            open(options: OpenWindowOptions)
+        class Window extends View {
+            open(options?: OpenWindowOptions);
+            close();
         }
 
-        class View {}
+        class View extends AbstractBaseView {
+            
+        }
         
         // Factory functions
 
+        function create2DMatrix(options: any): Titanium.UI.Matrix2D;
         function createActivityIndicator(options: any): ActivityIndicator;
         function createAlertDialog(options: any): AlertDialog;
         function createButton(options: any): Button;
