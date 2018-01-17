@@ -59,6 +59,10 @@ export class InvisibleElement extends AbstractAngularElement {
                     newChild.insertIntoVisualTree(child);
                 }
             }
+
+            if (this.firstElementChild === newChild && newChild instanceof TitaniumElement) {
+                this.projectAttributesToVisualElement(newChild);
+            }
         }
     }
 
@@ -82,6 +86,20 @@ export class InvisibleElement extends AbstractAngularElement {
 
         console.log(`InvisibleElement.insertIntoVisualTree ${child} -> ${parent}`);
         parent.insertIntoVisualTree(child, baseIndex + insideIndex);
+    }
+
+    private projectAttributesToVisualElement(visualElement: TitaniumElement) {
+        console.log(`InvisibleElement.projectAttributesToVisualElement - ${this} -> ${visualElement})`);
+        for (let [attributeName, attributeValue] of this.attributes) {
+            let name = attributeName;
+            let namespace = null;
+            const nameParts = attributeName.split(':');
+            if (nameParts.length === 2) {
+                name = nameParts[1];
+                namespace = nameParts[0];
+            }
+            visualElement.setAttribute(attributeName, attributeValue);
+        }
     }
 
 }

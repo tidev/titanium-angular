@@ -100,7 +100,11 @@ export class ElementNode extends AbstractNode implements ChildNodeInterface, Par
     }
 
     setAttribute(name: string, value: any, namespace?: string | null): void {
-        this.attributes.set(name, value);
+        if (namespace) {
+            this.attributes.set(`${namespace}:${name}`, value);
+        } else {
+            this.attributes.set(name, value);
+        }
     }
 
     getStyle(propertyName: string): any {
