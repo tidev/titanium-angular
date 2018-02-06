@@ -18,8 +18,6 @@ import {
 })
 export class TabGroupDirective {
 
-    public element: TitaniumElement;
-
     private tabGroup: Titanium.UI.TabGroup;
 
     private _selectedIndex: number;
@@ -27,8 +25,7 @@ export class TabGroupDirective {
     private viewInitialized: boolean;
 
     constructor(el: ElementRef) {
-        this.element = el.nativeElement;
-        this.tabGroup = this.element.titaniumView;
+        this.tabGroup = el.nativeElement.titaniumView;
     }
 
     @Input()
@@ -63,7 +60,7 @@ export class TabDirective implements OnInit {
 
     constructor(el: ElementRef, owner: TabGroupDirective) {
         this.element = el.nativeElement;
-        this.tab = this.element.titaniumView;
+        this.tab = <Titanium.UI.Tab>this.element.titaniumView;
         this.owner = owner;
     }
 
@@ -77,7 +74,7 @@ export class TabDirective implements OnInit {
             throw new Error('The first child of a Tab always must be a Window');
         }
         
-        this.tab.setWindow(windowElement.titaniumView);
+        this.tab.setWindow(<Titanium.UI.Window>windowElement.titaniumView);
         this.owner.addTab(this);
     }
 

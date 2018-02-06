@@ -15,10 +15,10 @@ import {
     selector: 'PickerRow'
 })
 export class PickerRowDirective {
-    element: TitaniumElement;
+    pickerRow: Titanium.UI.PickerRow;
 
     constructor(el: ElementRef) {
-        this.element = el.nativeElement;
+        this.pickerRow = el.nativeElement.titaniumView;
     }
 }
 
@@ -26,17 +26,18 @@ export class PickerRowDirective {
     selector: 'PickerColumn'
 })
 export class PickerColumnDirective implements AfterContentInit {
-    element: TitaniumElement;
+
+    pickerColumn: Titanium.UI.PickerColumn;
 
     @ContentChildren(PickerRowDirective) rows: QueryList<PickerRowDirective>;
 
     constructor(el: ElementRef) {
-        this.element = el.nativeElement;
+        this.pickerColumn = el.nativeElement.titaniumView;
     }
 
     ngAfterContentInit() {
         this.rows.forEach(row => {
-            this.element.titaniumView.addRow(row.element.titaniumView);
+            this.pickerColumn.addRow(row.pickerRow);
         });
     }
 }
@@ -46,14 +47,14 @@ export class PickerColumnDirective implements AfterContentInit {
 })
 export class PickerDirective implements AfterContentInit {
 
-    private element: TitaniumElement;
+    private picker: Titanium.UI.Picker;
 
     @ContentChildren(PickerRowDirective) rows: QueryList<PickerRowDirective>;
 
     @ContentChildren(PickerColumnDirective) columns: QueryList<PickerColumnDirective>;
 
     constructor(el: ElementRef) {
-        this.element = el.nativeElement;
+        this.picker = <Titanium.UI.Picker>el.nativeElement.titaniumView;
     }
 
     ngAfterContentInit() {
@@ -61,17 +62,17 @@ export class PickerDirective implements AfterContentInit {
 
         if (this.columns.length >= 0) {
             this.columns.forEach(column => {
-                pickerData.push(column.element.titaniumView);
+                pickerData.push(column.pickerColumn);
             });
         }
 
         if (this.rows.length >= 0) {
             this.rows.forEach(row => {
-                pickerData.push(row.element.titaniumView);
+                pickerData.push(row.pickerRow);
             });
         }
 
-        this.element.titaniumView.add(pickerData);
+        this.picker.add(pickerData);
     }
 
 }
