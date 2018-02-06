@@ -10,18 +10,15 @@ Adds a new platform to Angular allowing you to easily create native mobile apps 
 
 ## Getting started
 
-Until the proper build pipeline is in place you can try the bundled example app. Make sure to run all commands from inside `ti-angular-example/app`;
+You can checkout how Titanium Angular works by taking a look at the bundled example application. To get started, first navigate to `ti-angular-example/app` and install the required dependencies with `npm i`. After that, go back to the project root. You can now build and run the app with `appc run -p [android|ios]`.
 
-> ⚠️ The example app currently only runs on iOS and requires a special build of SDK 7.0.0 which is available [here](https://jenkins.appcelerator.org/blue/organizations/jenkins/titanium-sdk%2Ftitanium_mobile/detail/PR-9552/4/artifacts).
-
-- Install dependencies with `npm i`
-- Build and start the app using `npm run ios`
+> ⚠️ The example app currently only runs on Android and iOS and requires the latest SDK from our master branch. You can install the latest master build via `appc ti sdk install -b master`.
 
 ## Developmet guide
 
 This monorepo contains all packages that are required to build Titanium apps using Angular.
 
-- [ti.angular](packages/ti.angular) - CLI hooks for the build pipeline (not implemented yet)
+- [webpack-dev-titanium](packages/webpack-dev-titnaium) - Various plugins for Webpack to help bundle Titanium Angular apps
 - [titanium-angular](packages/titanium-angular) - Adds Titanium as a new platform to Angular
-- [types-titanium](packages/types-titanium) - Contains TypeScript definitions for the global `Ti` variable. Currently only defined as `any` for convenince.
+- [types-titanium](packages/types-titanium) - Contains TypeScript definitions for the global `Ti` variable. This is not complete yet. You are welcomed to file a PR with additional definitions.
 
