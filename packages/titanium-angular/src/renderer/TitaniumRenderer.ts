@@ -41,8 +41,6 @@ export class TitaniumRenderer extends Renderer2 {
         this.elementRegistry = configuration.elementRegistry;
         this.logger = configuration.logger;
         this.device = configuration.device;
-
-        this.logger.trace('Created a new TitaniumRenderer instance');
     }
 
     get data(): { [key: string]: any } {
@@ -148,7 +146,14 @@ export class TitaniumRenderer extends Renderer2 {
 
     setProperty(el: any, name: string, value: any): void {
         this.logger.debug(`TitaniumRenderer.setProperty(${el}, ${name}, ${value})`);
-        el.setAttribute(name, value);
+        if (name.indexOf(':') !== -1) {
+            const nameParts = name.split(':');
+            const namespace = nameParts[0];
+            name = nameParts[1];
+            el.setAttribute(name, value, namespace);
+        } else {
+            el.setAttribute(name, value);
+        }
     }
 
     setValue(node: NodeInterface, value: string): void {
