@@ -18,7 +18,7 @@ You can checkout how Titanium Angular works by taking a look at the bundled exam
 
 This monorepo contains all packages that are required to build Titanium apps using Angular.
 
-- [webpack-dev-titanium](packages/webpack-dev-titnaium) - Various plugins for Webpack to help bundle Titanium Angular apps
+- [webpack-dev-titanium](packages/webpack-dev-titanium) - Various plugins for Webpack to help bundle Titanium Angular apps
 - [titanium-angular](packages/titanium-angular) - Adds Titanium as a new platform to Angular
 - [types-titanium](packages/types-titanium) - Contains TypeScript definitions for the global `Ti` variable. This is not complete yet. You are welcomed to file a PR with additional definitions.
 
