@@ -61,11 +61,11 @@ export class PlatformFilterDirective {
 
             if (platformName[0] === '!') {
                 platformName = platformName.slice(1);
-                if (!this._device.runsIn(platformName)) {
+                if (!this._device.runs(platformName)) {
                     renderOnCurrentPlatform = true;
                 }
             } else {
-                if (this._device.runsIn(platformName)) {
+                if (this._device.runs(platformName)) {
                     renderOnCurrentPlatform = true;
                 }
             }
