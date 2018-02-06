@@ -1,0 +1,23 @@
+<Tab title="Controls" ios:icon="images/icons/controls.png">
+    <Window title="Controls" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }">
+        <ListView (itemclick)="openItem($event)">
+            <ListSection>
+                <ListItem title="Views" itemId="views"></ListItem>
+                <ListItem title="Label" itemId="label"></ListItem>
+                <ListItem title="Tabbed Bar" itemId="tabbed-bar" *platform="'ios'"></ListItem>
+                <ListItem title="Toolbar" itemId="toolbar" *platform="'android,ios'"></ListItem>
+                <ListItem title="Toolbar (as action bar)" itemId="toolbar-action-bar" *platform="'android'"></ListItem>
+                <ListItem title="Command Bar" itemId="command-bar" *platform="'windows'"></ListItem>
+                <ListItem title="Switch" itemId="switch-control"></ListItem>
+                <ListItem title="Stepper" itemId="stepper" *platform="'ios'"></ListItem>
+                <ListItem title="Slider" itemId="slider"></ListItem>
+                <ListItem title="Activity Indicator" itemId="activity-indicator"></ListItem>
+                <ListItem title="Picker" itemId="picker"></ListItem>
+                <ListItem title="Alert Dialog" itemId="alert-dialog"></ListItem>
+                <ListItem title="Option Dialog" itemId="option-dialog"></ListItem>
+                <ListItem title="Text Field" itemId="text-field"></ListItem>
+                <ListItem title="Text Area" itemId="text-area"></ListItem>
+            </ListSection>
+        </ListView>
+    </Window>
+</Tab>

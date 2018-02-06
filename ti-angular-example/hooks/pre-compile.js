@@ -23,10 +23,12 @@ class WebpackBundler {
 
 	runWebpack(builder) {
 		const config = {
-			production: builder.deployType !== 'development'
+			production: builder.deployType !== 'development',
+			targetPlatform: this.cli.argv.platform
 		};
 
 		const args = [
+			'--preserve-symlinks',
 			path.resolve(__dirname, '..', 'app', 'node_modules', 'webpack', 'bin', 'webpack.js'),
 			'--progress',
 			...this.generateEnvFlags(config)

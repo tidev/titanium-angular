@@ -36,4 +36,8 @@ export class TitaniumRouter {
         return this.router.navigateByUrl(url, options);
     }
 
+    public back() {
+        this.navigationManager.back();
+    }
+
 }

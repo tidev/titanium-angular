@@ -1,0 +1,13 @@
+<Window title="Scrollable View" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <ScrollableView [showPagingControl]="true" [overlayEnabled]="true" (scrollend)="scrollableViewDidScroll($event)">
+        <View backgroundColor="#03A9F4">
+            <Label>View 1</Label>
+        </View>
+        <View backgroundColor="#00BCD4">
+            <Label>View 2</Label>
+        </View>
+        <View backgroundColor="#009688">
+            <Label>View 3</Label>
+        </View>
+    </ScrollableView>
+</Window>

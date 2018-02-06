@@ -12,7 +12,7 @@
             "dom",
             "es2015.iterable"
         ],
-        "baseUrl": "."
+        "baseUrl": "./src"
     },
     "exclude": [
         "node_modules",

@@ -1,21 +1,8 @@
-import { 
-    createPlatformFactory,
-    PlatformRef,
-    StaticProvider
-} from '@angular/core';
+import { createPlatformFactory, PlatformRef, StaticProvider } from '@angular/core';
+import { ɵplatformCoreDynamic as platformCoreDynamic } from '@angular/platform-browser-dynamic';
 
-import {
-    ɵplatformCoreDynamic as platformCoreDynamic
-} from '@angular/platform-browser-dynamic';
-
-import {
-    TitaniumPlatformRef
-} from './TitaniumPlatformRef';
-
-import {
-    COMMON_PROVIDERS,
-    TITANIUM_COMPILER_PROVIDERS
-} from './providers';
+import { TitaniumPlatformRef } from '../core/TitaniumPlatformRef';
+import { COMMON_PROVIDERS, TITANIUM_COMPILER_PROVIDERS } from './providers';
 
 export const _platformTitaniumDynamic = createPlatformFactory(
     platformCoreDynamic,

@@ -4,7 +4,7 @@ import { ComponentRef, Injectable, Injector, Type } from "@angular/core";
 import { Logger } from '../log';
 import { ElementNode, TitaniumElement, InvisibleElement } from '../vdom';
 import { NavigationOptions } from "./NavigationOptions";
-import { AbstractNavigator, NativeNavigationEvent, OpenableView } from "./navigators/AbstractNavigator";
+import { AbstractNavigator, NativeNavigationEvent } from "./navigators/AbstractNavigator";
 import { TabGroupNavigator } from "./navigators/TabGroupNavigator";
 import { WindowNavigator } from "./navigators/WindowNavigator";
 
@@ -63,7 +63,7 @@ export class NavigationManager {
             throw new Error(`No active navigator available to handle navigation to ${componentName}`);
         }
         
-        const titaniumView = this.findTopLevelOpenableView(component);
+        const titaniumView = this.findTopLevelWindow(component);
         if (!this.activeNavigator.canOpen(titaniumView)) {
             throw new Error(`Currently active navigator ${this.activeNavigator} cannot open a ${titaniumView.apiName}`);
         }
@@ -104,7 +104,7 @@ export class NavigationManager {
         const componentElement: ElementNode = component.location.nativeElement;
         componentElement.parentElement.removeChild(componentElement);
 
-        const titaniumView = this.findTopLevelOpenableView(component);
+        const titaniumView = this.findTopLevelWindow(component);
         let navigator: AbstractNavigator = null;
         for (const candidateNavigatorClass of this.availableNavigators) {
             if ((<typeof AbstractNavigator>candidateNavigatorClass).canHandle(titaniumView)) {
@@ -154,21 +154,21 @@ export class NavigationManager {
         this.navigators.pop();
     }
 
-    private findTopLevelOpenableView(component: ComponentRef<any>): OpenableView {
+    private findTopLevelWindow(component: ComponentRef<any>): Titanium.UI.WindowProxy {
         const componentName = component.componentType.name;
         const componentElement: ElementNode = component.location.nativeElement;
-        const visualElement = componentElement.firstElementChild;
-        if (!(visualElement instanceof TitaniumElement) || !this.isOpenable(visualElement.titaniumView)) {
+        const candidateElement = componentElement.firstElementChild;
+        if (!(candidateElement instanceof TitaniumElement) || !this.isWindow(candidateElement.titaniumView)) {
             throw new Error(`Could not find an openable Titanium view as the top-level element in component ${componentName}`);
         }
 
-        return visualElement.titaniumView;
+        return candidateElement.titaniumView;
     }
 
     /**
      * @param view 
      */
-    private isOpenable(view: Titanium.UI.ViewProxy): view is OpenableView {
+    private isWindow(view: Titanium.Proxy): view is Titanium.UI.WindowProxy {
         if (!view) {
             return false;
         }

@@ -1,9 +1,11 @@
-const GenerateAppJsPlugin = require('./plugins/GenerateAppJsPlugin');
-const titaniumTarget = require('./titanium-target');
-const WatchStateNotifierPlugin = require('./plugins/WatchStateNotifierPlugin');
+const GenerateAppJsPlugin = require('./lib/plugins/GenerateAppJsPlugin');
+const TitaniumAngularCompilerPlugin = require('./lib/plugins/TitaniumAngularCompilerPlugin');
+const titaniumTarget = require('./lib/titanium-target');
+const WatchStateNotifierPlugin = require('./lib/plugins/WatchStateNotifierPlugin');
 
 module.exports = {
 	GenerateAppJsPlugin,
+	TitaniumAngularCompilerPlugin,
 	titaniumTarget,
 	WatchStateNotifierPlugin
 };

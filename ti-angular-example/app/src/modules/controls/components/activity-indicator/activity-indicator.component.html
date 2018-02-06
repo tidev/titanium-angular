@@ -1,0 +1,15 @@
+<Window title="Slider" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <VerticalLayout>
+        <Label left="20" top="20">Plain</Label>
+        <ActivityIndicator #indicators top="10" [style]="ActivityIndicatorStyle.Plain"></ActivityIndicator>
+
+        <Label left="20" top="20">Dark</Label>
+        <ActivityIndicator #indicators top="10" [style]="ActivityIndicatorStyle.Dark"></ActivityIndicator>
+
+        <Label left="20" top="20">Big</Label>
+        <ActivityIndicator #indicators top="10" [style]="ActivityIndicatorStyle.Big"></ActivityIndicator>
+
+        <Label left="20" top="20">Dark with Message</Label>
+        <ActivityIndicator #indicators top="10" [style]="ActivityIndicatorStyle.Dark" message="Loading..."></ActivityIndicator>
+    </VerticalLayout>
+</Window>

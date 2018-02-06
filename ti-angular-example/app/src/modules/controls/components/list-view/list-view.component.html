@@ -1,0 +1,26 @@
+<Window title="List View" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <ListView (itemclick)="handleListViewClick($event)">
+        <RefreshControl #refresh (refreshstart)="fetchData($event)" *platform="'android,ios'"></RefreshControl>
+
+        <ng-template tiTemplateName="MyCustomTemplate">
+            <Label bindId="title" left="20" height="40" color="#dd0331"></Label>
+            <Label bindId="detail" right="20" height="40" color="#1976d2" [font]="{ fontWeight: 'bold' }"></Label>
+        </ng-template>
+
+        <ListSection #systemTemplates *platform="'ios'" headerTitle="System Item Templates">
+            <ListItem title="Bananas" image="images/icons/tab.png"></ListItem>
+            <ListItem title="Apples" subtitle="Oranges"></ListItem>
+            <ListItem title="Mangos" subtitle="Strawberries"></ListItem>
+            <ListItem title="Lemon" subtitle="Melone"></ListItem>
+        </ListSection>
+
+        <ListSection headerTitle="Custom Item Templates" [items]="items"></ListSection>
+
+        <ListSection #accessorySection headerTitle="Accessory Types">
+            <ListItem title="No Accessory" accessoryType="{{ListAccessoryType.None}}"></ListItem>
+            <ListItem title="Detail Accessory" accessoryType="{{ListAccessoryType.Detail}}"></ListItem>
+            <ListItem title="Disclosure Accessory" accessoryType="{{ListAccessoryType.Disclosure}}"></ListItem>
+            <ListItem title="Checkmark Accessory" accessoryType="{{ListAccessoryType.Checkmark}}"></ListItem>
+        </ListSection>
+    </ListView>
+</Window>

@@ -2,16 +2,19 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 import { Logger } from '../../log';
-import { TitaniumRouter } from '../TitaniumRouter';
+import { NavigationTransition, TransitionType } from '../../animation';
+import { capitalizeFirstLetter } from '../../utility/string';
+import { TitaniumNavigationOptions, TitaniumRouter } from '../TitaniumRouter';
 
 @Directive({
     selector: '[tiRouterLink]'
 })
 export class TitaniumRouterLinkDirective {
 
-    @Input() target: string;
     @Input() queryParams: { [k: string]: any };
     @Input() fragment: string;
+
+    @Input() transition: boolean | string | NavigationTransition = false;
 
     private router: Router;
     private titaniumRouter: TitaniumRouter;
@@ -45,13 +48,34 @@ export class TitaniumRouterLinkDirective {
 
     @HostListener('click')
     onClick(): void {
-        const extras = {
-            // @todo: Figure what extras we need
+        const options: TitaniumNavigationOptions = {
+            queryParams: this.queryParams,
+            fragment: this.fragment,
+            transition: this.convertTransition()
         };
-        this.titaniumRouter.navigateByUrl(this.urlTree, extras)
+        this.titaniumRouter.navigateByUrl(this.urlTree, options)
             .catch(e => {
                 this.logger.error(e.message);
             });
+    }
+
+    private convertTransition(): NavigationTransition {
+        if (typeof this.transition === 'boolean') {
+            return {
+                type: this.transition ? TransitionType.SlideLeft : TransitionType.None
+            }
+        } else if (typeof this.transition === 'string') {
+            const enumMemberName = capitalizeFirstLetter(this.transition);
+            if (!TransitionType[enumMemberName]) {
+                throw new Error(`Invalid transition string specified. Valid transitions are: ${Object.keys(TransitionType).map(t => TransitionType[t]).join(', ')}`);
+            }
+
+            return {
+                type: TransitionType[enumMemberName]
+            }
+        } else {
+            return this.transition;
+        }
     }
 
 }

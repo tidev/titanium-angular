@@ -5,13 +5,8 @@ import {
     StaticProvider
 } from "@angular/core";
 
-import {
-    TitaniumPlatformRef
-} from './TitaniumPlatformRef';
-
-import {
-    COMMON_PROVIDERS
-} from './providers';
+import { TitaniumPlatformRef } from '../core/TitaniumPlatformRef';
+import { COMMON_PROVIDERS } from './providers';
 
 export const _platformTitanium = createPlatformFactory(
     platformCore,

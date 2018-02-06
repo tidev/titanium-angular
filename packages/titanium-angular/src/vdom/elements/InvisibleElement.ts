@@ -82,7 +82,7 @@ export class InvisibleElement extends AbstractAngularElement {
 
         const nextVisual = this.nextVisualSibling;
         const baseIndex = nextVisual ? this.parentElement.children.indexOf(nextVisual) : 0;
-        const insideIndex = atIndex === null ? this.children.indexOf(child) : atIndex;
+        const insideIndex = atIndex === null || atIndex === undefined ? this.children.indexOf(child) : atIndex;
 
         console.log(`InvisibleElement.insertIntoVisualTree ${child} -> ${parent}`);
         parent.insertIntoVisualTree(child, baseIndex + insideIndex);

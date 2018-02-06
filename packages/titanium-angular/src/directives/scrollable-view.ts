@@ -27,25 +27,25 @@ export class ScrollableViewDirective implements AfterContentInit {
 
     @ViewChild('container', { read: ElementRef }) container: ElementRef
 
-    scrollView: any;
+    scrollableView: Titanium.UI.ScrollableView;
     
     constructor(el: ElementRef) {
-        this.scrollView = el.nativeElement.titaniumView;
+        this.scrollableView = el.nativeElement.titaniumView;
     }
 
     ngAfterContentInit() {
         const containerElement = this.container.nativeElement as TitaniumElement;
         const views = [];
 
-        for (const child of this.container.nativeElement.children) {
+        for (const child of containerElement.children) {
             if (child instanceof TitaniumElement) {
                 views.push(child.titaniumView)
             } else if (child instanceof InvisibleElement) {
-                const visualElement = (<AbstractAngularElement>child).findSingleVisualElement(child);
+                const visualElement = child.findSingleVisualElement(child);
                 views.push(visualElement.titaniumView);
             }
         }
 
-        this.scrollView.setViews(views);
+        this.scrollableView.setViews(views);
     }
 }

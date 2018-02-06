@@ -8,8 +8,9 @@
     "test": "echo 'No tests specified'",
     "tsc": "tsc -p tsconfig.json",
     "clean": "rm -rf ./dist",
-    "build": "npm run clean && ngc",
-    "dev": "npm run clean && ngc --watch"
+    "build": "npm run clean && npm run syncd && ngc",
+    "syncd": "rsync -am --include='*.d.ts' --include='*/' --exclude='*' ./src/ ./dist/ --progress",
+    "dev": "npm run clean && npm run syncd && ngc --watch"
   },
   "author": "Axway Appcelerator",
   "license": "Apache-2.0",

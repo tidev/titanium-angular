@@ -23,6 +23,8 @@ import {
     capitalizeFirstLetter
 } from '../../utility/string';
 
+export type ProxyFactory = (options: any) => Titanium.Proxy;
+
 export interface ViewMetadata {
     skipAddToDom?: boolean,
     typeName: String
@@ -32,22 +34,57 @@ export class TitaniumElement extends AbstractAngularElement {
 
     meta: ViewMetadata;
 
-    titaniumView: any;
+    private createProxy: ProxyFactory;
+
+    private _titaniumProxy: Titanium.Proxy = null;
+
+    private proxyCreated: boolean = false;
 
     private logger: Logger;
 
     private device: DeviceEnvironment;
 
-    constructor(nodeName: string, titaniumView: any, logger: Logger, device: DeviceEnvironment) {
+    constructor(nodeName: string, createProxy: ProxyFactory, logger: Logger, device: DeviceEnvironment) {
         super(nodeName);
 
-        this.titaniumView = titaniumView;
+        this.createProxy = createProxy;
         this.logger = logger;
         this.device = device;
     }
 
-    getAttribute(name: string): any {
+    get titaniumView(): Titanium.Proxy {
+        if (this._titaniumProxy === null) {
+            const creationProperties = {};
+            this.attributes.forEach((attributeValue, attributeName) => {
+                creationProperties[attributeName] = attributeValue;
+            });
+            this.logger.debug(`Creating proxy for ${this} with options: ${JSON.stringify(creationProperties)}`);
+            this._titaniumProxy = this.createProxy(creationProperties);
 
+            this.events.forEach((handlers, eventName) => {
+                handlers.forEach(handler => {
+                    this.logger.debug(`Adding event listener for ${eventName} to created proxy.`);
+                    this._titaniumProxy.addEventListener(eventName, handler);
+                });
+            });
+
+            this.proxyCreated = true;
+        }
+
+        return this._titaniumProxy;
+    }
+
+    getAttribute(name: string): any {
+        if (this.proxyCreated === false) {
+            return this.getElementAttribute(name);
+        }
+
+        let propertyName = camelize(name);
+        if (!Reflect.has(this.titaniumView, propertyName)) {
+            throw new Error(`Unable to get attribute ${name}. ${this} has no matching property named ${propertyName}.`);
+        }
+
+        return this.titaniumView[propertyName];
     }
 
     getElementAttribute(name: string): any {
@@ -55,9 +92,13 @@ export class TitaniumElement extends AbstractAngularElement {
     }
 
     setAttribute(name: string, value: any, namespace?: string | null): void {
+        if (namespace && !this.device.runs(namespace)) {
+            return;
+        }
+        
         super.setAttribute(name, value, namespace);
 
-        if (namespace && !this.device.runsIn(namespace)) {
+        if (this.proxyCreated === false) {
             return;
         }
 
@@ -86,16 +127,6 @@ export class TitaniumElement extends AbstractAngularElement {
         });
     }
 
-    public setText(text: string): void {
-        let possibleProperties = ['text', 'title'];
-        for (let textProperty of possibleProperties) {
-            if (this.hasAttributeAccessor(textProperty)) {
-                this.setAttribute(textProperty, text, null);
-                break;
-            }
-        }
-    }
-
     /**
      * Reads text from all text child nodes and updates the title or text property of the 
      * underlying Titanium view
@@ -109,7 +140,13 @@ export class TitaniumElement extends AbstractAngularElement {
         }
         updatedText = updatedText.replace(/^\s+|\s+$/g, '');
         if (updatedText !== '') {
-            this.setText(updatedText);
+            let possibleProperties = ['text', 'title'];
+            for (let textProperty of possibleProperties) {
+                if (this.hasAttributeAccessor(textProperty)) {
+                    this.setAttribute(textProperty, updatedText, null);
+                    break;
+                }
+            }
         }
     }
 
@@ -122,6 +159,7 @@ export class TitaniumElement extends AbstractAngularElement {
         }
 
         if (newNode instanceof TitaniumElement) {
+            // @todo find nearest visual sibling based on reference node and insert at that index
             this.insertChild(newNode);
         }
 
@@ -141,13 +179,17 @@ export class TitaniumElement extends AbstractAngularElement {
     on(eventName: string, handler: Function): void {
         super.on(eventName, handler);
 
-        this.titaniumView.addEventListener(eventName, handler)
+        if (this.proxyCreated) {
+            this.titaniumView.addEventListener(eventName, handler);
+        }
     }
 
     off(eventName: string, handler: Function): void {
         super.off(eventName, handler);
 
-        this.titaniumView.removeEventListener(eventName, handler);
+        if (this.proxyCreated) {
+            this.titaniumView.removeEventListener(eventName, handler);
+        }
     }
 
     private insertChild(element: TitaniumElement, atIndex?: number): void {
@@ -156,10 +198,9 @@ export class TitaniumElement extends AbstractAngularElement {
             return;
         }
 
-        let parentView = this.titaniumView;
-        let childView = element.titaniumView;
-
-        if (atIndex === null) {
+        let parentView = <Titanium.UI.View>this.titaniumView;
+        let childView = <Titanium.UI.View>element.titaniumView;
+        if (atIndex === null || atIndex === undefined) {
             parentView.add(childView);
         } else {
             parentView.insertAt({
