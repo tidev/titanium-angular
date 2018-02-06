@@ -8,9 +8,7 @@ import {
     Logger
 } from '../log'
 
-import {
-    ViewMetadata
-} from '.';
+import { ProxyFactory, ViewMetadata } from './elements/TitaniumElement';
 
 export interface TitaniumViewElementMeta {
     resolveFactory: Function
@@ -28,7 +26,7 @@ export class TitaniumElementRegistry {
         this.elements = new Map();
     }
 
-    registerElement(tagName: string, resolveFactory: Function, meta: ViewMetadata): void {
+    registerElement(tagName: string, resolveFactory: () => ProxyFactory, meta: ViewMetadata): void {
         this.logger.trace(`Registering Titanium view <${tagName}> (meta: ${JSON.stringify(meta)})`);
         this.elements.set(tagName.toLowerCase(), {
             resolveFactory,
@@ -40,7 +38,7 @@ export class TitaniumElementRegistry {
         return this.elements.has(tagName.toLowerCase());
     }
 
-    getViewFactory(tagName): Function {
+    getViewFactory(tagName): ProxyFactory {
         if (!this.hasElement(tagName)) {
             throw new Error(`No titanium view registerd for tag ${tagName}`);
         }

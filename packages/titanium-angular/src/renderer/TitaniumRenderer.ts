@@ -54,10 +54,11 @@ export class TitaniumRenderer extends Renderer2 {
     }
 
     createElement(name: string, namespace?: string | null): NodeInterface {
+        name = namespace ? `${namespace}:${name}` : name;
         this.logger.debug(`TitaniumRenderer.createElement ${name}`);
         if (this.elementRegistry.hasElement(name)) {
             let createView = this.elementRegistry.getViewFactory(name);
-            const node = new TitaniumElement(name, createView(), this.logger, this.device);
+            const node = new TitaniumElement(name, createView, this.logger, this.device);
             node.meta = this.elementRegistry.getViewMetadata(name);
             return node;
         }
