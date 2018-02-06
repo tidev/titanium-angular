@@ -1,10 +1,5 @@
 import { PlatformLocation } from '@angular/common';
-
-import {
-    ElementSchemaRegistry,
-    ResourceLoader
-} from '@angular/compiler';
-
+import { ElementSchemaRegistry, ResourceLoader } from '@angular/compiler';
 import { 
     COMPILER_OPTIONS,
     InjectionToken,
@@ -15,30 +10,13 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 
-import {
-    HistoryStack,
-    TitaniumPlatformLocation,
-} from '../common';
-
-import {
-    FileSystemResourceLoader,
-    TitaniumElementSchemaRegistry
-} from '../compiler';
-
-import {
-    Logger
-} from '../log';
-
-import {
-    DeviceEnvironment
-} from '../services';
-
-import {
-    TitaniumDomAdapter,
-    TitaniumElementRegistry
-} from '../vdom';
-
-import { TitaniumSanitizer } from './TitaniumSanitizer';
+import { HistoryStack, TitaniumPlatformLocation } from '../common';
+import { FileSystemResourceLoader, TitaniumElementSchemaRegistry } from '../compiler';
+import { Logger } from '../log';
+import { DeviceEnvironment } from '../services';
+import { NavigationTransitionHandler, TransitionRegistry } from '../animation';
+import { TitaniumDomAdapter, TitaniumElementRegistry } from '../vdom';
+import { TitaniumSanitizer } from '../core/TitaniumSanitizer';
 
 export function initDomAdapter() {
     TitaniumDomAdapter.makeCurrent();
@@ -47,6 +25,8 @@ export function initDomAdapter() {
 export const COMMON_PROVIDERS = [
     { provide: Logger, useClass: Logger, deps: [] },
     { provide: DeviceEnvironment, useClass: DeviceEnvironment, deps: [] },
+    { provide: TransitionRegistry, useClass: TransitionRegistry, deps: [DeviceEnvironment] },
+    { provide: NavigationTransitionHandler, useClass: NavigationTransitionHandler, deps: [TransitionRegistry] },
     { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: [Logger]},
     { provide: PLATFORM_INITIALIZER, useValue: initDomAdapter, multi: true },
     { provide: HistoryStack, useClass: HistoryStack, deps: [] },

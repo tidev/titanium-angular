@@ -4,7 +4,7 @@ import { ComponentRef } from '@angular/core';
 import { TitaniumPlatformLocation } from '../../common';
 import { DeviceEnvironment } from '../../services';
 import { NavigationOptions } from '../NavigationOptions';
-import { AbstractNavigator, OpenableView } from "./AbstractNavigator";
+import { AbstractNavigator } from "./AbstractNavigator";
 import { ApplicationRef } from '@angular/core';
 
 /**
@@ -30,7 +30,7 @@ export class TabGroupNavigator extends AbstractNavigator {
         super();
 
         if (tabGroup.apiName !== 'Ti.UI.TabGroup') {
-            throw new Error('The TabGroupNavigator can only handle a Titanium view of type TabGroup');
+            throw new Error('The TabGroupNavigator can only handle navigation for Ti.UI.TabGroup');
         }
 
         this.tabGroup = tabGroup;
@@ -49,17 +49,16 @@ export class TabGroupNavigator extends AbstractNavigator {
         this.tabGroup.open();
     }
 
-    open(view: OpenableView, options: NavigationOptions): void {
-        const window = <Titanium.UI.Window>view
-        window.addEventListener('close', this.onWindowClose.bind(this));
+    open(view: Titanium.UI.Window, options: NavigationOptions): void {
+        view.addEventListener('close', this.onWindowClose.bind(this));
         const activeTab = this.tabGroup.activeTab;
         let windowStack = this.windowStacks.get(activeTab);
         if (!windowStack) {
             windowStack = [];
             this.windowStacks.set(activeTab, windowStack);
         }
-        windowStack.push(window);
-        this.tabGroup.activeTab.open(window);
+        windowStack.push(view);
+        this.tabGroup.activeTab.open(view);
     }
 
     back(): void {
@@ -70,10 +69,10 @@ export class TabGroupNavigator extends AbstractNavigator {
         }
 
         const window = windowStack.pop();
-        if (this.device.runsIn('ios')) {
+        if (this.device.runs('ios')) {
             this.tabGroup.activeTab.close(window);
         } else {
-            this.tabGroup.activeTab.close();
+            window.close();
         }
     }
 

@@ -1,7 +1,8 @@
 import { ComponentRef } from '@angular/core';
 
 import { NavigationOptions } from '../NavigationOptions';
-import { AbstractNavigator, OpenableView } from "./AbstractNavigator";
+import { AbstractNavigator } from "./AbstractNavigator";
+import { NavigationTransitionHandler, TransitionType } from '../../animation';
 
 export class WindowNavigator extends AbstractNavigator {
 
@@ -15,18 +16,20 @@ export class WindowNavigator extends AbstractNavigator {
 
     private windows: Array<Titanium.UI.Window> = [];
 
+    private transitionHandler: NavigationTransitionHandler;
+
     constructor(titaniumView: Titanium.UI.Window) {
         super();
 
         if (titaniumView.apiName !== 'Ti.UI.Window') {
-            throw new Error('The WindowNavigator can only handle a Titanium view of type Window.');
+            throw new Error('The WindowNavigator can only handle navigation for Ti.UI.Window.');
         }
 
         this.rootWindow = titaniumView;
     }
 
     initialize(): void {
-        
+        this.transitionHandler = this._injector.get(NavigationTransitionHandler);
     }
 
     openRootWindow() {
@@ -34,9 +37,23 @@ export class WindowNavigator extends AbstractNavigator {
         this.rootWindow.open();
     }
 
-    open(view: OpenableView, options: NavigationOptions) {
-        // todo: close previous window?
-        view.open();
+    open(view: Titanium.UI.WindowProxy, options: NavigationOptions) {
+        let openWindowOptions: Titanium.UI.OpenWindowOptions = {};
+
+        if (options.clearHistory) {
+
+        }
+
+        console.log(`options: ${JSON.stringify(options)}`);
+        console.log(`openWindowOptions: ${JSON.stringify(openWindowOptions)}`);
+
+        if (options.transition.type !== TransitionType.None) {
+            const currentView = this.windows[this.windows.length - 1];
+            this.transitionHandler.prepareTransition(view, currentView, options.transition, openWindowOptions);
+            console.log(`openWindowOptions: ${JSON.stringify(openWindowOptions)}`);
+        }
+
+        view.open(openWindowOptions);
     }
 
     back() {
