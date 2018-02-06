@@ -11,7 +11,7 @@ export class ScrollableViewComponent implements AfterViewInit {
     private selectedPage: number = 0;
 
     ngAfterViewInit() {
-        this.scrollableView.titaniumView.currentPage = this.selectedPage;
+        this.scrollableView.scrollableView.currentPage = this.selectedPage;
     }
 
     scrollableViewDidScroll(event) {

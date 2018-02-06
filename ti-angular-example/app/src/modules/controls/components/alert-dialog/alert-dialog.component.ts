@@ -1,10 +1,19 @@
 import { Component, ViewChild } from '@angular/core'
-import { AlertDialog, ConfirmDialog, AlertDialogDirective, ConfirmResult } from 'titanium-angular';
+import {
+    AlertDialog,
+    AlertDialogDirective,
+    ConfirmDialog,
+    ConfirmResult,
+    LayoutBehaviorType
+} from 'titanium-angular';
 
 @Component({
     templateUrl: './alert-dialog.component.html'
 })
 export class AlertDialogComponent  {
+
+    LayoutBehaviorType = LayoutBehaviorType;
+
     @ViewChild('templateAlertDialog') templateAlertDialog: AlertDialogDirective;
 
     openAlertDialog() {

@@ -1,10 +1,14 @@
 'use strict';
 
-const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { GenerateAppJsPlugin, titaniumTarget, WatchStateNotifierPlugin } = require('webpack-dev-titanium');
+const {
+	GenerateAppJsPlugin,
+	TitaniumAngularCompilerPlugin,
+	titaniumTarget,
+	WatchStateNotifierPlugin
+} = require('webpack-dev-titanium');
 
 module.exports = env => {
 	const enableAot = env && env.production;
@@ -24,7 +28,7 @@ module.exports = env => {
 		},
 		resolve: {
 			extensions: ['.ts', '.js', '.scss', '.css'],
-			modules: [path.resolve(__dirname, "node_modules")],
+			modules: [path.resolve(__dirname, 'node_modules')],
 			symlinks: false
 		},
 		resolveLoader: {
@@ -50,18 +54,19 @@ module.exports = env => {
 				name: 'vendor'
 			}),
 			new CopyWebpackPlugin([
-				{ from: 'assets/**' },
+				{ context: 'assets', from: '**/*' },
+				{ from: 'platform/**/*', to: '..' }
 			]),
 			new GenerateAppJsPlugin([
 				'vendor',
 				'bundle'
 			]),
-			// @todo Hack compiler to enable resource loading for platform sepcific templates
-			new AngularCompilerPlugin({
+			new TitaniumAngularCompilerPlugin({
 				tsConfigPath: tsConfigPath,
 				basePath: path.resolve('./src'),
 				entryModule: path.resolve('./src/app.module#AppModule'),
-				skipCodeGeneration: !enableAot
+				skipCodeGeneration: !enableAot,
+				targetPlatform: env.targetPlatform
 			})
 		]
 	};

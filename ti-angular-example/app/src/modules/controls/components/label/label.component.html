@@ -1,12 +1,12 @@
-<Window title="Label" backgroundColor="#fafafa" barColor="#1976d2" [titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
-    <Label #label top="50" textAlign="left" left="50" right="50" color="#1976d2">
+<Window title="Label" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <Label #label top="50" textAlign="left" width="300" color="#1976d2">
         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.
     </Label>
     <VerticalLayout top="200">
-        <Button title="Change text align to center" (click)="changeToCenterAlignment()"></Button>
-        <Button title="Change text align to left" (click)="changeToLeftAlignment()"></Button>
-        <Button title="Change text align to right" (click)="changeToRightAlignment()"></Button>
-        <Button title="Change text align to justify" (click)="changeToJustifyAlignment()" *platform="'ios'"></Button>
-        <Button title="Change color to red" (click)="changeColor()"></Button>
+        <Button #buttons title="Change text align to center" (click)="changeToCenterAlignment()"></Button>
+        <Button #buttons title="Change text align to left" (click)="changeToLeftAlignment()"></Button>
+        <Button #buttons title="Change text align to right" (click)="changeToRightAlignment()"></Button>
+        <Button #buttons title="Change text align to justify" (click)="changeToJustifyAlignment()" *platform="'ios'"></Button>
+        <Button #buttons title="Change color to red" (click)="changeColor()"></Button>
     </VerticalLayout>
 </Window>

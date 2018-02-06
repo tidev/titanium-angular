@@ -1,0 +1,6 @@
+<Window title="Slider" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <VerticalLayout>
+        <Label #state top="20"></Label>
+        <Slider top="10" min="0" max="100" value="75" (change)="updateLabel($event)"></Slider>
+    </VerticalLayout>
+</Window>

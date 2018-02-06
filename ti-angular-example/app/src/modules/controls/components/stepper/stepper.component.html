@@ -1,0 +1,6 @@
+<Window title="Stepper" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <VerticalLayout>
+        <Label #state top="20"></Label>
+        <Stepper top="10" mininum="0" maximum="10" (change)="updateLabel($event)"></Stepper>
+    </VerticalLayout>
+</Window>

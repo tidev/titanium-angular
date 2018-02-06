@@ -1,6 +1,5 @@
 import {
-    AfterContentInit,
-    AfterViewInit,
+    AfterViewChecked,
     Component,
     ContentChildren,
     QueryList,
@@ -15,16 +14,20 @@ import {
 } from 'titanium-angular';
 
 @Component({
-    selector: 'ControlsTab',
-    templateUrl: 'controls.component.html'
+    selector: 'PhoneTab',
+    templateUrl: 'phone.component.html'
 })
-export class ControlsComponent implements AfterViewInit {
+export class PhoneComponent implements AfterViewChecked {
 
     @ViewChild(ListSectionDirective) section: ListSectionDirective;
 
-    constructor(private router: TitaniumRouter) { }
+    private router: TitaniumRouter;
 
-    ngAfterViewInit() {
+    constructor(router: TitaniumRouter) {
+        this.router = router;
+    }
+
+    ngAfterViewChecked() {
         this.styleListItems();
     }
 
