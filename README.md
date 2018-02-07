@@ -10,7 +10,7 @@ Adds a new platform to Angular allowing you to easily create native mobile apps 
 
 ## Getting started
 
-You can checkout how Titanium Angular works by taking a look at the bundled example application. To get started, first navigate to `ti-angular-example/app` and install the required dependencies with `npm i`. After that, go back to the project root. You can now build and run the app with `appc run -p [android|ios]`.
+You can checkout how Titanium Angular works by taking a look at the bundled example application. To get started, first prepare all bundled packages by installing their dependencies with `sh prepare.sh`. After that, go to the example project in `ti-angular-example`. You can now build and run the app with `appc run -p [android|ios]`.
 
 > ⚠️ The example app currently only runs on Android and iOS and requires the latest SDK from our master branch. You can install the latest master build via `appc ti sdk install -b master`.
 
