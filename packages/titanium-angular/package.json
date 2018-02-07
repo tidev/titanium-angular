@@ -10,7 +10,8 @@
     "clean": "rm -rf ./dist",
     "build": "npm run clean && npm run syncd && ngc",
     "syncd": "rsync -am --include='*.d.ts' --include='*/' --exclude='*' ./src/ ./dist/ --progress",
-    "dev": "npm run clean && npm run syncd && ngc --watch"
+    "dev": "npm run clean && npm run syncd && ngc --watch",
+    "prepare": "npm run build"
   },
   "author": "Axway Appcelerator",
   "license": "Apache-2.0",
