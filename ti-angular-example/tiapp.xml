@@ -46,7 +46,7 @@
   <android 
     xmlns:android="http://schemas.android.com/apk/res/android">
     <manifest>
-      <application android:theme="@style/TitaniumAngular"></application>
+      <application android:theme="@style/TitaniumAngular"/>
       <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="25"/>
     </manifest>
   </android>
@@ -58,8 +58,7 @@
     </splash>
     <theme>default</theme>
   </mobileweb>
-  <modules>
-  </modules>
+  <modules></modules>
   <deployment-targets>
     <target device="android">true</target>
     <target device="ipad">true</target>
@@ -67,6 +66,5 @@
     <target device="mobileweb">false</target>
   </deployment-targets>
   <sdk-version>7.1.0</sdk-version>
-  <plugins>
-  </plugins>
+  <plugins></plugins>
 </ti:app>
