@@ -7,13 +7,7 @@ import {
     ViewContainerRef
 } from '@angular/core';
 
-import {
-    DeviceEnvironment
-} from '../services';
-
-import {
-    NodeInterface
-} from '../vdom';
+import { DeviceEnvironment } from '../services';
 
 export class PlatformContext {
     public filter: string = ''
