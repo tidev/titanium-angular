@@ -4,9 +4,11 @@ import { ComponentRef, Injectable, Injector, Type } from "@angular/core";
 import { Logger } from '../log';
 import { ElementNode, TitaniumElement, InvisibleElement } from '../vdom';
 import { NavigationOptions } from "./NavigationOptions";
-import { AbstractNavigator, NativeNavigationEvent, OpenableView } from "./navigators/AbstractNavigator";
+import { AbstractNavigator, NativeNavigationEvent } from "./navigators/AbstractNavigator";
 import { TabGroupNavigator } from "./navigators/TabGroupNavigator";
 import { WindowNavigator } from "./navigators/WindowNavigator";
+
+type OpenableView = Titanium.UI.TabGroup | Titanium.UI.Window;
 
 @Injectable()
 export class NavigationManager {

@@ -4,7 +4,7 @@ import { ComponentRef } from '@angular/core';
 import { TitaniumPlatformLocation } from '../../common';
 import { DeviceEnvironment } from '../../services';
 import { NavigationOptions } from '../NavigationOptions';
-import { AbstractNavigator, OpenableView } from "./AbstractNavigator";
+import { AbstractNavigator } from "./AbstractNavigator";
 import { ApplicationRef } from '@angular/core';
 
 /**
