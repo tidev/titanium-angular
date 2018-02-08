@@ -11,14 +11,8 @@ import {
     QueryList
 } from '@angular/core';
 
-import {
-    ElementNode, TitaniumElement
-} from '../vdom'
-
-import {
-    BaseDialog,
-    DialogAction
-} from '../dialog';
+import { TitaniumElement } from '../vdom'
+import { BaseDialog, DialogAction } from '../facades/dialog';
 
 @Directive({
     selector: 'DialogAction'
@@ -66,7 +60,7 @@ export class DialogActionDirective implements OnInit {
     selector: 'AlertDialog',
     template: `
         <ng-container>
-            <TemplateLoadingContainer #loader></TemplateLoadingContainer>
+            <DetachedView #loader></DetachedView>
             <ng-content></ng-content>
         </ng-container>
     `

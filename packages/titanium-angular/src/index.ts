@@ -1,5 +1,5 @@
-export * from './dialog';
 export * from './directives';
+export * from './facades';
 export * from './log';
 export * from './platform/platform-titanium';
 export * from './platform/platform-titanium-dynamic';

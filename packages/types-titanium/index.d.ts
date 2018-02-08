@@ -820,6 +820,20 @@ declare namespace Titanium {
              * @param data A row, set of rows, a column of rows or a set of columns of rows.
              */
             add(data: Titanium.UI.PickerRow | Array<Titanium.UI.PickerRow> | Titanium.UI.PickerColumn | Array<Titanium.UI.Picker>): void
+            
+            /**
+             * Shows data picker as a modal dialog.
+             * 
+             * @param options Date picker modal dialog options.
+             */
+            showDatePickerDialog(options: { callback: Function, okButtonTitle?: string, title?: string, value?: Date });
+
+            /**
+             * Shows time picker as a modal dialog.
+             * 
+             * @param options Time picker modal dialog options.
+             */
+            showTimePickerDialog(options: { callback: Function, format24?: boolean, okButtonTitle?: string, title?: string, value?: Date });
         }
 
         class PickerColumn extends View {

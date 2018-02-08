@@ -1,7 +1,4 @@
-import {
-    AbstractDialog
-} from '.';
-
+import { AbstractDialog } from '.';
 
 export class BaseDialog extends AbstractDialog {
 
@@ -30,7 +27,7 @@ export class BaseDialog extends AbstractDialog {
     /**
      * @todo set view from template
      */
-    set androidView(androidView: any) {
+    set androidView(androidView: Titanium.UI.View) {
         this._alertDialog.setAndroidView(androidView);
     }
 
