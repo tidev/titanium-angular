@@ -674,29 +674,6 @@ declare namespace Titanium {
             title: string;
         }
 
-        abstract class ViewProxy extends Proxy {
-            backgroundGradient: Gradient;
-            transform: Titanium.UI.Matrix2D | Titanium.UI.Matrix3D;
-
-            add(view: Titanium.UI.View): void;
-
-            insertAt(params: { view: Titanium.UI.View, position: number }): void;
-
-            /**
-             * Animates this view.
-             * 
-             * @param animation Either a dictionary of animation properties or an Animation object.
-             * @param callback Function to be invoked upon completion of the animation.
-             */
-            animate(animation: Animation, callback?: Function): void;
-        }
-
-        abstract class WindowProxy extends ViewProxy {
-            activity: Titanium.Android.Activity;
-            open(options?: OpenWindowOptions): void;
-            close(): void;
-        }
-
         interface ListDataItem {
             properties: any;
             template?: string | number;
@@ -721,7 +698,7 @@ declare namespace Titanium {
         /**
          * An activity indicator that lets the user know an action is taking place.
          */
-        class ActivityIndicator extends ViewProxy {
+        class ActivityIndicator extends View {
             /**
              * Shows the activity indicator and starts the animation.
              * 
@@ -742,13 +719,13 @@ declare namespace Titanium {
          * message and buttons, positioned in the middle of the display.
          */
         class AlertDialog extends Proxy {}
-        class Button extends ViewProxy {}
-        class DashboardView extends ViewProxy {}
+        class Button extends View {}
+        class DashboardView extends View {}
         class DashboardItem extends Proxy {}
-        class ImageView extends ViewProxy {
+        class ImageView extends View {
             image: string | Titanium.Filesystem.File | Titanium.Blob;
         }
-        class Label extends ViewProxy {
+        class Label extends View {
             color: string;
             text: string;
             textAlign: number | string
@@ -758,7 +735,7 @@ declare namespace Titanium {
          * A list view is used to present information, organized in to sections
          * and items, in a vertically-scrolling view.
          */
-        class ListView extends ViewProxy {
+        class ListView extends View {
             sections: ListSection[];
             templates: { [name: string]: ListItemTemplate };
             appendSection(section: ListSection): void;
@@ -832,7 +809,7 @@ declare namespace Titanium {
         /**
          * A control used to select one or more fixed values.
          */
-        class Picker extends ViewProxy {
+        class Picker extends View {
             /**
              * Adds rows or columns to the picker.
              * 
@@ -845,22 +822,22 @@ declare namespace Titanium {
             add(data: Titanium.UI.PickerRow | Array<Titanium.UI.PickerRow> | Titanium.UI.PickerColumn | Array<Titanium.UI.Picker>): void
         }
 
-        class PickerColumn extends ViewProxy {
+        class PickerColumn extends View {
             addRow(row: Titanium.UI.PickerRow): void;
         }
-        class PickerRow extends ViewProxy { }
-        class ProgressBar extends ViewProxy { }
-        class RefreshControl extends ViewProxy { }
-        class ScrollableView extends ViewProxy {
+        class PickerRow extends View { }
+        class ProgressBar extends View { }
+        class RefreshControl extends View { }
+        class ScrollableView extends View {
             currentPage: number;
             setViews(views: any[]): void;
         }
-        class ScrollView extends ViewProxy { }
-        class SearchBar extends ViewProxy { }
-        class Slider extends ViewProxy { }
-        class Switch extends ViewProxy { }
+        class ScrollView extends View { }
+        class SearchBar extends View { }
+        class Slider extends View { }
+        class Switch extends View { }
 
-        class Tab extends ViewProxy {
+        class Tab extends View {
             setWindow(window: Window): void;
 
             /**
@@ -885,32 +862,89 @@ declare namespace Titanium {
             close(window?: Window, options?: CloseWindowOptions): void;
         }
 
-        class TabGroup extends WindowProxy {
+        class TabGroup extends View {
             activeTab: Tab;
             addTab(tab: Tab): void;
+            /**
+             * Opens the tab group and makes it visible.
+             */
+            open(): void;
         }
 
-        class TextArea extends ViewProxy { }
-        class TextField extends ViewProxy { }
+        class TextArea extends View { }
+        class TextField extends View { }
 
         /**
          * A toolbar, which can contain buttons and certain other controls.
          */
-        class Toolbar extends ViewProxy {
+        class Toolbar extends View {
             /**
              * An array of buttons (or other widgets) contained in the toolbar.
              */
             items: Titanium.UI.View[];
         }
         
-        class WebView extends ViewProxy { }
+        class WebView extends View { }
 
-        class Window extends WindowProxy {
-
+        /**
+         * The Window is an empty drawing surface or container and acts as a root view.
+         */
+        class Window extends View {
+            activity: Titanium.Android.Activity;
+            open(options?: OpenWindowOptions): void;
+            close(): void;
         }
 
-        class View extends ViewProxy {
-            
+        /**
+         * An empty drawing surface or container and the base type for all UI
+         * widgets.
+         */
+        class View extends Proxy {
+
+            backgroundGradient: Gradient;
+
+            /**
+             * Array of this view's child views.
+             */
+            readonly children: Array<Titanium.UI.View>;
+
+            transform: Titanium.UI.Matrix2D | Titanium.UI.Matrix3D;
+
+            /**
+             * Animates this view.
+             * 
+             * @param animation Either a dictionary of animation properties or an Animation object.
+             * @param callback Function to be invoked upon completion of the animation.
+             */
+            animate(animation: Animation, callback?: Function): void;
+
+            /**
+             * Adds a child to this view's hierarchy.
+             * 
+             * @param view 
+             */
+            add(view: Titanium.UI.View | Array<Titanium.UI.View>): void;
+
+            /**
+             * Hides this view.
+             * 
+             * @param options Animation options for Android
+             */
+            hide(options?: any): void;
+
+            /**
+             * Inserts a view at the specified position in the children array.
+             * 
+             * @param params
+             */
+            insertAt(params: { view: Titanium.UI.View, position: number }): void;
+
+            /**
+             * Makes this view visible.
+             * 
+             * @param options nimation options for Android
+             */
+            show(options?: any): void;
         }
         
         // Factory functions
@@ -957,7 +991,7 @@ declare namespace Titanium {
              * CardView provides a layout container with rounded corners and a
              * shadow indicating the view is elevated.
              */
-            class CardView extends ViewProxy {
+            class CardView extends View {
 
             }
 
@@ -995,11 +1029,11 @@ declare namespace Titanium {
 
             // iOS UI views
 
-            class BlurView extends ViewProxy {
+            class BlurView extends View {
                 setEffect(effect: number);
             }
 
-            class TabbedBar extends ViewProxy {
+            class TabbedBar extends View {
                 labels: string[] | BarItem[]
             }
 
