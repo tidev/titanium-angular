@@ -1,19 +1,18 @@
 import {
     CollectionIndexCache,
     ElementNode,
-    NodeInterface,
     NodeIterator,
     NodeListInterface
 } from '.';
 
-export class ElementCollection implements NodeListInterface {
+export class ElementCollection implements NodeListInterface<ElementNode> {
     private _rootNode: ElementNode;
 
-    private _indexCache: CollectionIndexCache<ElementCollection>;
+    private _indexCache: CollectionIndexCache<ElementNode, ElementCollection>;
 
     constructor(rootNode: ElementNode) {
         this._rootNode = rootNode;
-        this._indexCache = new CollectionIndexCache<ElementCollection>(this);
+        this._indexCache = new CollectionIndexCache(this);
     }
 
     get length(): number {
@@ -24,7 +23,7 @@ export class ElementCollection implements NodeListInterface {
         return <ElementNode>this._indexCache.nodeAt(index);
     }
 
-    indexOf(node: NodeInterface) {
+    indexOf(node: ElementNode) {
         return this._indexCache.indexOf(node);
     }
 
@@ -44,7 +43,7 @@ export class ElementCollection implements NodeListInterface {
         this._indexCache.invalidate();
     }
 
-    [Symbol.iterator](): Iterator<NodeInterface> {
+    [Symbol.iterator](): Iterator<ElementNode> {
         return new NodeIterator(this);
     }
 }

@@ -12,11 +12,11 @@ import {
 } from '../services';
 
 import {
+    AbstractNode,
     CommentNode,
     InvisibleElement,
     ElementNode,
     EmulatedRootElement,
-    NodeInterface,
     TitaniumElement,
     TitaniumElementRegistry,
     TextNode
@@ -51,7 +51,7 @@ export class TitaniumRenderer extends Renderer2 {
         this.logger.trace('TitaniumRenderer.destroy');
     }
 
-    createElement(name: string, namespace?: string | null): NodeInterface {
+    createElement(name: string, namespace?: string | null): AbstractNode {
         name = namespace ? `${namespace}:${name}` : name;
         this.logger.debug(`TitaniumRenderer.createElement ${name}`);
         if (this.elementRegistry.hasElement(name)) {
@@ -74,7 +74,7 @@ export class TitaniumRenderer extends Renderer2 {
         return new TextNode(value);
     }
 
-    appendChild(parent: NodeInterface, newChild: NodeInterface): void {
+    appendChild(parent: AbstractNode, newChild: AbstractNode): void {
         this.logger.debug(`TitaniumRenderer.appendChild ${newChild} -> ${parent}`);
         if (!parent) {
             this.logger.debug(`No parent to add child ${newChild}, skipping.`);
@@ -84,7 +84,7 @@ export class TitaniumRenderer extends Renderer2 {
         parent.appendChild(newChild);
     }
 
-    insertBefore(parent: NodeInterface, newChild: NodeInterface, refChild: NodeInterface): void {
+    insertBefore(parent: AbstractNode, newChild: AbstractNode, refChild: AbstractNode): void {
         this.logger.debug(`TitaniumRenderer.insertBefore ${newChild} before ${refChild} in ${parent}`);
         if (!parent) {
             this.logger.debug(`No parent to insert child ${newChild}, skipping.`);
@@ -94,7 +94,7 @@ export class TitaniumRenderer extends Renderer2 {
         parent.insertBefore(newChild, refChild);
     }
 
-    removeChild(parent: NodeInterface, oldChild: NodeInterface): void {
+    removeChild(parent: AbstractNode, oldChild: AbstractNode): void {
         this.logger.debug(`TitaniumRenderer.removeChild ${oldChild} from ${parent}`);
         if (!parent) {
             this.logger.debug(`Child ${oldChild} has no parent, skipping.`);
@@ -109,12 +109,12 @@ export class TitaniumRenderer extends Renderer2 {
         return new EmulatedRootElement();
     }
 
-    parentNode(node: NodeInterface): any {
+    parentNode(node: AbstractNode): any {
         this.logger.debug(`TitaniumRenderer.parentNode(${node}) -> ${node.parentNode}`);
         return node.parentNode;
     }
 
-    nextSibling(node: NodeInterface): any {
+    nextSibling(node: AbstractNode): any {
         this.logger.debug(`TitaniumRenderer.nextSibling(${node}) -> ${node.nextSibling}`);
         return node.nextSibling;
     }
@@ -156,7 +156,7 @@ export class TitaniumRenderer extends Renderer2 {
         }
     }
 
-    setValue(node: NodeInterface, value: string): void {
+    setValue(node: AbstractNode, value: string): void {
         this.logger.debug(`TitaniumRenderer.setValue(${node}, ${value})`);
         node.nodeValue = value;
     }

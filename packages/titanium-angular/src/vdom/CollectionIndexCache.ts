@@ -1,19 +1,19 @@
 import {
-    NodeInterface,
+    AbstractNode,
     NodeListInterface
 } from '.';
 
-export class CollectionIndexCache<T extends NodeListInterface> {
+export class CollectionIndexCache<T extends AbstractNode, U extends NodeListInterface<T>> {
 
-    private _collection: T;
+    private _collection: U;
 
-    private _cachedList: Array<NodeInterface>
+    private _cachedList: Array<T>
 
     private _nodeCount: number;
 
     private _initialized: boolean;
 
-    constructor(collection: T) {
+    constructor(collection: U) {
         this._collection = collection;
         this._cachedList = [];
         this._initialized = false;
@@ -21,8 +21,7 @@ export class CollectionIndexCache<T extends NodeListInterface> {
 
     get nodeCount() {
         if (!this._initialized) {
-            this.updateNodeCountAndListCache();
-            this._initialized = true;
+            this.initialize();
         }
 
         return this._nodeCount;
@@ -30,8 +29,7 @@ export class CollectionIndexCache<T extends NodeListInterface> {
 
     nodeAt(index: number) {
         if (!this._initialized) {
-            this.updateNodeCountAndListCache();
-            this._initialized = true;
+            this.initialize();
         }
 
         if (index >= this._nodeCount) {
@@ -41,7 +39,11 @@ export class CollectionIndexCache<T extends NodeListInterface> {
         return this._cachedList[index];
     }
 
-    indexOf(node: NodeInterface): number {
+    indexOf(node: T): number {
+        if (!this._initialized) {
+            this.initialize();
+        }
+
         return this._cachedList.indexOf(node);
     }
 
@@ -58,5 +60,10 @@ export class CollectionIndexCache<T extends NodeListInterface> {
         this._cachedList = [];
         this._nodeCount = 0;
         this._initialized = false;
+    }
+
+    private initialize() {
+        this.updateNodeCountAndListCache();
+        this._initialized = true;
     }
 }

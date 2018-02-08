@@ -1,27 +1,8 @@
-import {
-    AbstractAngularElement,
-    InvisibleElement
-} from '.';
-
-import {
-    AbstractNode,
-    ElementNode,
-    NodeInterface,
-    TextNode
-} from '..';
-
-import {
-    Logger
-} from '../../log';
-
-import {
-    DeviceEnvironment
-} from '../../services';
-
-import {
-    camelize,
-    capitalizeFirstLetter
-} from '../../utility/string';
+import { Logger } from '../../log';
+import { DeviceEnvironment } from '../../services';
+import { camelize, capitalizeFirstLetter } from '../../utility/string';
+import { AbstractNode, ElementNode, TextNode, NodeType } from '..';
+import { AbstractAngularElement, InvisibleElement } from '.';
 
 export type ProxyFactory = (options: any) => Titanium.Proxy;
 
@@ -150,12 +131,11 @@ export class TitaniumElement extends AbstractAngularElement {
         }
     }
 
-    insertBefore(newNode: NodeInterface, referenceNode: NodeInterface): void {
-        super.insertBefore(<AbstractNode>newNode, <AbstractNode>referenceNode);
+    insertBefore(newNode: AbstractNode, referenceNode: AbstractNode): void {
+        super.insertBefore(newNode, referenceNode);
 
         if (newNode instanceof TextNode) {
             this.updateText();
-            return;
         }
 
         if (newNode instanceof TitaniumElement) {

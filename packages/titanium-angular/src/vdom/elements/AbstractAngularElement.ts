@@ -9,10 +9,14 @@ export abstract class AbstractAngularElement extends ElementNode {
         return this.parentElement instanceof AbstractAngularElement ? this.parentElement : null;
     }
 
-    findSingleVisualElement(node: AbstractAngularElement): TitaniumElement {
+    static findSingleVisualElement(node: AbstractAngularElement): TitaniumElement {
+        if (node instanceof TitaniumElement) {
+            return node;
+        }
+        
         let visualElement = null;
         try {
-            visualElement = this.findSingleVisualElementRecursive(node.children);
+            visualElement = AbstractAngularElement.findSingleVisualElementRecursive(node.children);
         } catch (e) {
             throw new Error(`No suitable visual element found within ${node}. Reason: ${e.message}`);
         }
@@ -22,13 +26,17 @@ export abstract class AbstractAngularElement extends ElementNode {
 
     abstract insertIntoVisualTree(children: AbstractAngularElement, atIndex?: number);
 
-    private findSingleVisualElementRecursive(elements: ElementCollection, nestingLevel: number = 0) {
+    private static findSingleVisualElementRecursive(elements: ElementCollection, nestingLevel: number = 0): TitaniumElement {
         if (elements.length === 0) {
             throw new Error(`Reached buttom of tree without finding at least one visual element (nesting level: ${nestingLevel}).`);
         }
 
         if (elements.length > 1) {
             throw new Error(`Expected only one elemnt, but found ${elements.length} (nesting level: ${nestingLevel}).`);
+        }
+
+        if (nestingLevel > 50) {
+            throw new Error(`Couldn't find a visual element after reaching nesting level limit (nesting level: ${nestingLevel}.`);
         }
 
         const candidateElement = elements.item(0);

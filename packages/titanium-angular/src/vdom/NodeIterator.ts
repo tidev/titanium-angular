@@ -1,20 +1,20 @@
 import {
-    NodeInterface,
+    AbstractNode,
     NodeListInterface
 } from '.';
 
-export class NodeIterator implements Iterator<NodeInterface> {
+export class NodeIterator<T extends AbstractNode> implements Iterator<T> {
 
-    private _list: NodeListInterface;
+    private _list: NodeListInterface<T>;
 
     private _index: number;
 
-    constructor(list: NodeListInterface) {
+    constructor(list: NodeListInterface<T>) {
         this._list = list;
         this._index = 0;
     }
 
-    next(): IteratorResult<NodeInterface> {
+    next(): IteratorResult<T> {
         return {
             done: this._index >= this._list.length,
             value: this._list.item(this._index++)

@@ -20,10 +20,10 @@ import {
 import { Observable } from 'rxjs';
 
 import {
+    AbstractNode,
     AbstractAngularElement,
     AbstractTextualNode,
     InvisibleElement,
-    NodeInterface,
     TitaniumElement,
     TitaniumElementRegistry
 } from '../vdom';
@@ -98,7 +98,7 @@ export class ListViewComponent implements AfterContentInit {
         this._templateFactories.set(name, createTemplate);
     }
 
-    private convertNodesToTemplatesRecursive(nodes: Iterable<NodeInterface>, templates: Array<ListItemViewTemplate>): void {
+    private convertNodesToTemplatesRecursive(nodes: Iterable<AbstractNode>, templates: Array<ListItemViewTemplate>): void {
         for (let node of nodes) {
             if (node instanceof TitaniumElement) {
                 let meta = this._elementRegistry.getViewMetadata(node.nodeName);

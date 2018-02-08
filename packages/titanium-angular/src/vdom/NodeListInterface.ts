@@ -1,15 +1,13 @@
-import {
-    NodeInterface
-} from '.';
+import { AbstractNode } from '.';
 
-export interface NodeListInterface extends Iterable<NodeInterface> {
+export interface NodeListInterface<T extends AbstractNode> extends Iterable<T> {
     length: number
 
-    item(index: number): NodeInterface;
+    item(index: number): T;
 
-    collectionBegin(): NodeInterface;
+    collectionBegin(): T;
 
-    collectionEnd(): NodeInterface;
+    collectionEnd(): T;
 
-    traverseForward(node: NodeInterface): NodeInterface;
+    traverseForward(node: T): T;
 }

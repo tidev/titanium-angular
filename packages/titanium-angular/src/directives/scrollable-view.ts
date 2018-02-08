@@ -41,7 +41,7 @@ export class ScrollableViewDirective implements AfterContentInit {
             if (child instanceof TitaniumElement) {
                 views.push(child.titaniumView)
             } else if (child instanceof InvisibleElement) {
-                const visualElement = child.findSingleVisualElement(child);
+                const visualElement = AbstractAngularElement.findSingleVisualElement(child);
                 views.push(visualElement.titaniumView);
             }
         }

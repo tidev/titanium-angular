@@ -1,37 +1,37 @@
 import {
+    AbstractNode,
     CollectionIndexCache,
-    NodeInterface,
     NodeIterator,
     NodeListInterface
 } from '.';
 
-export class ChildNodeList implements NodeListInterface {
-    private _rootNode: NodeInterface;
+export class ChildNodeList implements NodeListInterface<AbstractNode> {
+    private _rootNode: AbstractNode;
 
-    private _indexCache: CollectionIndexCache<ChildNodeList>;
+    private _indexCache: CollectionIndexCache<AbstractNode, ChildNodeList>;
 
-    constructor(rootNode: NodeInterface) {
+    constructor(rootNode: AbstractNode) {
         this._rootNode = rootNode;
-        this._indexCache = new CollectionIndexCache<ChildNodeList>(this);
+        this._indexCache = new CollectionIndexCache(this);
     }
 
     get length(): number {
         return this._indexCache.nodeCount;
     }
 
-    item(index: number): NodeInterface {
+    item(index: number): AbstractNode {
         return this._indexCache.nodeAt(index);
     }
 
-    collectionBegin(): NodeInterface {
+    collectionBegin(): AbstractNode {
         return this._rootNode.firstChild;
     }
 
-    collectionEnd(): NodeInterface {
+    collectionEnd(): AbstractNode {
         return this._rootNode.lastChild;
     }
 
-    traverseForward(node: NodeInterface): NodeInterface {
+    traverseForward(node: AbstractNode): AbstractNode {
         return node.nextSibling;
     }
 
@@ -39,7 +39,7 @@ export class ChildNodeList implements NodeListInterface {
         this._indexCache.invalidate();
     }
 
-    [Symbol.iterator](): Iterator<NodeInterface> {
+    [Symbol.iterator](): Iterator<AbstractNode> {
         return new NodeIterator(this);
     }
 

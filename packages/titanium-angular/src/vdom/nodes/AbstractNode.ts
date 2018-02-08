@@ -1,22 +1,22 @@
-import {
-    ChildNodeList
-} from '..';
+import { ChildNodeList } from '..';
+import { ElementNode } from '.'
 
-import {
-    NodeInterface,
-    NodeType,
-    ElementNode
-} from '.'
+export enum NodeType {
+    Element = 1,
+    Text = 3,
+    Comment = 8,
+    Document = 9
+} 
 
-export abstract class AbstractNode implements NodeInterface {
+export abstract class AbstractNode {
 
     nodeName: string;
 
     nodeType: NodeType;
 
-    parentNode: NodeInterface;
+    parentNode: AbstractNode;
 
-    firstChild: NodeInterface;
+    firstChild: AbstractNode;
 
     ngCssClasses: Map<string, boolean>;
 
@@ -24,9 +24,9 @@ export abstract class AbstractNode implements NodeInterface {
 
     private _childNodes: ChildNodeList;
 
-    private _nextSibling: NodeInterface;
+    private _nextSibling: AbstractNode;
 
-    private _previousSibling: NodeInterface;
+    private _previousSibling: AbstractNode;
 
     constructor() {
         this.parentNode = null;
@@ -58,13 +58,13 @@ export abstract class AbstractNode implements NodeInterface {
 
     get lastChild() {
         if (this.firstChild) {
-            return (<AbstractNode>this.firstChild)._previousSibling;
+            return this.firstChild._previousSibling;
         }
 
         return null;
     }
 
-    get nextSibling(): NodeInterface {
+    get nextSibling(): AbstractNode {
         if (this.parentNode === null) {
             return null;
         }
@@ -77,7 +77,7 @@ export abstract class AbstractNode implements NodeInterface {
         return nextSibling;
     }
 
-    get previousSibling(): NodeInterface {
+    get previousSibling(): AbstractNode {
         if (this.parentNode === null) {
             return null;
         }
@@ -90,6 +90,26 @@ export abstract class AbstractNode implements NodeInterface {
         return previousSibling;
     }
 
+    get nextElementSibling(): ElementNode {
+        for (let child = this.nextSibling; child !== null; child = child.nextSibling) {
+            if (child.nodeType === NodeType.Element) {
+                return <ElementNode>child;
+            }
+        }
+
+        return null;
+    }
+
+    get previousElementSibling(): ElementNode {
+        for (let child = this.previousSibling; child !== null; child = child.previousSibling) {
+            if (child.nodeType === NodeType.Element) {
+                return <ElementNode>child;
+            }
+        }
+
+        return null;
+    }
+
     appendChild(childNode: AbstractNode): void {
         this.insertBefore(childNode, null);
     }
@@ -99,8 +119,8 @@ export abstract class AbstractNode implements NodeInterface {
             throw new Error(`Child node ${oldChild} not found inside ${this}`);
         }
 
-        const previousChild = <AbstractNode>oldChild._previousSibling;
-        const nextChild = <AbstractNode>oldChild._nextSibling;
+        const previousChild = oldChild._previousSibling;
+        const nextChild = oldChild._nextSibling;
         
         if (previousChild === oldChild) {
             return;
@@ -125,13 +145,13 @@ export abstract class AbstractNode implements NodeInterface {
         newNode.parentNode = this;
 
         if (referenceNode === null) {
-            referenceNode = <AbstractNode>this.firstChild;
+            referenceNode = this.firstChild;
         }
 
         if (referenceNode) {
             newNode._previousSibling = referenceNode._previousSibling;
             newNode._nextSibling = referenceNode;
-            (<AbstractNode>referenceNode._previousSibling)._nextSibling = newNode;
+            referenceNode._previousSibling._nextSibling = newNode;
             referenceNode._previousSibling = newNode;
         } else {
             this.firstChild = newNode;

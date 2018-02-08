@@ -1,7 +1,6 @@
 import {
     AbstractNode,
     ChildNodeInterface,
-    NodeInterface,
     NodeType,
     ParentNodeInterface
 } from '.';
@@ -53,26 +52,6 @@ export class ElementNode extends AbstractNode implements ChildNodeInterface, Par
 
     get lastElementChild(): ElementNode {
         for(let child = this.lastChild; child !== null; child = child.previousSibling) {
-            if (child.nodeType === NodeType.Element) {
-                return <ElementNode>child;
-            }
-        }
-
-        return null;
-    }
-
-    get nextElementSibling(): ElementNode {
-        for (let child = this.nextSibling; child !== null; child = child.nextSibling) {
-            if (child.nodeType === NodeType.Element) {
-                return <ElementNode>child;
-            }
-        }
-
-        return null;
-    }
-
-    get previousElementSibling(): ElementNode {
-        for (let child = this.previousSibling; child !== null; child = child.previousSibling) {
             if (child.nodeType === NodeType.Element) {
                 return <ElementNode>child;
             }

@@ -38,14 +38,24 @@ import {
  */
 export class InvisibleElement extends AbstractAngularElement {
 
-    get nextVisualSibling(): TitaniumElement {
-        for (let next = this.nextSibling; next !== null; next = next.nextSibling) {
-            if (next instanceof TitaniumElement) {
-                return next;
-            }
+    getAttribute(name: string): any {
+        try {
+            const visualElement = AbstractAngularElement.findSingleVisualElement(this);
+            return visualElement.getAttribute(name);
+        } catch (e) {
+            return super.getAttribute(name);
         }
+    }
 
-        return null;
+    setAttribute(name: string, value: any, namespace?: string |  null): void {
+        super.setAttribute(name, value, namespace);
+
+        try {
+            const visualElement = AbstractAngularElement.findSingleVisualElement(this);
+            visualElement.setAttribute(name, value, namespace);
+        } catch (e) {
+
+        }
     }
 
     insertBefore(newChild: AbstractNode, referenceChild: AbstractNode) {
@@ -67,6 +77,8 @@ export class InvisibleElement extends AbstractAngularElement {
     }
 
     insertIntoVisualTree(child: AbstractAngularElement, atIndex?: number) {
+        console.log(`${this}.insertIntoVisualTree(${child}, ${atIndex})`);
+
         const parent = this.parentTemplateElement;
         if (parent === null) {
             console.log(`No parent element, cannot insert child ${child} into visual tree.`);
@@ -80,11 +92,16 @@ export class InvisibleElement extends AbstractAngularElement {
             }
         }
 
-        const nextVisual = this.nextVisualSibling;
-        const baseIndex = nextVisual ? this.parentElement.children.indexOf(nextVisual) : 0;
+        console.log('Parent structure');
+        console.log(`${parent}`);
+        for (let child of this.children) {
+            console.log('˪ ' + child);
+        }
+
+        const baseIndex = this.parentElement.children.indexOf(this);
         const insideIndex = atIndex === null || atIndex === undefined ? this.children.indexOf(child) : atIndex;
 
-        console.log(`InvisibleElement.insertIntoVisualTree ${child} -> ${parent}`);
+        console.log(`${this}.insertIntoVisualTree ${child} -> ${parent}, baseIndex: ${baseIndex}, insideIndex: ${insideIndex}`);
         parent.insertIntoVisualTree(child, baseIndex + insideIndex);
     }
 
