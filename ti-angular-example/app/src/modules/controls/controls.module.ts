@@ -9,6 +9,7 @@ import { BlurViewComponent } from './components/blur-view/blur-view.component';
 import { ImageViewComponent } from './components/image-view/image-view.component';
 import { LabelComponent } from './components/label/label.component';
 import { ListViewComponent } from './components/list-view/list-view.component';
+import { PickerComponent } from './components/picker/picker.component';
 import { ScrollableViewComponent } from './components/scrollable-view/scrollable-view.component';
 import { SliderComponent } from './components/slider/slider.component';
 import { StepperComponent } from './components/stepper/stepper.component';
@@ -32,6 +33,7 @@ import { WebViewComponent } from './components/web-view/web-view.component';
         ImageViewComponent,
         LabelComponent,
         ListViewComponent,
+        PickerComponent,
         ScrollableViewComponent,
         SliderComponent,
         StepperComponent,
@@ -49,6 +51,7 @@ import { WebViewComponent } from './components/web-view/web-view.component';
         ImageViewComponent,
         LabelComponent,
         ListViewComponent,
+        PickerComponent,
         ScrollableViewComponent,
         SliderComponent,
         StepperComponent,

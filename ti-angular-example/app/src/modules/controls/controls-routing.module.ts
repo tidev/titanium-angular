@@ -8,6 +8,7 @@ import { BlurViewComponent } from './components/blur-view/blur-view.component';
 import { ImageViewComponent } from './components/image-view/image-view.component';
 import { LabelComponent } from './components/label/label.component';
 import { ListViewComponent } from './components/list-view/list-view.component';
+import { PickerComponent } from './components/picker/picker.component';
 import { ScrollableViewComponent } from './components/scrollable-view/scrollable-view.component';
 import { SliderComponent } from './components/slider/slider.component';
 import { StepperComponent } from './components/stepper/stepper.component';
@@ -37,6 +38,7 @@ const controlsRoutes: Routes = [
             { path: 'activity-indicator', component: ActivityIndicatorComponent },
             { path: 'alert-dialog', component: AlertDialogComponent },
             { path: 'label', component: LabelComponent },
+            { path: 'picker', component: PickerComponent },
             { path: 'slider', component: SliderComponent },
             { path: 'stepper', component: StepperComponent },
             { path: 'switch-control', component: SwitchControlComponent },
