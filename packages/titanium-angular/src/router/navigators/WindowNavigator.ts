@@ -1,7 +1,7 @@
 import { ComponentRef } from '@angular/core';
 
 import { NavigationOptions } from '../NavigationOptions';
-import { AbstractNavigator } from "./AbstractNavigator";
+import { AbstractNavigator, OpenableView } from "./AbstractNavigator";
 import { NavigationTransitionHandler, TransitionType } from '../../animation';
 
 export class WindowNavigator extends AbstractNavigator {
@@ -37,7 +37,7 @@ export class WindowNavigator extends AbstractNavigator {
         this.rootWindow.open();
     }
 
-    open(view: Titanium.UI.WindowProxy, options: NavigationOptions) {
+    open(view: OpenableView, options: NavigationOptions) {
         let openWindowOptions: Titanium.UI.OpenWindowOptions = {};
 
         if (options.clearHistory) {
@@ -53,7 +53,11 @@ export class WindowNavigator extends AbstractNavigator {
             console.log(`openWindowOptions: ${JSON.stringify(openWindowOptions)}`);
         }
 
-        view.open(openWindowOptions);
+        if (view instanceof Titanium.UI.Window) {
+            view.open(openWindowOptions);
+        } else if (view instanceof Titanium.UI.TabGroup) {
+            view.open();
+        }
     }
 
     back() {

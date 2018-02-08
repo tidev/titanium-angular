@@ -136,7 +136,7 @@ export class ListViewComponent implements AfterContentInit {
         this._element.setAttribute('templates', templates);
         this.listView = <Titanium.UI.ListView>this._element.titaniumView;
         const ownerElement = <TitaniumElement>this._element.parentElement;
-        const owner = <Titanium.UI.ViewProxy>ownerElement.titaniumView;
+        const owner = <Titanium.UI.View>ownerElement.titaniumView;
         owner.add(this.listView);
 
         if (this.refreshControl !== null) {

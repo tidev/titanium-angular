@@ -3,6 +3,9 @@ import { ComponentRef, EventEmitter, Injector } from '@angular/core';
 import { ElementNode, TitaniumElement } from '../../vdom';
 import { NavigationOptions } from '../NavigationOptions';
 
+// @todo: Add iOS navigation and split windows 
+export type OpenableView = Titanium.UI.Window | Titanium.UI.TabGroup;
+
 export interface NativeNavigationEvent {
     
 }
@@ -40,7 +43,7 @@ export abstract class AbstractNavigator {
      * 
      * @param view Root view on which this navigator should start navigation
      */
-    static canHandle(view: Titanium.UI.WindowProxy): boolean {
+    static canHandle(view: Titanium.UI.View): boolean {
         return this.supportedRootView === view.apiName;
     }
 
@@ -60,7 +63,7 @@ export abstract class AbstractNavigator {
      * 
      * @param view Last view that was opened
      */
-    public shouldYieldNavigating(view: Titanium.UI.WindowProxy): boolean {
+    public shouldYieldNavigating(view: Titanium.UI.View): boolean {
         return this.yieldNavigationViews.indexOf(view.apiName) !== -1;
     }
 
@@ -69,7 +72,7 @@ export abstract class AbstractNavigator {
      * 
      * @param view Titanium view that should be opnened
      */
-    public canOpen(view: Titanium.UI.WindowProxy): boolean {
+    public canOpen(view: Titanium.UI.View): boolean {
         return this.supportedViews.indexOf(view.apiName) !== -1;
     }
 
@@ -79,7 +82,7 @@ export abstract class AbstractNavigator {
      * @param view View that should be opnened
      * @param options Navigation options to apply while opening the view
      */
-    abstract open(view: Titanium.UI.WindowProxy, options: NavigationOptions);
+    abstract open(view: OpenableView, options: NavigationOptions);
 
     /**
      * Navigates one view back in the currently active stack.

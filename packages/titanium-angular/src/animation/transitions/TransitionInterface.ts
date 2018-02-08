@@ -6,6 +6,6 @@ export interface TransitionConstructor {
 
 export interface TransitionInterface {
     name: string;
-    initializeAnimations(futureView: Titanium.UI.WindowProxy, currentView: Titanium.UI.WindowProxy, transition: NavigationTransition);
+    initializeAnimations(futureView: Titanium.UI.View, currentView: Titanium.UI.View, transition: NavigationTransition);
     startTransition();
 }

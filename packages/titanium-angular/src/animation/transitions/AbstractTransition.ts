@@ -10,6 +10,6 @@ export abstract class AbstractTransition implements TransitionInterface {
 
     }
 
-    abstract initializeAnimations(futureView: Titanium.UI.WindowProxy, currentView: Titanium.UI.WindowProxy, transition: NavigationTransition);
+    abstract initializeAnimations(futureView: Titanium.UI.View, currentView: Titanium.UI.View, transition: NavigationTransition);
     abstract startTransition();
 }
