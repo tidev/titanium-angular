@@ -3,9 +3,6 @@ import { ComponentRef, EventEmitter, Injector } from '@angular/core';
 import { ElementNode, TitaniumElement } from '../../vdom';
 import { NavigationOptions } from '../NavigationOptions';
 
-// @todo: Add iOS navigation and split windows 
-export type OpenableView = Titanium.UI.Window | Titanium.UI.TabGroup;
-
 export interface NativeNavigationEvent {
     
 }
@@ -82,7 +79,7 @@ export abstract class AbstractNavigator {
      * @param view View that should be opnened
      * @param options Navigation options to apply while opening the view
      */
-    abstract open(view: OpenableView, options: NavigationOptions);
+    abstract open(view: Titanium.UI.View, options: NavigationOptions);
 
     /**
      * Navigates one view back in the currently active stack.
