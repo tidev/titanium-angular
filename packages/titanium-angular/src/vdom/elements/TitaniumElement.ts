@@ -139,8 +139,8 @@ export class TitaniumElement extends AbstractAngularElement {
         }
 
         if (newNode instanceof TitaniumElement) {
-            // @todo find nearest visual sibling based on reference node and insert at that index
-            this.insertChild(newNode);
+            const atIndex = this.getTitaniumChildIndexFromNode(referenceNode);
+            this.insertChild(newNode, atIndex);
         }
 
         if (newNode instanceof InvisibleElement) {
@@ -149,7 +149,7 @@ export class TitaniumElement extends AbstractAngularElement {
     }
 
     insertIntoVisualTree(child: AbstractAngularElement, atIndex?: number) {
-        this.logger.trace(`TitaniumElement.insertIntoVisualTree(${child})`);
+        this.logger.trace(`${this}.insertIntoVisualTree(${child}, ${atIndex})`);
 
         if (child instanceof TitaniumElement) {
             this.insertChild(child, atIndex);
@@ -180,6 +180,7 @@ export class TitaniumElement extends AbstractAngularElement {
 
         let parentView = <Titanium.UI.View>this.titaniumView;
         let childView = <Titanium.UI.View>element.titaniumView;
+
         if (atIndex === null || atIndex === undefined) {
             parentView.add(childView);
         } else {
@@ -188,5 +189,28 @@ export class TitaniumElement extends AbstractAngularElement {
                 position: atIndex
             });
         }
+    }
+
+    private getTitaniumChildIndexFromNode(node: AbstractNode): number | null {
+        if (node === null) {
+            return null;
+        }
+
+        let element: AbstractAngularElement = null;
+        if (!(node instanceof AbstractAngularElement)) {
+            element = <AbstractAngularElement>node.nextElementSibling;
+            if (!element) {
+                return null;
+            }
+        }
+
+        const visualElement = AbstractAngularElement.findSingleVisualElement(element);
+        const childTitaniumView = <Titanium.UI.View>visualElement.titaniumView;
+        const childIndex = (<Titanium.UI.View>this.titaniumView).children.indexOf(childTitaniumView);
+        if (childIndex !== -1) {
+            return childIndex;
+        }
+
+        return null;
     }
 }
