@@ -8,6 +8,7 @@ import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.com
 import { BlurViewComponent } from './components/blur-view/blur-view.component';
 import { ImageViewComponent } from './components/image-view/image-view.component';
 import { LabelComponent } from './components/label/label.component';
+import { ItemComponent } from './components/list-view/item.component';
 import { ListViewComponent } from './components/list-view/list-view.component';
 import { PickerComponent } from './components/picker/picker.component';
 import { ScrollableViewComponent } from './components/scrollable-view/scrollable-view.component';
@@ -31,6 +32,7 @@ import { WebViewComponent } from './components/web-view/web-view.component';
         BlurViewComponent,
         ControlsComponent,
         ImageViewComponent,
+        ItemComponent,
         LabelComponent,
         ListViewComponent,
         PickerComponent,

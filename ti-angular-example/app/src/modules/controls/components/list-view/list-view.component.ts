@@ -3,16 +3,19 @@ import {
     Logger,
     DeviceEnvironment,
     ListAccessoryType,
+    ListItemTemplate,
     ListViewComponent as ListViewDirective,
     ListSectionDirective
 } from 'titanium-angular';
 
 @Component({
-    templateUrl: './list-view.component.html'
+    templateUrl: './list-view.component.html',
 })
 export class ListViewComponent implements AfterViewInit {
 
     ListAccessoryType = ListAccessoryType;
+
+    ListItemTemplate = ListItemTemplate;
 
     @ViewChild(ListViewDirective) listView: ListViewDirective;
 
@@ -20,13 +23,56 @@ export class ListViewComponent implements AfterViewInit {
 
     items: any[] = [
         {
-            title: {
-                text: 'Nectarine'
+            profileImage: {
+                image: 'http://via.placeholder.com/50x50/1976d2/ffffff'
             },
-            detail: {
-                text: '3'
+            name: {
+                text: 'Daisy Rey',
+                font: {
+                    fontWeight: 'bold'
+                }
             },
-            template: 'MyCustomTemplate'
+            preview: {
+                text: 'Can\'t wait to see you! \uE056'
+            },
+            time: {
+                color: 'black',
+                text: '21:42',
+                font: {
+                    fontSize: '12',
+                    fontWeight: 'bold'
+                }
+            },
+            newMessagesBadgeText: {
+                text: '1',
+                font: {
+                    fontSize: '12'
+                }
+            },
+            template: 'ComponentTemplate'
+        }, {
+            profileImage: {
+                image: 'http://via.placeholder.com/50x50/1976d2/ffffff'
+            },
+            name: {
+                text: 'Frank',
+                font: {
+                    fontWeight: 'bold'
+                }
+            },
+            preview: {
+                text: '28 days, 6 hours, 42 minutes, 12 seconds'
+            },
+            time: {
+                text: '20:15',
+                font: {
+                    fontSize: '12'
+                }
+            },
+            newMessagesBadge: {
+                visible: false
+            },
+            template: 'ComponentTemplate'
         }, {
             title: {
                 text: 'Pear'
@@ -35,7 +81,7 @@ export class ListViewComponent implements AfterViewInit {
                 text: '7',
                 color: 'green'
             },
-            template: 'MyCustomTemplate'
+            template: 'InlineTemplate'
         }
     ];
 
