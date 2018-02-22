@@ -29,7 +29,6 @@ export function initializeCommonTitaniumElements(platform: TitaniumPlatformRef) 
     titaniumElementRegistry.registerElement('TextArea', () => Ti.UI.createTextArea, { typeName: 'Ti.UI.TextArea' });
     titaniumElementRegistry.registerElement('TextField', () => Ti.UI.createTextField, { typeName: 'Ti.UI.TextField' });
     titaniumElementRegistry.registerElement('Toolbar', () => Ti.UI.createToolbar, { typeName: 'Ti.UI.Toolbar' });
-    titaniumElementRegistry.registerElement('TextField', () => Ti.UI.createTextField, { typeName: 'Ti.UI.TextField' });
     titaniumElementRegistry.registerElement('View', () => Ti.UI.createView, { typeName: 'Ti.UI.View' });
     titaniumElementRegistry.registerElement('WebView', () => Ti.UI.createWebView, { typeName: 'Ti.UI.WebView' });
     titaniumElementRegistry.registerElement('Window', () => Ti.UI.createWindow, { skipAddToDom: true, typeName: 'Ti.UI.Window' });
