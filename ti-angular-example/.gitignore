@@ -1,12 +1,13 @@
-.DS_Store
-/Resources
-/platform
+# Build dirs and files
+/build
 /i18n
-build.log
-build
-npm-debug.log
-tmp
-.map
-.project
-.settings
+/platform
+/Resources
+
+# OS files
+.DS_Store
 Thumbs.db
+
+# Angular AoT generated files
+**/*.ngfactory.ts
+**/*.ngsummary.json
