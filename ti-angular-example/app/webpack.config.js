@@ -2,6 +2,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {
 	GenerateAppJsPlugin,
@@ -9,6 +10,9 @@ const {
 	titaniumTarget,
 	WatchStateNotifierPlugin
 } = require('webpack-dev-titanium');
+
+const projectRootDirectory = path.resolve('..');
+const outputDirectory = path.join(projectRootDirectory, 'Resources');
 
 module.exports = env => {
 	const enableAot = env && env.production;
@@ -22,7 +26,7 @@ module.exports = env => {
 		},
 		output: {
 			pathinfo: true,
-			path: path.resolve('../Resources'),
+			path: outputDirectory,
 			libraryTarget: 'commonjs2',
 			filename: '[name].js',
 		},
@@ -50,6 +54,15 @@ module.exports = env => {
 			]
 		},
 		plugins: [
+			new CleanWebpackPlugin(
+				[
+					path.join(outputDirectory, '*.*'),
+					path.join(projectRootDirectory, 'platform')
+				],
+				{
+					allowExternal: true
+				}
+			),
 			new webpack.optimize.CommonsChunkPlugin({
 				name: 'vendor'
 			}),
