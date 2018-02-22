@@ -1,5 +1,5 @@
-const MESSAGE_CHANGE_DETECTED = '';
-const MESSAGE_COMPILATION_COMPLETE = '';
+const MESSAGE_CHANGE_DETECTED = 'change-detected';
+const MESSAGE_COMPILATION_COMPLETE = 'compilation-complete';
 
 /**
  * Plugin for IPC communication with appcd.
