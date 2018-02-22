@@ -15,7 +15,8 @@ const projectRootDirectory = path.resolve('..');
 const outputDirectory = path.join(projectRootDirectory, 'Resources');
 
 module.exports = env => {
-	const enableAot = env && env.production;
+	// AoT is currently broken, see https://jira.appcelerator.org/browse/FRAME-6
+	const enableAot =  false; // env & env.production;
 	const tsConfigPath = enableAot ? 'tsconfig.aot.json' : 'tsconfig.json';
 	const config = {
 		context: __dirname,
