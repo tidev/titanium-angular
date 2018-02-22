@@ -1,13 +1,18 @@
 import {
     AfterContentInit,
     AfterViewInit,
+    ChangeDetectionStrategy,
     Component,
     ContentChildren,
     Directive,
+    DoCheck,
     ElementRef,
     Host,
     Inject,
     Input,
+    IterableChanges,
+    IterableDiffer,
+    IterableDiffers,
     OnChanges,
     OnInit,
     QueryList,
@@ -117,6 +122,7 @@ export class ListViewComponent implements AfterContentInit {
                         properties[attributeName] = attributeValue;
                     }
                 });
+                // @todo: Map events
                 templateDefinition.properties = properties;
                 if (node.children.length > 0) {
                     this.convertNodesToTemplatesRecursive(node.children, templateDefinition.childTemplates);
@@ -227,7 +233,6 @@ export class ListItemDirective implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.owner.updateListItem(this);
         for (let changedPropertyName in changes) {
             if (changedPropertyName === 'template') {
                 continue;
@@ -235,38 +240,31 @@ export class ListItemDirective implements OnChanges {
             const change = changes[changedPropertyName];
             this.itemProperties[changedPropertyName] = change.currentValue;
         }
+
+        this.owner.updateListItem(this);
     }
 }
 
-@Directive({
-    selector: 'ListSection'
+@Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ListSection',
+    template: `<ng-content></ng-content>`
 })
-export class ListSectionDirective implements AfterContentInit {
+export class ListSectionDirective implements AfterContentInit, DoCheck, OnChanges {
 
     public listSection: Titanium.UI.ListSection;
 
     @ContentChildren(ListItemDirective) contentItems: QueryList<ListItemDirective>;
 
+    @Input() items: Array<Titanium.UI.ListDataItem>;
+
     private owner: ListViewComponent;
 
-    private _items: Array<any>;
+    private _itemDiffer: IterableDiffer<Titanium.UI.ListDataItem> = null;
 
-    constructor(el: ElementRef, owner: ListViewComponent) {
+    constructor(el: ElementRef, owner: ListViewComponent, private _iterableDiffers: IterableDiffers) {
         this.listSection = el.nativeElement.titaniumView;
         this.owner = owner;
-    }
-
-    @Input()
-    get items() {
-        return this._items;
-    }
-
-    set items(value: any) {
-        this._items = value;
-
-        // todo: Add support for observable arrays
-
-        this.listSection.setItems(this._items);
     }
 
     ngAfterContentInit() {
@@ -281,14 +279,32 @@ export class ListSectionDirective implements AfterContentInit {
         });
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('items' in changes) {
+            const currentItems = changes['items'].currentValue;
+            if (!this._itemDiffer && currentItems) {
+                this._itemDiffer = this._iterableDiffers.find(currentItems).create((index, item) => item);
+            }
+        }
+    }
+
+    ngDoCheck(): void {
+        if (this._itemDiffer) {
+            const changes = this._itemDiffer.diff(this.items);
+            if (changes) {
+                this.applyItemChanges(changes);
+            }
+        }
+    }
+
     updateListItem(item: ListItemDirective) {
-        if (this.contentItems === undefined) {
+        if (!this.contentItems) {
             return;
         }
 
         let itemIndex = null;
         this.contentItems.find((element, index, array) => {
-            if (element === item) {
+            if (element.dataItem === item.dataItem) {
                 itemIndex = index;
                 return true;
             }
@@ -299,9 +315,22 @@ export class ListSectionDirective implements AfterContentInit {
         this.listSection.updateItemAt(itemIndex, item.dataItem);
     }
 
+    private applyItemChanges(changes: IterableChanges<Titanium.UI.ListDataItem>) {
+        changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
+            if (adjustedPreviousIndex == null) {
+                this.listSection.insertItemsAt(currentIndex, [item.item]);
+            } else if (currentIndex == null) {
+                this.listSection.deleteItemsAt(adjustedPreviousIndex, 1);
+            } else {
+                this.listSection.deleteItemsAt(adjustedPreviousIndex, 1);
+                this.listSection.insertItemsAt(currentIndex, [item.item]);
+            }
+        });
+    }
+
     private updateContentListItems() {
         if (this.contentItems.length > 0) {
-            this.items = this.contentItems.map(listItem => listItem.dataItem);
+            this.listSection.items = this.contentItems.map(listItem => listItem.dataItem);
         }
     }
 }
