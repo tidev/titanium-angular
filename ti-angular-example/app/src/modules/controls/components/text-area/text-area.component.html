@@ -1,0 +1,3 @@
+<Window title="Text Area" (click)="deselectTextArea()" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <textarea width="80%" height="200" (change)="logText($event)" (focus)="logFocus($event)" (blur)="logBlur()" hintText="Enter some text!"></textarea>
+</Window>

@@ -14,6 +14,8 @@ import { SliderComponent } from './components/slider/slider.component';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { SwitchControlComponent } from './components/switch-control/switch-control.component';
 import { TabbedBarComponent } from './components/tabbed-bar/tabbed-bar.component';
+import { TextAreaComponent } from './components/text-area/text-area.component';
+import { TextFieldComponent } from './components/text-field/text-field.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.compnent';
 import { ViewsComponent } from './components/views/views.component';
 import { ViewComponent } from './components/view/view.component';
@@ -43,6 +45,8 @@ const controlsRoutes: Routes = [
             { path: 'stepper', component: StepperComponent },
             { path: 'switch-control', component: SwitchControlComponent },
             { path: 'tabbed-bar', component: TabbedBarComponent },
+            { path: 'text-area', component: TextAreaComponent },
+            { path: 'text-field', component: TextFieldComponent },
             { path: 'toolbar', component: ToolbarComponent}
         ]
     }

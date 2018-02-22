@@ -13,9 +13,6 @@ import { PhoneRoutingModule } from './phone-routing.module';
         PhoneComponent,
         
     ],
-    entryComponents: [
-        
-    ],
     exports: [
         PhoneComponent
     ]

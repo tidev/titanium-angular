@@ -16,6 +16,8 @@ import { SliderComponent } from './components/slider/slider.component';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { SwitchControlComponent  } from './components/switch-control/switch-control.component';
 import { TabbedBarComponent } from './components/tabbed-bar/tabbed-bar.component';
+import { TextAreaComponent } from './components/text-area/text-area.component';
+import { TextFieldComponent } from './components/text-field/text-field.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.compnent';
 import { ViewsComponent } from './components/views/views.component';
 import { ViewComponent } from './components/view/view.component';
@@ -41,24 +43,8 @@ import { WebViewComponent } from './components/web-view/web-view.component';
         StepperComponent,
         SwitchControlComponent,
         TabbedBarComponent,
-        ToolbarComponent,
-        ViewComponent,
-        ViewsComponent,
-        WebViewComponent
-    ],
-    entryComponents: [
-        ActivityIndicatorComponent,
-        AlertDialogComponent,
-        BlurViewComponent,
-        ImageViewComponent,
-        LabelComponent,
-        ListViewComponent,
-        PickerComponent,
-        ScrollableViewComponent,
-        SliderComponent,
-        StepperComponent,
-        SwitchControlComponent,
-        TabbedBarComponent,
+        TextAreaComponent,
+        TextFieldComponent,
         ToolbarComponent,
         ViewComponent,
         ViewsComponent,
