@@ -775,6 +775,26 @@ declare namespace Titanium {
             items: ListDataItem[];
 
             /**
+             * Appends the data entries to the end of the list section.
+             * 
+             * On iOS, the list item(s) can be inserted with an animation by
+             * specifying the animation parameter.
+             * 
+             * @param dataItems List items to add.
+             * @param animation Animation properties. (iOS only.)
+             */
+            appendItems(dataItems: Array<ListDataItem>, animation?: iOS.ListViewAnimationProperties): void; 
+
+            /**
+             * Removes count entries from the list section at the specified index.
+             * 
+             * @param itemIndex Index of where to remove items.
+             * @param count Number of items to remove.
+             * @param animation Animation properties. (iOS only.)
+             */
+            deleteItemsAt(itemIndex: number, count: number, animation?: iOS.ListViewAnimationProperties): void;
+
+            /**
              * Returns the item entry from the list view at the specified index.
              * 
              * @param index Index of where to retrieve an item.
@@ -782,11 +802,24 @@ declare namespace Titanium {
             getItemAt(index: number): ListDataItem;
 
             /**
-             * Sets the value of the items property.
+             * Inserts data entries to the list section at the specified index.
              * 
-             * @param items New value for the property.
+             * @param itemIndex Index of where to insert the items.
+             * @param dataItems List items to insert.
+             * @param animation Animation properties. (iOS only.)
              */
-            setItems(items: ListDataItem[]): void;
+            insertItemsAt(itemIndex: number, dataItems: Array<ListDataItem>, animation?: iOS.ListViewAnimationProperties): void;
+
+            /**
+             * Removes count entries from the list section at the specified index,
+             * then inserts data entries to the list section at the same index.
+             * 
+             * @param index Index of where to remove then insert items.
+             * @param count Number of list items to remove.
+             * @param dataItems List items to insert.
+             * @param animation Animation properties. (iOS only.)
+             */
+            replaceItemsAt(index: number, count: number, dataItems: Array<ListDataItem>, animation?: iOS.ListViewAnimationProperties): void;
 
             /**
              * Updates an item at the specified index.
@@ -885,8 +918,25 @@ declare namespace Titanium {
             open(): void;
         }
 
-        class TextArea extends View { }
-        class TextField extends View { }
+        /**
+         * A multiline text field that supports editing and scrolling.
+         */
+        class TextArea extends View {
+            /**
+             * Forces this text area to lose focus.
+             */
+            blur(): void;
+        }
+        
+        /**
+         * A single line text field.
+         */
+        class TextField extends View {
+            /**
+             * Forces the field to lose focus.
+             */
+            blur(): void;
+        }
 
         /**
          * A toolbar, which can contain buttons and certain other controls.
@@ -1039,6 +1089,49 @@ declare namespace Titanium {
                 image: string | Titanium.Blob | Titanium.Filesystem.File;
                 title: string,
                 width: number
+            }
+
+            /**
+             * A simple object for specifying the animation properties to use
+             * when inserting or deleting sections or cells, or scrolling the list.
+             */
+            interface ListViewAnimationProperties {
+                /**
+                 * Whether this list change should be animated.
+                 * 
+                 * Ignored if any animationStyle value is specified.
+                 */
+                animated: boolean;
+
+                /**
+                 * Type of animation to use for cell insertions and deletions.
+                 * 
+                 * Must be one of the Titanium.UI.iOS.RowAnimationStyle.* constants.
+                 */
+                animationStyle: number;
+
+                /**
+                 * Specifies what position to scroll the selected cell to.
+                 * 
+                 * Must be one of the Titanium.UI.iOS.ListViewScrollPosition.* constants.
+                 */
+                position: number;
+            }
+
+            namespace ListViewScrollPosition {
+                const BOTTOM: number;
+                const MIDDLE: number;
+                const NONE: number;
+                const TOP: number
+            }
+
+            namespace RowAnimationStyle {
+                const BOTTOM: number;
+                const FADE: number;
+                const LEFT: number;
+                const NONE: number;
+                const RIGHT: number;
+                const TOP: number;
             }
 
             // iOS UI views
