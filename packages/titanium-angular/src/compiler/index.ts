@@ -1,2 +1,2 @@
-export * from './ElementSchemaRegistry'
+export * from './TitaniumElementSchemaRegistry'
 export * from './FileSystemResourceLoader';
