@@ -9,7 +9,7 @@ import { HistoryStack } from './HistoryStack';
 
 /**
  * A path location strategy that copies most of it's behavior from Angular's
- * PathLocationStrateg,y but doesn't require a base url since we don't have
+ * PathLocationStrategy but doesn't require a base url since we don't have
  * that in our JS context.
  */
 @Injectable()
