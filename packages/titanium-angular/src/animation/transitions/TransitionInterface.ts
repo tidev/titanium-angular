@@ -1,7 +1,7 @@
 import { NavigationTransition } from "../NavigationTransition";
 
 export interface TransitionConstructor {
-    new (openWindowOptions: Titanium.UI.OpenWindowOptions): TransitionInterface
+    new (openWindowOptions: openWindowParams): TransitionInterface
 }
 
 export interface TransitionInterface {

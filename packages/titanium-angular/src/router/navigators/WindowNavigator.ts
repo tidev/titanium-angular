@@ -38,7 +38,7 @@ export class WindowNavigator extends AbstractNavigator {
     }
 
     open(view: Titanium.UI.View, options: NavigationOptions) {
-        let openWindowOptions: Titanium.UI.OpenWindowOptions = {};
+        let openWindowOptions: openWindowParams = {};
 
         if (options.clearHistory) {
 

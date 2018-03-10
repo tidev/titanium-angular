@@ -9,6 +9,8 @@ import {
     ElementCollection
 } from '..';
 
+export type EventCallback = (event: any) => any;
+
 /**
  * Represents a default element inside our vdom.
  * 
@@ -19,7 +21,7 @@ export class ElementNode extends AbstractNode implements ChildNodeInterface, Par
 
     attributes: Map<string, any>;
 
-    events: Map<string, Set<Function>>;
+    events: Map<string, Set<EventCallback>>;
 
     styles: Map<string, any>;
 
@@ -32,7 +34,7 @@ export class ElementNode extends AbstractNode implements ChildNodeInterface, Par
         this.nodeType = NodeType.Element;
 
         this.attributes = new Map<string, any>();
-        this.events = new Map<string, Set<Function>>();
+        this.events = new Map<string, Set<EventCallback>>();
         this.styles = new Map<string, any>();
     }
 
@@ -90,16 +92,16 @@ export class ElementNode extends AbstractNode implements ChildNodeInterface, Par
         this.styles.set(propertyName, value);
     }
 
-    on(eventName: string, handler: Function): void {
+    on(eventName: string, handler: EventCallback): void {
         let eventHandlers = this.events.get(eventName);
         if (!eventHandlers) {
-            eventHandlers = new Set<Function>();
+            eventHandlers = new Set<EventCallback>();
             this.events.set(eventName, eventHandlers);
         }
         eventHandlers.add(handler);
     }
 
-    off(eventName: string, handler: Function): void {
+    off(eventName: string, handler: EventCallback): void {
         const eventHandlers = this.events.get(eventName);
         if (eventHandlers) {
             eventHandlers.delete(handler);

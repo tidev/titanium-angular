@@ -179,9 +179,9 @@ export class ListItemDirective implements OnChanges {
 
     @Input() color: string;
 
-    @Input() editActions: Titanium.UI.RowActionType[];
+    @Input() editActions: RowActionType[];
 
-    @Input() font: Titanium.Font;
+    @Input() font: Font;
 
     @Input() height: number | string;
 
@@ -193,7 +193,7 @@ export class ListItemDirective implements OnChanges {
 
     @Input() selectedBackgroundColor: string;
 
-    @Input() selectedBackgroundGradient: Titanium.UI.Gradient;
+    @Input() selectedBackgroundGradient: Gradient;
 
     @Input() selectedBackgroundImage: string;
 
@@ -222,12 +222,10 @@ export class ListItemDirective implements OnChanges {
         this.owner = owner;
     }
 
-    get dataItem(): Titanium.UI.ListDataItem {
-        const dataItem: Titanium.UI.ListDataItem = {
+    get dataItem(): ListDataItem {
+        const dataItem: ListDataItem = {
+            template: this.template || Titanium.UI.LIST_ITEM_TEMPLATE_DEFAULT,
             properties: this.itemProperties
-        }
-        if (this.template !== undefined) {
-            dataItem.template = this.template;
         }
         return dataItem;
     }
@@ -256,11 +254,11 @@ export class ListSectionDirective implements AfterContentInit, DoCheck, OnChange
 
     @ContentChildren(ListItemDirective) contentItems: QueryList<ListItemDirective>;
 
-    @Input() items: Array<Titanium.UI.ListDataItem>;
+    @Input() items: Array<ListDataItem>;
 
     private owner: ListViewComponent;
 
-    private _itemDiffer: IterableDiffer<Titanium.UI.ListDataItem> = null;
+    private _itemDiffer: IterableDiffer<ListDataItem> = null;
 
     constructor(el: ElementRef, owner: ListViewComponent, private _iterableDiffers: IterableDiffers) {
         this.listSection = el.nativeElement.titaniumView;
@@ -315,7 +313,7 @@ export class ListSectionDirective implements AfterContentInit, DoCheck, OnChange
         this.listSection.updateItemAt(itemIndex, item.dataItem);
     }
 
-    private applyItemChanges(changes: IterableChanges<Titanium.UI.ListDataItem>) {
+    private applyItemChanges(changes: IterableChanges<ListDataItem>) {
         changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
             if (adjustedPreviousIndex == null) {
                 this.listSection.insertItemsAt(currentIndex, [item.item]);

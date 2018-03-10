@@ -6,7 +6,7 @@ export abstract class AbstractTransition implements TransitionInterface {
 
     defaultDuration: number = 350;
 
-    constructor(protected openWindowOptions: Titanium.UI.OpenWindowOptions) {
+    constructor(protected openWindowOptions: openWindowParams) {
 
     }
 

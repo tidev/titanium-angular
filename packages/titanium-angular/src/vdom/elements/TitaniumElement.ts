@@ -1,10 +1,10 @@
 import { Logger } from '../../log';
 import { DeviceEnvironment } from '../../services';
 import { camelize, capitalizeFirstLetter } from '../../utility/string';
-import { AbstractNode, ElementNode, TextNode, NodeType } from '..';
+import { AbstractNode, ElementNode, EventCallback, TextNode, NodeType } from '..';
 import { AbstractAngularElement, InvisibleElement } from '.';
 
-export type ProxyFactory = (options: any) => Titanium.Proxy;
+export type ProxyFactory = (options: object) => Titanium.Proxy;
 
 export interface ViewMetadata {
     skipAddToDom?: boolean,
@@ -156,7 +156,7 @@ export class TitaniumElement extends AbstractAngularElement {
         }
     }
 
-    on(eventName: string, handler: Function): void {
+    on(eventName: string, handler: EventCallback): void {
         super.on(eventName, handler);
 
         if (this.proxyCreated) {
@@ -164,7 +164,7 @@ export class TitaniumElement extends AbstractAngularElement {
         }
     }
 
-    off(eventName: string, handler: Function): void {
+    off(eventName: string, handler: EventCallback): void {
         super.off(eventName, handler);
 
         if (this.proxyCreated) {

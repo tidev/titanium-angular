@@ -21,7 +21,7 @@ export class NavigationTransitionHandler {
      * @param transition 
      * @param openWindowOptions
      */
-    prepareTransition(futureView: any, currentView: any, transition: NavigationTransition, openWindowOptions: Titanium.UI.OpenWindowOptions) {
+    prepareTransition(futureView: any, currentView: any, transition: NavigationTransition, openWindowOptions: openWindowParams) {
         if (!this.transitionRegistry.hasTransition(transition.type)) {
             throw new Error(`Invalid transition specified, ${transition.type} is not a known transition name.`);
         }
