@@ -1,9 +1,11 @@
+'use strict';
+
 const MESSAGE_CHANGE_DETECTED = 'change-detected';
 const MESSAGE_COMPILATION_COMPLETE = 'compilation-complete';
 
 /**
  * Plugin for IPC communication with appcd.
- * 
+ *
  * Sends an IPC message if webpack detects changes in watch mode and once
  * it has emitted all bundles.
  */

@@ -1,3 +1,5 @@
+'use strict';
+
 const pathModule = require('path');
 
 /**
@@ -67,7 +69,7 @@ class PlatformAwareFileSystem {
 			if (!err && stat.isFile()) {
 				candidatePath = platformPath;
 			}
-			vfsFunction.apply(this.virtualInputFileSystem, [candidatePath, callback]);
+			vfsFunction.apply(this.virtualInputFileSystem, [ candidatePath, callback ]);
 		});
 	}
 

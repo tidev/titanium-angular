@@ -1,3 +1,5 @@
+'use strict';
+
 const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const { PlatformAwareFileSystem } = require('../PlatformAwareFileSystem');
 
@@ -13,7 +15,7 @@ class TitaniumAngularCompilerPlugin extends AngularCompilerPlugin {
 
 		compiler.plugin('environment', () => {
 			compiler.inputFileSystem = new PlatformAwareFileSystem(compiler.inputFileSystem, this.targetPlatform);
-			//compiler.watchFileSystem = new PlatformAwareWatchFileSystem(compiler.inputFileSystem);
+			// compiler.watchFileSystem = new PlatformAwareWatchFileSystem(compiler.inputFileSystem);
 		});
 	}
 }

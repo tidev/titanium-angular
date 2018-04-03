@@ -1,3 +1,5 @@
+'use strict';
+
 const { RawSource } = require('webpack-sources');
 
 class GenerateAppJsPlugin {
