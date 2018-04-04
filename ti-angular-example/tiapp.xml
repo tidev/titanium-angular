@@ -15,6 +15,7 @@
   <guid>5b8d84b0-7a0a-4c65-9222-1d9569d75f4f</guid>
   <property name="ti.ui.defaultunit" type="string">dp</property>
   <property name="run-on-main-thread" type="bool">true</property>
+  <transpile>false</transpile>
   <ios>
     <use-jscore-framework>true</use-jscore-framework>
     <enable-launch-screen-storyboard>true</enable-launch-screen-storyboard>
