@@ -106,6 +106,18 @@ export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
         return future.routeConfig === curr.routeConfig;
     }
 
+    clearDetachedRouteHandlers(): void {
+        this.handlers.clear();
+    }
+
+    snapshotDetachedRoutehandlers(): Map<string, DetachedRouteHandle> {
+        return new Map(this.handlers);
+    }
+
+    restoreHandlers(handlers: Map<string, DetachedRouteHandle>): void {
+        this.handlers = new Map(handlers);
+    } 
+
     private generateAbsoluteRoutePath(route: ActivatedRouteSnapshot): string {
         let urlSegments = [];
         urlSegments = urlSegments.concat(route.url);

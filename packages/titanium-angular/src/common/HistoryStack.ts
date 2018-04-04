@@ -73,11 +73,11 @@ export class HistoryStack {
     }
 
     snapshotStack(): Array<LocationState> {
-        return 
+        return [...this.states];
     }
 
-    replaceStack(stack: Array<LocationState>) {
-
+    restoreStack(states: Array<LocationState>): void {
+        this.states = states;
     }
 
 }
