@@ -12,10 +12,10 @@
             "dom",
             "es2015.iterable"
         ],
+        "rootDir": "./src",
         "baseUrl": "./src"
     },
     "exclude": [
-        "node_modules",
         "**/*.aot.ts"
     ]
 }
