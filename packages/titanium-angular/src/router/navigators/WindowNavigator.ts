@@ -37,7 +37,7 @@ export class WindowNavigator extends AbstractNavigator {
         this.rootWindow.open();
     }
 
-    open(view: Titanium.UI.View, options: NavigationOptions) {
+    open(view: Titanium.Proxy, options: NavigationOptions) {
         let openWindowOptions: openWindowParams = {};
 
         if (options.clearHistory) {
@@ -64,11 +64,11 @@ export class WindowNavigator extends AbstractNavigator {
 
     }
 
-    private isWindow(view: Titanium.UI.View): view is Titanium.UI.Window {
+    private isWindow(view: Titanium.Proxy): view is Titanium.UI.Window {
         return view.apiName === 'Ti.UI.Window'
     }
 
-    private isTabGroup(view: Titanium.UI.View): view is Titanium.UI.TabGroup {
+    private isTabGroup(view: Titanium.Proxy): view is Titanium.UI.TabGroup {
         return view.apiName === 'Ti.UI.TabGroup';
     }
 

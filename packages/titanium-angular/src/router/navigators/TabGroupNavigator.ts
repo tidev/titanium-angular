@@ -49,7 +49,7 @@ export class TabGroupNavigator extends AbstractNavigator {
         this.tabGroup.open();
     }
 
-    open(view: Titanium.UI.Window, options: NavigationOptions): void {
+    open(view: Titanium.Proxy, options: NavigationOptions): void {
         view.addEventListener('close', this.onWindowClose.bind(this));
         const activeTab = this.tabGroup.activeTab;
         let windowStack = this.windowStacks.get(activeTab);
@@ -57,8 +57,8 @@ export class TabGroupNavigator extends AbstractNavigator {
             windowStack = [];
             this.windowStacks.set(activeTab, windowStack);
         }
-        windowStack.push(view);
-        this.tabGroup.activeTab.open(view);
+        windowStack.push(<any>view);
+        this.tabGroup.activeTab.open(<any>view);
     }
 
     back(): void {

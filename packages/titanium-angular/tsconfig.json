@@ -20,14 +20,8 @@
         ],
         "rootDir": "./src",
         "outDir": "./dist",
-        "typeRoots": [
-            "./node_modules/@types/",
-            "./node_modules/types-titanium"
-        ]
+        "baseUrl": "./src",
     },
-    "include": [
-        "src/**/*"
-    ],
     "angularCompilerOptions": {
         "genDir": "./dist",
         "skipMetadataEmit": false,
