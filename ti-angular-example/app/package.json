@@ -1,6 +1,6 @@
 {
     "name": "titanium-angular-dev-app",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "Test app for the Titanium Angular platform",
     "main": "src/main.ts",
     "scripts": {
