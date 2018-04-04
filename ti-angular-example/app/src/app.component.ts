@@ -5,11 +5,7 @@ import {
     AfterViewChecked,
     ViewChild
 } from '@angular/core';
-
-import {
-    Router
-} from '@angular/router';
-
+import { Router } from '@angular/router';
 import {
     AlertDialog,
     ConfirmDialog,
