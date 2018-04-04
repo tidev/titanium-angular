@@ -18,7 +18,7 @@ export class IntroComponent implements AfterViewInit, OnInit {
 
     @ViewChild('imageView') imageViewElement: ElementRef;
 
-    skyGradient: Titanium.UI.Gradient;
+    skyGradient: Gradient;
 
     constructor(private device: DeviceEnvironment) {
 
