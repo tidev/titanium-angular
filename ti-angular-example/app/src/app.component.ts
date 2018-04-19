@@ -1,19 +1,4 @@
-import { 
-    AfterViewInit,
-    Component,
-    AfterContentChecked,
-    AfterViewChecked,
-    ViewChild
-} from '@angular/core';
-import { Router } from '@angular/router';
-import {
-    AlertDialog,
-    ConfirmDialog,
-    AlertDialogDirective,
-    ConfirmResult,
-    TabGroupDirective,
-    ListSectionDirective
-} from 'titanium-angular';
+import { Component } from '@angular/core';
 
 @Component({
     selector: "ti-app",
