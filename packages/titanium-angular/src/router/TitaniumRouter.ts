@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras, UrlTree } from '@angular/router';
 
@@ -17,9 +18,12 @@ export class TitaniumRouter {
 
     private navigationManager: NavigationManager;
 
-    constructor(router: Router, navigationManager: NavigationManager) {
+    private location: Location;
+
+    constructor(router: Router, navigationManager: NavigationManager, location: Location) {
         this.router = router;
         this.navigationManager = navigationManager;
+        this.location = location;
     }
 
     public navigate(commands: any[], options?: TitaniumNavigationOptions): Promise<boolean> {
@@ -37,7 +41,7 @@ export class TitaniumRouter {
     }
 
     public back() {
-        this.navigationManager.back();
+        this.location.back();
     }
 
 }

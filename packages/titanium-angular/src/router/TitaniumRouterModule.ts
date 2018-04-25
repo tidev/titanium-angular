@@ -26,7 +26,6 @@ const ROUTER_DIRECTIVES = [
 const ROUTER_PROVIDERS: Provider[] = [
     { provide: EmulatedPathLocationStrategy, useClass: EmulatedPathLocationStrategy, deps: [PlatformLocation] },
     { provide: LocationStrategy, useExisting: EmulatedPathLocationStrategy },
-    NavigationManager,
     { provide: NavigationAwareRouteReuseStrategy, useClass: NavigationAwareRouteReuseStrategy, deps: [NavigationManager, Logger] },
     { provide: RouteReuseStrategy, useExisting: NavigationAwareRouteReuseStrategy },
     TitaniumRouter

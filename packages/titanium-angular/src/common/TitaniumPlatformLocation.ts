@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 
 import { HistoryStack } from './HistoryStack';
-import { NavigationManager } from '../router';
+import { NavigationManager } from '../router/NavigationManager';
 
 /**
  * 
@@ -16,10 +16,13 @@ export class TitaniumPlatformLocation extends PlatformLocation {
 
     private _history: HistoryStack;
 
-    constructor(history: HistoryStack) {
+    private navigationManager: NavigationManager;
+
+    constructor(history: HistoryStack, navigationManager: NavigationManager) {
         super();
         
         this._history = history;
+        this.navigationManager = navigationManager;
     }
 
     getBaseHrefFromDOM(): string {
@@ -68,6 +71,7 @@ export class TitaniumPlatformLocation extends PlatformLocation {
 
     back(): void {
         console.log('TitaniumPlatformLocation.back');
+        this.navigationManager.locationBackNavigation = true;
         this._history.back();
     }
 }
