@@ -129,7 +129,7 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         if (this.isInitialRoute) {
             this.activated = this.location.createComponent(factory, this.location.length, injector);
             this.changeDetector.markForCheck();
-            this.navigationManager.initializeRootNavigator(this.activated);
+            this.navigationManager.createAndOpenRootNavigator(this.activated);
             this.isInitialRoute = false;
         } else {
             const loaderRef = this.location.createComponent(this.detachedLoaderFactory, this.location.length, injector);
@@ -167,7 +167,12 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         this.activated = ref;
         this._activatedRoute = activedRoute;
 
-        this.navigationManager.nativeBackNavigation = false;
+        if (this.navigationManager.isLocationBackNavigation) {
+            this.navigationManager.back();
+            this.navigationManager.locationBackNavigation = false;
+        } else if (this.navigationManager.isNativeBackNavigation) {
+            this.navigationManager.nativeBackNavigation = false;
+        }
     }
 
     /**
@@ -179,10 +184,11 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         if (!this.activated) {
             throw new Error('Outlet is not activated');
         }
-        //this.location.detach();
+
         const componentRef = this.activated;
         this.activated = null;
         this._activatedRoute = null;
+        
         return componentRef;
     }
 }

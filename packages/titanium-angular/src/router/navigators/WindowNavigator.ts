@@ -37,6 +37,10 @@ export class WindowNavigator extends AbstractNavigator {
         this.rootWindow.open();
     }
 
+    closeRootWindow(): void {
+        this.rootWindow.close();
+    }
+
     open(view: Titanium.Proxy, options: NavigationOptions) {
         let openWindowOptions: openWindowParams = {};
 
@@ -60,8 +64,13 @@ export class WindowNavigator extends AbstractNavigator {
         }
     }
 
-    back() {
+    canGoBack() {
+        return this.windows.length > 1;
+    }
 
+    back() {
+        const window = this.windows.pop() as Titanium.UI.Window;
+        window.close();
     }
 
     private isWindow(view: Titanium.Proxy): view is Titanium.UI.Window {

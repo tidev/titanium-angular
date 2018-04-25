@@ -55,6 +55,11 @@ export abstract class AbstractNavigator {
     abstract openRootWindow(): void;
 
     /**
+     * Closes the root view of this navigator.
+     */
+    abstract closeRootWindow(): void;
+
+    /**
      * Returns wether this navigator should yield his navigating responsibilities
      * of to another navigator.
      * 
@@ -82,11 +87,20 @@ export abstract class AbstractNavigator {
     abstract open(view: Titanium.Proxy, options: NavigationOptions);
 
     /**
+     * Checks if this navigator has any more views in its stack where it can
+     * perform a back nagivation.
+     */
+    abstract canGoBack(): boolean;
+
+    /**
      * Navigates one view back in the currently active stack.
      */
-    abstract back();
+    abstract back(): void;
 
-    public toString() {
+    /**
+     * Returns the class name of this navigator.
+     */
+    public toString(): string {
         return this.constructor.name;
     }
 
