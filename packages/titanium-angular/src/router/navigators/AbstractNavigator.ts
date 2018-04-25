@@ -8,34 +8,56 @@ export interface NativeNavigationEvent {
 }
 
 /**
- * Abstract navigator
+ * Abstract navigator serving as a base class for the individual navigator
+ * implementations.
+ * 
+ * A navigator operates on a root view (defined by the supportedRootView
+ * property) and can open a set of other views (defined by supportedViews)
+ * on top of that root view. It has to keep track of those views so they can be
+ * closed later when a back navigation is requested.
+ * 
+ * If a navigator opens a view that requires another navigator to take over
+ * (defined by yieldNavigationViews), the {@link NavigationManager} will
+ * stop using the currently active navigator and search for a new one to
+ * continue.
  */
 export abstract class AbstractNavigator {
 
+    /**
+     * The root view this navigator operates on.
+     */
     static supportedRootView: string = null;
 
+    /**
+     * Set of views that can be opned from this navigator.
+     */
+    static supportedViews: Set<string> = new Set();
+
+    /**
+     * Event emitter for native navigation state changes.
+     */
     public nativeNavigationState = new EventEmitter<NativeNavigationEvent>();
 
     /**
-     * List of views this navigator can open.
+     * Set of views after which this navigator needs to yield to another
+     * navigator.
      */
-    protected supportedViews: Array<string> = [];
+    protected yieldNavigationViews: Set<string> = new Set();
 
     /**
-     * List of views after which this navigator needs to yield to another
-     * navigator
+     * Angular root injector.
      */
-    protected yieldNavigationViews: Array<string> = [];
-
-
     protected _injector: Injector;
 
+    /**
+     * Sets the Angular root injector.
+     */
     set injector(injector: Injector) {
         this._injector = injector;
     }
 
     /**
-     * Returns wether this navigator can handle the navigation using the
+     * Returns wether this navigator can handle navigation using the
      * specified view as its root view.
      * 
      * @param view Root view on which this navigator should start navigation
@@ -66,7 +88,7 @@ export abstract class AbstractNavigator {
      * @param view Last view that was opened
      */
     public shouldYieldNavigating(view: Titanium.Proxy): boolean {
-        return this.yieldNavigationViews.indexOf(view.apiName) !== -1;
+        return this.yieldNavigationViews.has(view.apiName);
     }
 
     /**
@@ -75,7 +97,7 @@ export abstract class AbstractNavigator {
      * @param view Titanium view that should be opnened
      */
     public canOpen(view: Titanium.Proxy): boolean {
-        return this.supportedViews.indexOf(view.apiName) !== -1;
+        return (<any>this.constructor).supportedViews.has(view.apiName);
     }
 
     /**

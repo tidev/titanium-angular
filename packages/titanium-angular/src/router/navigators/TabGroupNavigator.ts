@@ -9,15 +9,15 @@ import { AbstractNavigator } from "./AbstractNavigator";
 import { DetachedRouteHandle } from '@angular/router';
 
 /**
- * @todo Make a snapshot of the current paths for each active tab to be be able recreate the paths upon tab switch
+ * A navigator for handling navigation inside the Tab of a TabGroup
  */
 export class TabGroupNavigator extends AbstractNavigator {
 
     static supportedRootView: string = 'Ti.UI.TabGroup';
 
-    protected supportedViews: Array<string> = ['Ti.UI.Window'];
+    static supportedViews: Set<string> = new Set(['Ti.UI.Window']);
 
-    protected yieldNavigationViews: Array<string> = [];
+    protected yieldNavigationViews: Set<string> = new Set();
 
     private device: DeviceEnvironment;
 

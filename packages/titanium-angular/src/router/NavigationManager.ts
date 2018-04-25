@@ -6,29 +6,53 @@ import { Logger } from '../log';
 import { ElementNode, TitaniumElement, InvisibleElement } from '../vdom';
 import { NavigationOptions } from "./NavigationOptions";
 import { AbstractNavigator, NativeNavigationEvent } from "./navigators/AbstractNavigator";
+import { NavigationWindowNavigator } from './navigators/NavigationWindowNavigator';
 import { TabGroupNavigator } from "./navigators/TabGroupNavigator";
 import { WindowNavigator } from "./navigators/WindowNavigator";
 
-type OpenableView = Titanium.UI.TabGroup | Titanium.UI.Window;
+type OpenableView = Titanium.UI.TabGroup | Titanium.UI.Window | Titanium.UI.iOS.NavigationWindow;
 
+/**
+ * Manages navigation inside the app by using different navigators which
+ * handle opening and closing views inside the view hierarchy.
+ */
 @Injectable()
 export class NavigationManager {
 
+    /**
+     * Navigation options for the current route.
+     */
     public currentNavigationOptions: NavigationOptions;
 
+    /**
+     * Angular root injector
+     */
     private injector: Injector;
 
+    /**
+     * The default logger instance.
+     */
     private logger: Logger;
 
+    /**
+     * List of available navigators.
+     */
     private availableNavigators: Array<any> = [
+        NavigationWindowNavigator,
         TabGroupNavigator,
         WindowNavigator
-    ]
+    ];
 
-    private openableViews: Array<string> = ['Ti.UI.Window', 'Ti.UI.TabGroup'];
+    private _openableViews: Set<string>;
 
+    /**
+     * Stack of navigators.
+     */
     private navigators: Array<AbstractNavigator> = [];
 
+    /**
+     * Reference to the currently active navigator.
+     */
     private activeNavigator: AbstractNavigator;
 
     /**
@@ -58,13 +82,39 @@ export class NavigationManager {
     constructor(injector: Injector, logger: Logger) {
         this.injector = injector;
         this.logger = logger;
-
     }
 
+    /**
+     * A set of views that can automatically be openend using one of the available
+     * navigators.
+     * 
+     * Generated automatically on first access from the list of available
+     * navigators using their supportedViews property.
+     */
+    private get openableViews(): Set<string> {
+        if (!this._openableViews) {
+            console.log('init openableViews');
+            this._openableViews = new Set();
+            this.availableNavigators.forEach((navigator: typeof AbstractNavigator) => {
+                console.log(`${navigator.name}.supportedViews: ${Array.from(navigator.supportedViews).join(', ')}`);
+                navigator.supportedViews.forEach(viewApiName => this._openableViews.add(viewApiName));
+            });
+            console.log(this._openableViews);
+        }
+
+        return this._openableViews;
+    }
+
+    /**
+     * Returns true if a native back navigation is currently in progress.
+     */
     get isNativeBackNavigation(): boolean {
         return this._nativeBackNavigation;
     }
 
+    /**
+     * Sets the flag indicating a native back navigation.
+     */
     set nativeBackNavigation(nativeBackNavigation: boolean) {
         this._nativeBackNavigation = nativeBackNavigation;
     }
@@ -95,9 +145,13 @@ export class NavigationManager {
         this.pushNavigator(navigator);
     }
 
+    /**
+     * Opens 
+     * 
+     * @param component 
+     */
     open(component: ComponentRef<any>) {
         const componentName = component.componentType.name;
-        this.logger.trace(`NavigationManager.open(${componentName})`);
 
         if (!this.activeNavigator) {
             throw new Error(`No active navigator available to handle navigation to ${componentName}`);
@@ -241,7 +295,7 @@ export class NavigationManager {
             return false;
         }
 
-        return this.openableViews.indexOf(view.apiName) !== -1;
+        return this.openableViews.has(view.apiName);
     }
 
 }
