@@ -25,15 +25,17 @@ export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
      * Determines if this route (and its subtree) should be detached to be reused later
      */
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
-        console.log('NavigationAwareRouteReuseStrategy.shouldDetach');
-        console.log(route.pathFromRoot.join(' -> '));
+        this.logger.trace('NavigationAwareRouteReuseStrategy.shouldDetach');
+        this.logger.trace(route.pathFromRoot.join(' -> '));
 
-        if (!this.navigationManager.isNativeBackNavigation) {
-            this.logger.trace('Not in native back navigation, detaching route');
-            return true;
+        if (this.navigationManager.isNativeBackNavigation || this.navigationManager.isLocationBackNavigation) {
+            this.logger.trace('Back navigation detected, NOT detaching route');
+            return false;
         }
 
-        return false;
+        this.logger.trace('Forward navigation, detaching route.');
+
+        return true;
     }
 
     /**
@@ -63,14 +65,19 @@ export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
      * Determines if this route (and its subtree) should be reattached
      */
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
-        console.log('NavigationAwareRouteReuseStrategy.shouldAttach');
-        console.log(this.getRouteDebugDescription(route));
+        this.logger.trace('NavigationAwareRouteReuseStrategy.shouldAttach');
+        this.logger.trace(this.getRouteDebugDescription(route));
 
         // check if we are coming from a natively triggered back navigation
         if (this.navigationManager.isNativeBackNavigation) {
             this.logger.trace('Natively triggered back navigation in progress, should reattach route.');
             return true;
+        } else if (this.navigationManager.isLocationBackNavigation) {
+            this.logger.trace('Back navigation triggered from platform location, should reattach route.');
+            return true;
         }
+
+        this.logger.trace('Returning false from shouldAttach');
 
         return false;
     }
@@ -96,13 +103,11 @@ export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
     }
 
     /**
-     * Determines if a route should be reused
+     * Determines if a route should be reused.
+     * 
+     * Reuses routes as long as their route config is the same.
      */
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-        console.log('NavigationAwareRouteReuseStrategy.shouldReuseRoute');
-        console.log(`future: ${this.getRouteDebugDescription(future)}`);
-        console.log(`curr: ${this.getRouteDebugDescription(curr)}`);
-
         return future.routeConfig === curr.routeConfig;
     }
 

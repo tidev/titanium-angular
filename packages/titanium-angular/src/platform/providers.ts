@@ -1,8 +1,9 @@
-import { PlatformLocation } from '@angular/common';
+import { Location, PlatformLocation } from '@angular/common';
 import { ElementSchemaRegistry, ResourceLoader } from '@angular/compiler';
 import { 
     COMPILER_OPTIONS,
     InjectionToken,
+    Injector,
     MissingTranslationStrategy,
     PLATFORM_INITIALIZER,
     Sanitizer,
@@ -10,13 +11,14 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 
+import { NavigationTransitionHandler, TransitionRegistry } from '../animation';
+import { TitaniumSanitizer } from '../core/TitaniumSanitizer';
 import { HistoryStack, TitaniumPlatformLocation } from '../common';
 import { FileSystemResourceLoader, TitaniumElementSchemaRegistry } from '../compiler';
 import { Logger } from '../log';
+import { NavigationManager } from '../router/NavigationManager';
 import { DeviceEnvironment } from '../services';
-import { NavigationTransitionHandler, TransitionRegistry } from '../animation';
 import { TitaniumDomAdapter, TitaniumElementRegistry } from '../vdom';
-import { TitaniumSanitizer } from '../core/TitaniumSanitizer';
 
 export function initDomAdapter() {
     TitaniumDomAdapter.makeCurrent();
@@ -30,7 +32,8 @@ export const COMMON_PROVIDERS = [
     { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: [Logger]},
     { provide: PLATFORM_INITIALIZER, useValue: initDomAdapter, multi: true },
     { provide: HistoryStack, useClass: HistoryStack, deps: [] },
-    { provide: PlatformLocation, useClass: TitaniumPlatformLocation, deps: [HistoryStack] },
+    { provide: NavigationManager, useClass: NavigationManager, deps: [Injector, Logger] },
+    { provide: PlatformLocation, useClass: TitaniumPlatformLocation, deps: [HistoryStack, NavigationManager] },
     { provide: Sanitizer, useClass: TitaniumSanitizer, deps: [] }
 ];
 
