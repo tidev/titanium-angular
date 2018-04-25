@@ -1,6 +1,8 @@
-# Titanium Angular
+<p align="center"><img width="450" src="./assets/titanium-angular.png" /></p>
 
-Use Angular 5 to easily create native mobile apps with Axway Appcelerator Titanium.
+<h1 align="center">Titanium Angular</h1>
+
+Use [Angular 5](https://angular.io/) to easily create native mobile apps with Axway Appcelerator Titanium.
 
 > ⚠️ This platform is currently in an early beta stage. Expect things to be broken or APIs to change as this project matures. DO NOT USE IN PRODUCTION!
 
