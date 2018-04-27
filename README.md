@@ -30,7 +30,7 @@ Open source contributions are greatly appreciated! If you have a bugfix, improve
 ## Getting Help
 
 If you have questions about the Angular platform on Titanium, feel free to reach out on Stackoverflow or the
-`#angular` channel on [TiSlack](http://tislack.org). In case you find a bug, create a [new issue](/issues/new)
+`#titanium-angular` channel on [TiSlack](http://tislack.org). In case you find a bug, create a [new issue](/issues/new)
 or open a [new JIRA ticket](https://jira.appcelerator.org).
 
 ## License
