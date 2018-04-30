@@ -13,7 +13,13 @@ Use [Angular 5](https://angular.io/) to easily create native mobile apps with Ax
 
 ## Getting started
 
-You can checkout how Titanium Angular works by taking a look at the bundled example application. To get started, first prepare all bundled packages by installing their dependencies with `node ./prepare.js`. After that, go to the example project in `ti-angular-example`. You can now build and run the app with `appc run -p [android|ios]`.
+You can checkout how Titanium Angular works by taking a look at the bundled example application.
+To get started, run the following commands in the root of this project:
+
+- `npm install`
+- `node ./prepare.js`
+
+After that, go to the example project in `ti-angular-example`. You can now build and run the app with `appc run -p [android|ios]`.
 
 ## Development Guide
 
