@@ -30,7 +30,7 @@ export class HistoryStack {
 
     back() {
         const poppedState = this.popState();
-        this.statesSubject.next({ type: 'onpopstate' });
+        this.statesSubject.next({ type: 'onpopstate', state: poppedState });
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
