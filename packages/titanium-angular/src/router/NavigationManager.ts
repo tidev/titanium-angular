@@ -1,4 +1,3 @@
-import { Location, LocationStrategy } from "@angular/common";
 import { ComponentRef, Injectable, Injector, Type } from "@angular/core";
 import { Subscription } from "rxjs";
 
@@ -76,7 +75,7 @@ export class NavigationManager {
     /**
      * Constructs the navigation manager.
      * 
-     * @param injector Global Angular root injector
+     * @param injector Router module injector
      * @param logger Default logger instance
      */
     constructor(injector: Injector, logger: Logger) {
@@ -192,6 +191,11 @@ export class NavigationManager {
             this.activeNavigator.closeRootWindow();
             this.popNavigator();
         }
+    }
+
+    resetBackNavigationFlags() {
+        this.nativeBackNavigation = false;
+        this.locationBackNavigation = false;
     }
 
     /**

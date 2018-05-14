@@ -161,17 +161,32 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         this.deactivateEvents.emit(componentInstance);
     }
 
+    /**
+     * Reattaches a route.
+     * 
+     * The order in which the back navigation flags are checked is important here.
+     * When a back navigation was triggeered by a native event, such as the back
+     * button in the iOS navigation bar or the hardware back button on Android,
+     * both flags are set to true. This is because the navigators internally
+     * use the Location.back() method to sync router states. This also sets the
+     * isLocationBackNavigation to true. But only when it was set without a
+     * natively triggered back navigation, the NavigationManager.back() method
+     * has to be called.
+     * 
+     * @param ref 
+     * @param activedRoute 
+     */
     attach(ref: ComponentRef<any>, activedRoute: ActivatedRoute) {
         this.logger.trace('TitaniumRouterOutlet.attach');
 
         this.activated = ref;
         this._activatedRoute = activedRoute;
 
-        if (this.navigationManager.isLocationBackNavigation) {
+        if (this.navigationManager.isNativeBackNavigation) {
+            this.navigationManager.resetBackNavigationFlags();
+        } else if (this.navigationManager.isLocationBackNavigation) {
             this.navigationManager.back();
-            this.navigationManager.locationBackNavigation = false;
-        } else if (this.navigationManager.isNativeBackNavigation) {
-            this.navigationManager.nativeBackNavigation = false;
+            this.navigationManager.resetBackNavigationFlags();
         }
     }
 
