@@ -1,7 +1,7 @@
 import { PlatformLocation } from '@angular/common';
 import { ComponentRef, Injector } from '@angular/core';
 
-import { TitaniumPlatformLocation, HistoryStack, LocationState } from '../../common';
+import { HistoryStack, LocationState } from '../../common';
 import { DeviceEnvironment } from '../../services';
 import { NavigationAwareRouteReuseStrategy } from '../NavigationAwareRouteReuseStrategy';
 import { NavigationOptions } from '../NavigationOptions';
@@ -9,7 +9,14 @@ import { AbstractNavigator } from "./AbstractNavigator";
 import { DetachedRouteHandle } from '@angular/router';
 
 /**
- * A navigator for handling navigation inside the Tab of a TabGroup
+ * A navigator for handling navigation inside the Tabs of a TabGroup.
+ * 
+ * This navigator can only open Ti.UI.Window views. Opened views will be stored
+ * in a stack. Each tab has its own window stack, to allow individual back 
+ * navigation.
+ * 
+ * The router state will also be recorded per tab, so switching between tabs
+ * always restores the appropiarte routing history.
  */
 export class TabGroupNavigator extends AbstractNavigator {
 
@@ -17,16 +24,30 @@ export class TabGroupNavigator extends AbstractNavigator {
 
     static supportedViews: Set<string> = new Set(['Ti.UI.Window']);
 
-    protected yieldNavigationViews: Set<string> = new Set();
-
+    /**
+     * Provides access to the current device environment
+     */
     private device: DeviceEnvironment;
 
+    /**
+     * Titanium specific implementation of PlatformLocation
+     */
     private location: PlatformLocation;
 
+    /**
+     * The root tab group view
+     */
     private tabGroup: Titanium.UI.TabGroup;
 
+    /**
+     * Map of tabs and their window stack.
+     */
     private windowStacks: Map<Titanium.UI.Tab, Array<Titanium.UI.Window>> = new Map();
 
+    /**
+     * Router state manager that updates the internal router history and states
+     * when a tab is switched.
+     */
     private routerStateManager: RouterStateManager;
 
     constructor(tabGroup: Titanium.UI.TabGroup) {
@@ -99,25 +120,55 @@ export class TabGroupNavigator extends AbstractNavigator {
         this.routerStateManager.updateRouterStateSnapshot(this.tabGroup.activeTab);
     }
 
+    /**
+     * Event handler for the 'close' event of windows in a tab's window stack.
+     * 
+     * This is used to track native navigation events and then update the internal
+     * router states accordingly.
+     * 
+     * @param event 
+     */
     onWindowClose(event: any): void {
         const window = <Titanium.UI.Window>event.source;
         window.removeEventListener('close', this.onWindowClose);
+        
         this.nativeNavigationState.emit();
         this.location.back();
         this.routerStateManager.updateRouterStateSnapshot(this.tabGroup.activeTab);
     }
 }
 
+/**
+ * A snapshot of internal router states.
+ */
 class RouterStateSnapshot {
+    /**
+     * Stack of location states.
+     */
     historyStack: Array<LocationState>;
 
+    /**
+     * Map of detached route handlers.
+     */
     detachedRouteHandles: Map<string, DetachedRouteHandle>;
 
+    /**
+     * Constructs a new router state snapshot.
+     * 
+     * @param historyStack The location states stack
+     * @param detachedRouteHandles Map of detached route handlers
+     */
     constructor(historyStack: Array<LocationState>, detachedRouteHandles: Map<string, DetachedRouteHandle>) {
         this.historyStack = historyStack;
         this.detachedRouteHandles = detachedRouteHandles;
     }
 
+    /**
+     * Compares this router state snapshot against another one.
+     * 
+     * @param other Other router state snapshot to compare against
+     * @return True if both snapshots are equal, false if not.
+     */
     isEqual(other: RouterStateSnapshot): boolean {
         if (this.historyStack.length !== other.historyStack.length) {
             return false;
@@ -135,33 +186,69 @@ class RouterStateSnapshot {
         return true;
     }
 
+    /**
+     * Returns a string representation of this router state snapshot.
+     */
     toString() {
         return this.historyStack.map(state => state.url).join('/');
     }
 }
 
+/**
+ * A manager for the internal router states.
+ * 
+ * Saves and updates router state snapshots for each tab. Used to keep
+ * track of the different router states in each tab.
+ */
 class RouterStateManager {
-
+    /**
+     * The Titanium history API shim.
+     */
     historyStack: HistoryStack;
 
+    /**
+     * The used route reuse strategy.
+     */
     routeReuseStrategy: NavigationAwareRouteReuseStrategy;
 
+    /**
+     * Map of tabs and their current router state snapshot.
+     */
     private routerSnapshots: Map<Titanium.UI.Tab, RouterStateSnapshot> = new Map();
 
+    /**
+     * The routing snapshot when the tab group is opnened, used as the
+     * initial snapshot for each tab.
+     */
     private initalSnapshot: RouterStateSnapshot;
 
+    /**
+     * Constructs a new router state manager.
+     * 
+     * @param injector Injector of the router module
+     */
     constructor(injector: Injector) {
         this.historyStack = injector.get(HistoryStack);
         this.routeReuseStrategy = <NavigationAwareRouteReuseStrategy>injector.get(NavigationAwareRouteReuseStrategy);
         this.initalSnapshot = this.createSnapshot();
     }
 
+    /**
+     * Updates the current router state snpashot for the given tab.
+     * 
+     * @param tab Tab to associate the current router state snapshot with. 
+     */
     updateRouterStateSnapshot(tab: Titanium.UI.Tab) {
         const snapshot = this.createSnapshot();
         this.routerSnapshots.set(tab, snapshot);
         console.log(`Updated router snapshot for tab ${tab.title} to: ${snapshot}`);
     }
 
+    /**
+     * Applies the router states from the stored snapshot of the given tab.
+     * 
+     * @param tab Tab for which to look up and apply previously stored router states.
+     */
     applySnapshot(tab: Titanium.UI.Tab) {
         if (!tab || tab.apiName !== 'Ti.UI.Tab') {
             throw new Error('Invalid tab received while trying to apply router snapshot after switching tab.');
@@ -185,6 +272,12 @@ class RouterStateManager {
         this.routeReuseStrategy.restoreHandlers(storedSnapshot.detachedRouteHandles);
     }
 
+    /**
+     * Creates a new router state snapshot from the current location history and detached
+     * route handlers.
+     * 
+     * @return The created snpashot of the current router states.
+     */
     private createSnapshot(): RouterStateSnapshot {
         const historySnapshot = this.historyStack.snapshotStack();
         const handlersSnapshot = this.routeReuseStrategy.snapshotDetachedRoutehandlers();

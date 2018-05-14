@@ -4,20 +4,38 @@ import { NavigationOptions } from '../NavigationOptions';
 import { AbstractNavigator } from "./AbstractNavigator";
 import { NavigationTransitionHandler, TransitionType } from '../../animation';
 
+/**
+ * Navigator implementation for Ti.UI.iOS.NavigationWindow
+ * 
+ * This navigator can only open Ti.UI.Window views. Opened views will be stored
+ * in a stack and closed by the navigation window's closeWindow() method.
+ */
 export class NavigationWindowNavigator extends AbstractNavigator {
 
     static supportedRootView: string = 'Ti.UI.iOS.NavigationWindow';
 
     static supportedViews: Set<string> = new Set(['Ti.UI.Window']);
 
-    protected yieldNavigationViews: Set<string> = new Set();
-
+    /**
+     * Root window of this navigator which is a iOS NavigationWindow
+     */
     private rootWindow: Titanium.UI.iOS.NavigationWindow = null;
 
+    /**
+     * Stack of windows that are openend in the NavigationWindow
+     */
     private windows: Array<Titanium.Proxy> = [];
 
+    /**
+     * Handles transition animations during opening and closing windows.
+     */
     private transitionHandler: NavigationTransitionHandler;
 
+    /**
+     * Constructs a new NavigationWindow navigator
+     * 
+     * @param titaniumView Titanium.UI.iOS.NavigationWindow that will be used as the root window.
+     */
     constructor(titaniumView: Titanium.UI.iOS.NavigationWindow) {
         super();
 
