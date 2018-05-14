@@ -1,3 +1,4 @@
+import { PlatformLocation } from '@angular/common';
 import { ComponentRef } from '@angular/core';
 
 import { NavigationOptions } from '../NavigationOptions';
@@ -32,6 +33,11 @@ export class NavigationWindowNavigator extends AbstractNavigator {
     private transitionHandler: NavigationTransitionHandler;
 
     /**
+     * Titanium specific implementation of PlatformLocation
+     */
+    private location: PlatformLocation;
+
+    /**
      * Constructs a new NavigationWindow navigator
      * 
      * @param titaniumView Titanium.UI.iOS.NavigationWindow that will be used as the root window.
@@ -59,32 +65,36 @@ export class NavigationWindowNavigator extends AbstractNavigator {
     }
 
     open(view: Titanium.Proxy, options: NavigationOptions) {
-        let openWindowOptions: openWindowParams = {};
-
-        if (options.clearHistory) {
-
-        }
-
-        console.log(`options: ${JSON.stringify(options)}`);
-        console.log(`openWindowOptions: ${JSON.stringify(openWindowOptions)}`);
-
-        if (options.transition.type !== TransitionType.None) {
-            const currentView = this.windows[this.windows.length - 1];
-            this.transitionHandler.prepareTransition(view, currentView, options.transition, openWindowOptions);
-            console.log(`openWindowOptions: ${JSON.stringify(openWindowOptions)}`);
-        }
-
+        view.addEventListener('close', this.onWindowClose.bind(this));
         this.windows.push(view);
-
-        this.rootWindow.openWindow(<Titanium.UI.Window>view, openWindowOptions);
+        this.rootWindow.openWindow(<Titanium.UI.Window>view, { animated: true });
     }
 
     canGoBack() {
-        return this.windows.length > 1;
+        return this.windows.length >= 1;
     }
 
     back() {
-        this.rootWindow.closeWindow(<Titanium.UI.Window>this.windows.pop(), null);
+        const window = <Titanium.UI.Window>this.windows.pop();
+        window.removeEventListener('close', this.onWindowClose);
+        this.rootWindow.closeWindow(window, null);
+    }
+
+    /**
+     * Event handler for the "close" event of windows that were opened in the
+     * root navigation window.
+     * 
+     * Used to update Angular routing when a native back navigation was
+     * triggered.
+     * 
+     * @param event 
+     */
+    onWindowClose(event: any): void {
+        const window = <Titanium.UI.Window>event.source;
+        window.removeEventListener('close', this.onWindowClose);
+
+        this.nativeNavigationState.emit();
+        this.location.back();
     }
 
 }
