@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ExtraOptions, RouteReuseStrategy, RouterModule, Routes } from '@angular/router';
 
-import { EmulatedPathLocationStrategy } from '../common';
+import { HistoryStack, TitaniumPlatformLocation, EmulatedPathLocationStrategy } from '../common';
 import { Logger } from '../log';
 import { TitaniumCommonModule } from '../TitaniumCommonModule';
 import { TitaniumRouterLinkDirective, TitaniumRouterOutletDirective } from './directives';
@@ -24,6 +24,10 @@ const ROUTER_DIRECTIVES = [
 ];
 
 const ROUTER_PROVIDERS: Provider[] = [
+    NavigationManager,
+    HistoryStack,
+    TitaniumPlatformLocation,
+    { provide: PlatformLocation, useExisting: TitaniumPlatformLocation },
     { provide: EmulatedPathLocationStrategy, useClass: EmulatedPathLocationStrategy, deps: [PlatformLocation] },
     { provide: LocationStrategy, useExisting: EmulatedPathLocationStrategy },
     { provide: NavigationAwareRouteReuseStrategy, useClass: NavigationAwareRouteReuseStrategy, deps: [NavigationManager, Logger] },

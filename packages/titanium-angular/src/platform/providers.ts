@@ -13,7 +13,6 @@ import {
 
 import { NavigationTransitionHandler, TransitionRegistry } from '../animation';
 import { TitaniumSanitizer } from '../core/TitaniumSanitizer';
-import { HistoryStack, TitaniumPlatformLocation } from '../common';
 import { FileSystemResourceLoader, TitaniumElementSchemaRegistry } from '../compiler';
 import { Logger } from '../log';
 import { NavigationManager } from '../router/NavigationManager';
@@ -31,9 +30,6 @@ export const COMMON_PROVIDERS = [
     { provide: NavigationTransitionHandler, useClass: NavigationTransitionHandler, deps: [TransitionRegistry] },
     { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: [Logger]},
     { provide: PLATFORM_INITIALIZER, useValue: initDomAdapter, multi: true },
-    { provide: HistoryStack, useClass: HistoryStack, deps: [] },
-    { provide: NavigationManager, useClass: NavigationManager, deps: [Injector, Logger] },
-    { provide: PlatformLocation, useClass: TitaniumPlatformLocation, deps: [HistoryStack, NavigationManager] },
     { provide: Sanitizer, useClass: TitaniumSanitizer, deps: [] }
 ];
 
