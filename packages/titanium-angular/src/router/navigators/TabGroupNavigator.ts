@@ -78,7 +78,7 @@ export class TabGroupNavigator extends AbstractNavigator {
     canGoBack(): boolean {
         const activeTab = this.tabGroup.activeTab;
         let windowStack = this.windowStacks.get(activeTab);
-        return windowStack.length > 1;
+        return windowStack && windowStack.length >= 1;
     }
 
     back(): void {
@@ -89,6 +89,7 @@ export class TabGroupNavigator extends AbstractNavigator {
         }
 
         const window = windowStack.pop();
+        window.removeEventListener('close', this.onWindowClose);
         if (this.device.runs('ios')) {
             this.tabGroup.activeTab.close(window);
         } else {
