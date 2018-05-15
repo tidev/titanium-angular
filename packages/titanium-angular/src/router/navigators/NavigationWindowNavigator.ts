@@ -28,11 +28,6 @@ export class NavigationWindowNavigator extends AbstractNavigator {
     private windows: Array<Titanium.Proxy> = [];
 
     /**
-     * Handles transition animations during opening and closing windows.
-     */
-    private transitionHandler: NavigationTransitionHandler;
-
-    /**
      * Titanium specific implementation of PlatformLocation
      */
     private location: PlatformLocation;
@@ -53,7 +48,7 @@ export class NavigationWindowNavigator extends AbstractNavigator {
     }
 
     initialize(): void {
-        this.transitionHandler = this._injector.get(NavigationTransitionHandler);
+        this.location = this._injector.get(PlatformLocation);
     }
 
     openRootWindow(): void {
