@@ -129,18 +129,14 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         if (this.isInitialRoute) {
             this.activated = this.location.createComponent(factory, this.location.length, injector);
             this.changeDetector.markForCheck();
+            this.triggerChangeDetection();
             this.navigationManager.createAndOpenRootNavigator(this.activated);
             this.isInitialRoute = false;
         } else {
             const loaderRef = this.location.createComponent(this.detachedLoaderFactory, this.location.length, injector);
             this.changeDetector.markForCheck();
-
             this.activated = loaderRef.instance.loadWithFactory(factory);
-
-            // Trigger change detection
-            const appRef = this.activated.injector.get(ApplicationRef);
-            appRef.tick();
-
+            this.triggerChangeDetection();
             this.navigationManager.open(this.activated);
         }
 
@@ -205,6 +201,20 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         this._activatedRoute = null;
         
         return componentRef;
+    }
+
+    /**
+     * Manually triggers Angular's global change detection.
+     * 
+     * @todo Use Zone.js to automatically trigger change detection
+     */
+    private triggerChangeDetection() {
+        if (!this.activated) {
+            throw new Error(`No activated component available, cannot trigger change detection.`);
+        }
+
+        const appRef = this.activated.injector.get(ApplicationRef);
+        appRef.tick();
     }
 }
 
