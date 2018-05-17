@@ -8,12 +8,14 @@ Use [Angular 6](https://angular.io/) to easily create native mobile apps with Ax
 
 ## Requirements
 
-- iOS or Android SDK installed
-- Latest Titanium SDK master (install via `appc ti sdk install -b master`)
+- [x] iOS or Android SDK installed
+- [x] Latest Titanium SDK master (install via `appc ti sdk install -b master`)
 
 ## Getting started
 
 You can checkout how Titanium Angular works by taking a look at the bundled example application. To get started, first prepare all bundled packages by installing their dependencies with `npm run bootstrap`. After that, go to the example project in `ti-angular-example`. You can now build and run the app with `appc run -p [android|ios]`.
+
+You can find more details in the [Titanium Angular Guide](https://docs.appcelerator.com/platform/latest/#!/guide/Titanium_and_Angular).
 
 ## Development Guide
 
