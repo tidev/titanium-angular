@@ -21,7 +21,7 @@ You can find more details in the [Titanium Angular Guide](https://docs.appcelera
 
 Clone the repo and run the following commands to start developing.
 
-```
+```bash
 # Install deps
 npm i
 
