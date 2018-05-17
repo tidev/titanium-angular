@@ -16,6 +16,13 @@
   },
   "author": "Axway Appcelerator",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appcelerator/titanium-angular.git"
+  },
+  "bugs": {
+    "url": "https://github.com/appcelerator/titanium-angular/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^6.0.0",
     "@angular/compiler": "^6.0.0",
