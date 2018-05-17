@@ -7,9 +7,9 @@
   "scripts": {
     "test": "echo 'No tests specified'",
     "tsc": "tsc -p tsconfig.json",
-    "clean": "rm -rf ./dist",
+    "clean": "rimraf ./dist",
     "build": "npm run clean && npm run syncd && ngc",
-    "syncd": "rsync -am --include='*.d.ts' --include='*/' --exclude='*' ./src/ ./dist/ --progress",
+    "syncd": "cpx src/**/*.d.ts dist/",
     "dev": "npm run clean && npm run syncd && ngc --watch",
     "prepare": "npm run build"
   },
@@ -35,7 +35,9 @@
     "@angular/platform-browser-dynamic": "^6.0.0",
     "@angular/router": "^6.0.0",
     "@types/titanium": "^7.1.0",
+    "cpx": "^1.5.0",
     "reflect-metadata": "^0.1.12",
+    "rimraf": "^2.6.2",
     "rxjs": "^6.1.0",
     "typescript": "2.7.x",
     "zone.js": "^0.8.26"
