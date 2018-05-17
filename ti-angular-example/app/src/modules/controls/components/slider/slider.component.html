@@ -1,6 +1,6 @@
 <Window title="Slider" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
-    <VerticalLayout>
-        <Label #state top="20"></Label>
+    <VerticalLayout left="20" right="20">
+        <Label #state top="20">Move the slider!</Label>
         <Slider top="10" min="0" max="100" value="75" (change)="updateLabel($event)"></Slider>
     </VerticalLayout>
 </Window>
