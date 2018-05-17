@@ -22,6 +22,9 @@
         "outDir": "./dist",
         "baseUrl": "./src",
     },
+    "include": [
+        "src/**/*"
+    ],
     "angularCompilerOptions": {
         "genDir": "./dist",
         "skipMetadataEmit": false,
