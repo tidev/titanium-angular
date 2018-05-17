@@ -11,7 +11,8 @@
     "build": "npm run clean && npm run syncd && ngc",
     "syncd": "cpx src/**/*.d.ts dist/",
     "dev": "npm run clean && npm run syncd && ngc --watch",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "bootstrap": "npm i && cd ti-angular-example/app && npm i"
   },
   "author": "Axway Appcelerator",
   "license": "Apache-2.0",

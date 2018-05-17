@@ -13,14 +13,19 @@ Use [Angular 6](https://angular.io/) to easily create native mobile apps with Ax
 
 ## Getting started
 
-You can checkout how Titanium Angular works by taking a look at the bundled example application. To get started, first prepare all bundled packages by installing their dependencies with `sh prepare.sh`. After that, go to the example project in `ti-angular-example`. You can now build and run the app with `appc run -p [android|ios]`.
+You can checkout how Titanium Angular works by taking a look at the bundled example application. To get started, first prepare all bundled packages by installing their dependencies with `npm run bootstrap`. After that, go to the example project in `ti-angular-example`. You can now build and run the app with `appc run -p [android|ios]`.
 
 ## Development Guide
 
-This monorepo contains all packages that are required to build Titanium apps using Angular.
+Clone the repo and run the following commands to start developing.
 
-- [webpack-dev-titanium](packages/webpack-dev-titanium) - Various plugins for Webpack to help bundle Titanium Angular apps
-- [titanium-angular](packages/titanium-angular) - Adds Titanium as a new platform to Angular
+```
+# Install deps
+npm i
+
+# Compile and watch for changes
+npm run dev
+```
 
 ## Contributions
 
