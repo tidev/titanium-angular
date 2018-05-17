@@ -4,12 +4,8 @@ const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const {
-	GenerateAppJsPlugin,
-	TitaniumAngularCompilerPlugin,
-	titaniumTarget,
-	WatchStateNotifierPlugin
-} = require('webpack-dev-titanium');
+const { GenerateAppJsPlugin, titaniumTarget, WatchStateNotifierPlugin } = require('webpack-target-titanium');
+const { TitaniumAngularCompilerPlugin } = require('webpack-titanium-angular');
 
 const projectRootDirectory = path.resolve('..');
 const outputDirectory = path.join(projectRootDirectory, 'Resources');
@@ -21,9 +17,9 @@ module.exports = env => {
 	const config = {
 		context: __dirname,
 		target: titaniumTarget,
+		mode: env && env.production ? 'production' : 'development',
 		entry: {
-			bundle: enableAot ? './src/main.aot.ts' : './src/main.ts',
-			vendor: './vendor/vendor.js',
+			bundle: enableAot ? './src/main.aot.ts' : './src/main.ts'
 		},
 		output: {
 			pathinfo: true,
@@ -40,7 +36,8 @@ module.exports = env => {
 			symlinks: false
 		},
 		node: {
-			fs: 'empty'
+			fs: 'empty',
+			global: false
 		},
 		module: {
 			rules: [
@@ -64,15 +61,11 @@ module.exports = env => {
 					allowExternal: true
 				}
 			),
-			new webpack.optimize.CommonsChunkPlugin({
-				name: 'vendor'
-			}),
 			new CopyWebpackPlugin([
 				{ context: 'assets', from: '**/*' },
 				{ from: 'platform/**/*', to: '..' }
 			]),
 			new GenerateAppJsPlugin([
-				'vendor',
 				'bundle'
 			]),
 			new TitaniumAngularCompilerPlugin({
