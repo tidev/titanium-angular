@@ -37,7 +37,7 @@
     "@types/titanium": "^7.1.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.1.0",
-    "typescript": "2.7.2",
+    "typescript": "2.7.x",
     "zone.js": "^0.8.26"
   }
 }
