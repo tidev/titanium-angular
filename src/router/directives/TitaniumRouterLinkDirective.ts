@@ -1,8 +1,8 @@
 import { Directive, HostListener, Input } from '@angular/core';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
+import { NavigationTransition, TransitionType } from 'titanium-navigator';
 
 import { Logger } from '../../log';
-import { NavigationTransition, TransitionType } from '../../animation';
 import { capitalizeFirstLetter } from '../../utility/string';
 import { TitaniumNavigationOptions, TitaniumRouter } from '../TitaniumRouter';
 
@@ -55,7 +55,8 @@ export class TitaniumRouterLinkDirective {
         };
         this.titaniumRouter.navigateByUrl(this.urlTree, options)
             .catch(e => {
-                this.logger.error(e.message);
+                console.log('RouterLinkDirectove onClick navigateByUrl');
+                this.logger.error(e);
             });
     }
 

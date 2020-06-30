@@ -16,7 +16,6 @@ export class TitaniumErrorHandler extends ErrorHandler {
     }
 
     handleError(error: any): void {
-        this.logger.error(error.message);
-        this.logger.error(error.stack);
+        this.logger.error(error);
     }
 }

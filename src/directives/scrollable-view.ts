@@ -1,51 +1,48 @@
 import {
     AfterContentInit,
+    AfterViewInit,
     Component,
     ElementRef,
-    Host,
-    TemplateRef,
     ViewChild,
-    ViewContainerRef
 } from '@angular/core';
 
 import {
-    AbstractAngularElement,
+    findSingleVisualElement,
     InvisibleElement,
-    ElementNode,
     TitaniumElement
-} from '../vdom';
+} from 'titanium-vdom';
 
 @Component({
-    selector: 'ScrollableView',
+    selector: 'scrollable-view,ScrollableView',
     template: `
         <DetachedView #container>
             <ng-content></ng-content>
         </DetachedView>
     `
 })
-export class ScrollableViewDirective implements AfterContentInit {
+export class ScrollableViewDirective implements AfterViewInit {
 
-    @ViewChild('container', { read: ElementRef }) container: ElementRef
+    @ViewChild('container', { read: ElementRef, static: false }) container: ElementRef
 
     scrollableView: Titanium.UI.ScrollableView;
-    
+
     constructor(el: ElementRef) {
         this.scrollableView = el.nativeElement.titaniumView;
     }
 
-    ngAfterContentInit() {
-        const containerElement = this.container.nativeElement as TitaniumElement;
+    ngAfterViewInit() {
+        const containerElement = this.container.nativeElement as TitaniumElement<Titanium.UI.View>;
         const views = [];
 
         for (const child of containerElement.children) {
             if (child instanceof TitaniumElement) {
                 views.push(child.titaniumView)
             } else if (child instanceof InvisibleElement) {
-                const visualElement = AbstractAngularElement.findSingleVisualElement(child);
+                const visualElement = findSingleVisualElement(child);
                 views.push(visualElement.titaniumView);
             }
         }
 
-        this.scrollableView.setViews(views);
+        this.scrollableView.views = views;
     }
 }

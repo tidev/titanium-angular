@@ -1,32 +1,41 @@
 import { LocationStrategy, PlatformLocation } from '@angular/common';
 import {
-    FactoryProvider,
+    Injector,
     ModuleWithProviders,
     NgModule,
     NO_ERRORS_SCHEMA,
     Provider
 } from '@angular/core';
-import { ExtraOptions, RouteReuseStrategy, RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouteReuseStrategy, RouterModule, Routes, Router } from '@angular/router';
+import { loadNavigatorProviders, NavigationManager } from 'titanium-navigator';
 
 import { HistoryStack, TitaniumPlatformLocation, EmulatedPathLocationStrategy } from '../common';
 import { Logger } from '../log';
 import { TitaniumCommonModule } from '../TitaniumCommonModule';
 import { TitaniumRouterLinkDirective, TitaniumRouterOutletDirective } from './directives';
-import { NavigationManager } from './NavigationManager';
 import { TitaniumRouter } from './TitaniumRouter';
-import { TabGroupNavigator } from './navigators/TabGroupNavigator';
-import { WindowNavigator } from './navigators/WindowNavigator';
 import { NavigationAwareRouteReuseStrategy } from './NavigationAwareRouteReuseStrategy';
+import { EmptyOutletComponent } from './components/EmptyOutlet';
+import { ComponentAdapter } from './adapters/ComponentAdapter';
+import { RouterStateAdapter } from './adapters/RouterStateAdapter';
+
+export function createNavigationManager(injector: Injector) {
+    return new NavigationManager({
+        componentAdapter: new ComponentAdapter(),
+        navigatorProviders: loadNavigatorProviders(tabGroup => new RouterStateAdapter(tabGroup, injector))
+    });
+}
 
 const ROUTER_DIRECTIVES = [
     TitaniumRouterLinkDirective,
-    TitaniumRouterOutletDirective
+    TitaniumRouterOutletDirective,
+    EmptyOutletComponent
 ];
 
-const ROUTER_PROVIDERS: Provider[] = [
-    NavigationManager,
+export const ROUTER_PROVIDERS: Provider[] = [
+    { provide: NavigationManager, useFactory: createNavigationManager, deps: [Injector] },
     HistoryStack,
-    TitaniumPlatformLocation,
+    { provide: TitaniumPlatformLocation, useClass: TitaniumPlatformLocation, deps: [HistoryStack, NavigationManager] },
     { provide: PlatformLocation, useExisting: TitaniumPlatformLocation },
     { provide: EmulatedPathLocationStrategy, useClass: EmulatedPathLocationStrategy, deps: [PlatformLocation] },
     { provide: LocationStrategy, useExisting: EmulatedPathLocationStrategy },
@@ -35,13 +44,9 @@ const ROUTER_PROVIDERS: Provider[] = [
     TitaniumRouter
 ];
 
+// @dynamic
 @NgModule({
-    providers: [
-        ...ROUTER_PROVIDERS
-    ],
-    declarations: [
-        ...ROUTER_DIRECTIVES
-    ],
+    declarations: ROUTER_DIRECTIVES,
     imports: [
         RouterModule,
         TitaniumCommonModule,
@@ -50,47 +55,21 @@ const ROUTER_PROVIDERS: Provider[] = [
         RouterModule,
         ...ROUTER_DIRECTIVES
     ],
+    entryComponents: [EmptyOutletComponent],
     schemas: [NO_ERRORS_SCHEMA]
 })
 export class TitaniumRouterModule {
-    static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders {
-        return removeDefaultLocationStrategy(RouterModule.forRoot(routes, config));
-    }
-
-    static forChild(routes: Routes): ModuleWithProviders {
-        return removeDefaultLocationStrategy(RouterModule.forChild(routes));
-    }
-}
-
-/**
- * Removes the default LocationStrategy provider from the list of providers.
- * 
- * By default the Angular router either uses a hash or path strategy which is
- * not compatible with the Titanium platform. We loop through the list of
- * providers and remove it so it won't override our previously defined
- * location strategy in our own TitaniumRouterModule.
- * 
- * @param moduleWithProviders Router module with providers
- */
-export function removeDefaultLocationStrategy(moduleWithProviders: ModuleWithProviders): ModuleWithProviders {
-    const scrubbedProviders = moduleWithProviders.providers.slice();
-    for (let i = 0; i < moduleWithProviders.providers.length; i++) {
-        const provider = moduleWithProviders.providers[i];
-        if (isLocationStrategyProvider(provider)) {
-            scrubbedProviders.splice(i, 1);
-            break;
+    static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders<TitaniumRouterModule> {
+        return {
+            ngModule: TitaniumRouterModule,
+            providers: [...RouterModule.forRoot(routes, config).providers, ...ROUTER_PROVIDERS]
         }
     }
-    moduleWithProviders.providers = scrubbedProviders;
 
-    return moduleWithProviders
-}
-
-/**
- * Checks if the specified provider is the LocationStrategy provider.
- * 
- * @param provider A provider from the router module's list of providers
- */
-function isLocationStrategyProvider(provider: Provider): provider is FactoryProvider {
-    return (<FactoryProvider>provider).provide === LocationStrategy;
+    static forChild(routes: Routes): ModuleWithProviders<TitaniumRouterModule> {
+        return {
+            ngModule: TitaniumRouterModule,
+            providers: RouterModule.forChild(routes).providers
+        }
+    }
 }

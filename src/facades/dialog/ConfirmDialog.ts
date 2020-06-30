@@ -1,11 +1,5 @@
-import {
-    AbstractPresetDialog,
-    AlertDialog,
-    AlertDialogOptions,
-    BaseDialog,
-    DialogAction,
-    PresetDialogInterface,
-} from '.';
+import { AbstractPresetDialog } from './AbstractPresetDialog';
+import { AlertDialogOptions } from './AlertDialog';
 
 export interface ConfirmDialogOptions extends AlertDialogOptions {
     neutralButtonText?: string,
@@ -34,7 +28,7 @@ export class ConfirmDialog extends AbstractPresetDialog<ConfirmResult> {
         return new Promise(resolve => {
             this._okAction.handler = () => resolve(ConfirmResult.Ok);
             if (this._neutralAction !== null) {
-                this._neutralAction.handler = () => resolve(ConfirmResult.Neutral); 
+                this._neutralAction.handler = () => resolve(ConfirmResult.Neutral);
             }
             this._cancelAction.handler = () => resolve(ConfirmResult.Cancel);
 

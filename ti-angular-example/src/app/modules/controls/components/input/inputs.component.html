@@ -1,0 +1,96 @@
+<base-window title="Input Elements">
+  <scroll-view layout="vertical">
+    <input-demo
+      #switchDemo
+      name="Switch"
+      hint="Tap the switch"
+    >
+      <switch
+        [value]="switchValue"
+        (change)="switchValue = $event.value"
+        right="20"
+        ios:on-tint-color="#1976d2"
+      ></switch>
+    </input-demo>
+
+    <input-demo
+      #sliderDemo
+      name="Slider"
+      hint="Move the slider"
+    >
+      <slider
+        [value]="sliderValue"
+        (change)="sliderValue = $event.value"
+        min="0"
+        max="100"
+        ios:tint-color="#1976d2"
+      ></slider>
+    </input-demo>
+
+    <input-demo
+      #buttonDemo
+      name="Button"
+      hint="Tap the button"
+    >
+      <base-button (click)="onSubmit()">
+        Submit
+      </base-button>
+    </input-demo>
+
+    <!--
+    FIXME: The picker `type` property will be set after the picker view is created
+    and added into the view tree. This causes a crash on iOS since the picker was
+    instanciated as a generic UIPickerView instead of UIDatePicker
+    -->
+    <!--
+    <input-demo
+      *platform="'android'"
+      #pickerDemo
+      name="Picker"
+      hint="Choose a date"
+    >
+      <picker
+        [value]="pickerValue"
+        (change)="pickerValue = $event.value"
+        type="{{ Ti.UI.PICKER_TYPE_DATE }}"
+        width="100%"
+      ></picker>
+    </input-demo>
+    -->
+
+    <input-demo
+      #textFieldDemo
+      name="Text Field"
+    >
+      <text-field
+        (change)="textFieldValue = $event.value"
+        left="0"
+        hint-text="Enter some text"
+        ios:background-color="#f5f5f5"
+        ios:height="40"
+        ios:border-radius="10"
+        [ios:padding]="{ right: 8, left: 8 }"
+      ></text-field>
+    </input-demo>
+
+    <input-demo
+      #textAreaDemo
+      name="Text Area"
+      hint="Enter some text"
+    >
+      <vertical-layout [height]="Ti.UI.SIZE">
+        <text-area
+          (change)="textAreaValue = $event.value"
+          left="0"
+          right="0"
+          height="100"
+          hint-text="Enter some text"
+          ios:background-color="#f5f5f5"
+          ios:border-radius="10"
+          [ios:padding]="{ top: 12, right: 8, bottom: 12, left: 8 }"
+        ></text-area>
+        <label height="50">{{ textAreaValue }}</label>
+      </vertical-layout>
+    </input-demo>
+  </scroll-view>
+</base-window>

@@ -1,29 +1,18 @@
 import {
-    Inject,
     Injectable,
-    Optional,
     NgZone,
     RendererFactory2,
     RendererType2,
-    ViewEncapsulation,
 } from '@angular/core';
+import { TitaniumElementRegistry } from 'titanium-vdom';
 
 import {
     Logger
 } from '../log';
-
 import {
     DeviceEnvironment
 } from '../services';
-
-import {
-    TitaniumElementRegistry
-} from '../vdom';
-
-import {
-    TitaniumRenderer,
-    TitaniumRendererConfiguration
-} from '.';
+import { TitaniumRenderer } from './TitaniumRenderer'
 
 @Injectable()
 export class TitaniumRendererFactory implements RendererFactory2 {
@@ -36,15 +25,22 @@ export class TitaniumRendererFactory implements RendererFactory2 {
 
     private device: DeviceEnvironment;
 
-    constructor(titaniumElementRegistry: TitaniumElementRegistry, logger: Logger, device: DeviceEnvironment) {
+    constructor(
+        titaniumElementRegistry: TitaniumElementRegistry,
+        logger: Logger,
+        device: DeviceEnvironment,
+        private zone: NgZone
+    ) {
         this.titaniumElementRegistry = titaniumElementRegistry;
+        const meta = this.titaniumElementRegistry.getViewMetadata('table-view');
+        meta.detached = false;
         this.logger = logger;
         this.device = device;
         this.defaultRenderer = new TitaniumRenderer({
             elementRegistry: this.titaniumElementRegistry,
             logger: this.logger,
             device: this.device
-        });
+        }, zone);
     }
 
     createRenderer(hostElement: any, type: RendererType2): TitaniumRenderer {
@@ -56,7 +52,7 @@ export class TitaniumRendererFactory implements RendererFactory2 {
             elementRegistry: this.titaniumElementRegistry,
             logger: this.logger,
             device: this.device
-        });
+        }, this.zone);
     }
 
 }

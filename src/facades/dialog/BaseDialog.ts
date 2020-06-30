@@ -1,4 +1,4 @@
-import { AbstractDialog } from '.';
+import { AbstractDialog } from './AbstractDialog'
 
 export class BaseDialog extends AbstractDialog {
 

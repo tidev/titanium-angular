@@ -9,14 +9,19 @@ import {
     RendererFactory2,
     SystemJsNgModuleLoader,
 } from '@angular/core';
+import {
+    ViewportScroller,
+    ɵNullViewportScroller as NullViewportScroller,
+} from "@angular/common";
+import { TitaniumElementRegistry } from 'titanium-vdom';
 
 import { DetachedLoaderComponent } from './common';
-import { Logger } from './log'
 import { TitaniumRendererFactory } from './renderer';
-import { DeviceEnvironment } from './services';
-import { TitaniumElementRegistry } from './vdom';
 import { TitaniumCommonModule } from './TitaniumCommonModule';
-import { TitaniumErrorHandler } from './TitaniumErrorHandler';
+
+export function errorHandler() {
+    return new ErrorHandler();
+}
 
 @NgModule({
     declarations: [
@@ -24,9 +29,10 @@ import { TitaniumErrorHandler } from './TitaniumErrorHandler';
     ],
     providers: [
         SystemJsNgModuleLoader,
-        { provide: ErrorHandler, useClass: TitaniumErrorHandler, deps: [Logger] },
-        { provide: TitaniumRendererFactory, useClass: TitaniumRendererFactory, deps: [TitaniumElementRegistry, Logger, DeviceEnvironment] },
-        { provide: RendererFactory2, useExisting: TitaniumRendererFactory }
+        { provide: ErrorHandler, useFactory: errorHandler, deps: [] },
+        TitaniumRendererFactory,
+        { provide: RendererFactory2, useExisting: TitaniumRendererFactory },
+        { provide: ViewportScroller, useClass: NullViewportScroller },
     ],
     entryComponents: [
         DetachedLoaderComponent

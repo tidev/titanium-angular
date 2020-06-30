@@ -1,0 +1,29 @@
+<base-window title="Scroll View">
+    <ScrollView layout="vertical" background-color="#fafafa">
+        <View *ngFor="let post of posts; let i = index" top="20" background-color="white" [height]="Ti.UI.SIZE">
+            <View top="10" bottom="10" layout="vertical" [height]="Ti.UI.SIZE">
+                <horizontal-layout left="20" right="20" [height]="Ti.UI.SIZE">
+                    <fa-icon icon="user-circle" fontSize="48" color="#ccc"></fa-icon>
+                    <vertical-layout [height]="Ti.UI.SIZE">
+                        <Label left="10" [font]="{ fontWeigth: 'bold' }">{{post.user.username}}</Label>
+                        <Label left="10" color="#7f8c8d" [font]="{ fontSize: 14 }">{{post.date}}</Label>
+                    </vertical-layout>
+                </horizontal-layout>
+                <View top="10" bottom="10" [height]="Ti.UI.SIZE">
+                    <ImageView
+                        image="https://picsum.photos/768/{{400 + i}}"
+                        width="100%"
+                        prevent-default-image="true"
+                        (dblclick)="toggleLike(post)"
+                    ></ImageView>
+                </View>
+                <HorizontalLayout left="20" right="20" [height]="Ti.UI.SIZE">
+                    <horizontal-layout (click)="toggleLike(post)" [width]="Ti.UI.SIZE" [height]="Ti.UI.SIZE">
+                        <fa-icon icon="heart" [color]="post.liked ? '#dd0031' : '#ccc'"></fa-icon>
+                        <Label left="5" color="#aaa">{{post.likes}}</Label>
+                    </horizontal-layout>
+                </HorizontalLayout>
+            </View>
+        </View>
+    </ScrollView>
+</base-window>

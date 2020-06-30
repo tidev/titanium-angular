@@ -21,6 +21,14 @@
         "rootDir": "./src",
         "outDir": "./dist",
         "baseUrl": "./src",
+        "types": [
+            "titanium",
+            "node"
+        ],
+        "typeRoots": [
+            "./node_modules/@types",
+            "./typings"
+        ]
     },
     "include": [
         "src/**/*"
@@ -29,6 +37,10 @@
         "genDir": "./dist",
         "skipMetadataEmit": false,
         "skipTemplateCodegen": true,
-        "strictMetadataEmit": true
+        "strictMetadataEmit": true,
+        "fullTemplateTypeCheck": true,
+        "strictInjectionParameters": true,
+        "enableResourceInlining": true,
+        "enableIvy": false
     }
 }

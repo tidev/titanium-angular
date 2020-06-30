@@ -1,10 +1,10 @@
 import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from "@angular/router";
+import { NavigationManager } from "titanium-navigator";
 
 import { Logger } from '../log';
-import { NavigationManager } from "./NavigationManager";
 
 /**
- * A route reuse strategy that is aware of native navigation events and 
+ * A route reuse strategy that is aware of native navigation events and
  */
 export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
 
@@ -21,7 +21,7 @@ export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
         this.logger = logger;
     }
 
-    /** 
+    /**
      * Determines if this route (and its subtree) should be detached to be reused later
      */
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
@@ -104,7 +104,7 @@ export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
 
     /**
      * Determines if a route should be reused.
-     * 
+     *
      * Reuses routes as long as their route config is the same.
      */
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
@@ -121,7 +121,7 @@ export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
 
     restoreHandlers(handlers: Map<string, DetachedRouteHandle>): void {
         this.handlers = new Map(handlers);
-    } 
+    }
 
     private generateAbsoluteRoutePath(route: ActivatedRouteSnapshot): string {
         let urlSegments = [];
@@ -131,7 +131,7 @@ export class NavigationAwareRouteReuseStrategy extends RouteReuseStrategy {
             urlSegments = urlSegments.concat(parentRoute.url);
             parentRoute = parentRoute.parent;
         }
-        
+
         return urlSegments.reverse().join('/');
     }
 

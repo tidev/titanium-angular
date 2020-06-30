@@ -1,0 +1,5 @@
+<base-window title="Stepper" layout="vertical">
+  <stepper top="20" mininum="0" maximum="10" (change)="value=$event.value"></stepper>
+  <label top="20" color="#1976d2" [font]="{ fontSize: 64 }">{{value}}</label>
+  <label color="#6e6e6e" top="20" [font]="{ fontSize: 14 }">Current stepper value</label>
+</base-window>

@@ -1,0 +1,89 @@
+<base-window
+  title="Table View"
+  layout="vertical"
+>
+  <alert>
+    <base-label fontSize="14">
+      A TableView allows you to use the dynamic component features of Angular at the cost of performance. Consider using a ListView if you are working with larger data sets.
+    </base-label>
+  </alert>
+  <TableView [ios:selectionStyle]="Ti.UI.iOS?.TableViewCellSelectionStyle.NONE">
+    <TableViewSection>
+      <View
+        headerView
+        height="40"
+        background-color="#fff"
+      >
+        <Label
+          left="20"
+          bottom="10"
+          color="#2c3e50"
+          [font]="{ fontWeight: 'bold' }"
+        >Custom cell</Label>
+      </View>
+      <TableViewRow *ngFor="let item of items">
+        <horizontal-layout height="65">
+          <fa-icon
+            [icon]="iconForType(item.type)"
+            [color]="colorForType(item.type)"
+            left="24"
+            fontSize="32"
+            width="42"
+            [textAlign]="Ti.UI.TEXT_ALIGNMENT_CENTER"
+          ></fa-icon>
+          <vertical-layout [width]="Ti.UI.SIZE">
+            <Label
+              top="10"
+              left="10"
+              color="#7f8c8d"
+              [font]="{ fontSize: 14 }"
+            >{{ item.date }}</Label>
+            <Label
+              top="5"
+              left="10"
+            >{{ item.name }}</Label>
+          </vertical-layout>
+          <vertical-layout>
+            <Label
+              top="10"
+              right="20"
+              [color]="colorForType(item.type)"
+              [font]="{ fontSize: 14 }"
+            >{{ item.amount }}</Label>
+            <Label
+              top="5"
+              right="20"
+            >{{ item.status }}</Label>
+          </vertical-layout>
+        </horizontal-layout>
+      </TableViewRow>
+    </TableViewSection>
+    <TableViewSection>
+      <View
+        headerView
+        height="40"
+        background-color="#fff"
+      >
+        <Label
+          left="20"
+          bottom="10"
+          color="#2c3e50"
+          [font]="{ fontWeight: 'bold' }"
+        >Accessory Types</Label>
+      </View>
+      <TableViewRow title="None"></TableViewRow>
+      <TableViewRow
+        title="Disclosure"
+        has-child="true"
+      ></TableViewRow>
+      <TableViewRow
+        title="Detail"
+        has-detail="true"
+      ></TableViewRow>
+      <TableViewRow
+        title="Checkmark"
+        has-check="true"
+      ></TableViewRow>
+    </TableViewSection>
+  </TableView>
+</base-window>

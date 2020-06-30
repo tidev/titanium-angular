@@ -1,0 +1,16 @@
+<base-window title="Alert Dialogs">
+  <vertical-layout width="300">
+    <base-label top="20">Preset dialogs</base-label>
+    <base-button title="Alert" top="20" (click)="openAlertDialog()">Alert</base-button>
+    <base-button title="Confirm" top="20" (click)="openConfirmDialog()">Confirm</base-button>
+    <base-button title="Prompt" top="20" (click)="openPromptDialog()">Prompt</base-button>
+    <base-label top="30">Custom dialogs</base-label>
+    <base-button title="Alert (from template)" top="20" (click)="openTemplateAlertDialog()"></base-button>
+    <base-button title="Androd custom view" top="20" *platform="'android'" (click)="openCustomDialog()">Android custom view</base-button>
+  </vertical-layout>
+
+  <alert-dialog #templateAlertDialog title="Template alert" message="This is an alert defined via the <alert-dialog> component">
+    <dialog-action title="Meh" cancel="true" (handler)="handleCancelbase-button($event)"></dialog-action>
+    <dialog-action title="Cool!" (handler)="handleOkbase-button($event)"></dialog-action>
+  </alert-dialog>
+</base-window>

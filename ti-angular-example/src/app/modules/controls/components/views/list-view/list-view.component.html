@@ -1,0 +1,30 @@
+<base-window title="List View">
+    <list-view (itemclick)="handlelist-viewClick($event)">
+        <refresh-control #refresh (refreshstart)="fetchData($event)"></refresh-control>
+
+        <ng-template tiTemplateName="InlineTemplate">
+            <Label bindId="title" left="20" height="40" color="#dd0331"></Label>
+            <Label bindId="detail" right="20" height="40" color="#1976d2" [font]="{ fontWeight: 'bold' }"></Label>
+        </ng-template>
+
+        <ng-template tiTemplateName="ComponentTemplate">
+            <ItemComponent></ItemComponent>
+        </ng-template>
+
+        <list-section #systemTemplates *platform="'ios'" headerTitle="System Item Templates">
+            <list-item title="Bananas" image="images/icons/tab.png"></list-item>
+            <list-item title="Apples" subtitle="Oranges" [template]="Ti.UI.LIST_ITEM_TEMPLATE_SUBTITLE"></list-item>
+            <list-item title="Mangos" subtitle="Strawberries" [template]="Ti.UI.LIST_ITEM_TEMPLATE_SETTINGS"></list-item>
+            <list-item title="Lemon" subtitle="Melone" [template]="Ti.UI.LIST_ITEM_TEMPLATE_CONTACTS"></list-item>
+        </list-section>
+
+        <list-section headerTitle="Custom Item Templates" [items]="items"></list-section>
+
+        <list-section #accessorySection headerTitle="Accessory Types">
+            <list-item title="No Accessory"></list-item>
+            <list-item title="Detail Accessory" [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_DETAILS"></list-item>
+            <list-item title="Disclosure Accessory" [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_DISCLOSURE"></list-item>
+            <list-item title="Checkmark Accessory" [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_CHECKMARK"></list-item>
+        </list-section>
+    </list-view>
+</base-window>

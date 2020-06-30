@@ -1,31 +1,26 @@
-import {
-    Injectable,
-    InjectionToken
-} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {
-    LoggerInterface
-} from '.'
+import { LoggerInterface } from './LoggerInterface'
 
 @Injectable()
 export class Logger implements LoggerInterface {
-    info(message: string): void {
-        Ti.API.info(message);
+    info(...message: any[]): void {
+        console.log(...message);
     }
 
-    debug(message: string): void {
-        Ti.API.debug(message);
+    debug(...message: any[]): void {
+        console.debug(...message);
     }
 
-    trace(message: string): void {
-        Ti.API.trace(message);
+    trace(...message: any[]): void {
+        console.trace(...message);
     }
 
-    warn(message: string): void {
-        Ti.API.warn(message);
+    warn(...message: any[]): void {
+        console.warn(...message);
     }
 
-    error(message: string): void {
-        Ti.API.error(message);
+    error(...message: any[]): void {
+        console.error(...message);
     }
 }

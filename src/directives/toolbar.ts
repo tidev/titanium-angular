@@ -1,17 +1,16 @@
-import { AfterContentInit, Component, ElementRef, ViewChild } from '@angular/core';
-
-import { InvisibleElement, TitaniumElement } from '../vdom';
+import { AfterContentInit, Component, ElementRef, ViewChild, AfterContentChecked, AfterViewChecked } from '@angular/core';
+import { InvisibleElement, TitaniumElement, findSingleVisualElementNoThrow } from 'titanium-vdom';
 
 @Component({
-    selector: 'Toolbar',
+    selector: 'toolbar,Toolbar',
     template: `
         <DetachedView #container>
             <ng-content></ng-content>
         </DetachedView>
     `
 })
-export class ToolbarComponent implements AfterContentInit {
-    @ViewChild('container', { read: ElementRef }) container: ElementRef
+export class ToolbarComponent implements AfterViewChecked {
+    @ViewChild('container') container: ElementRef
 
     toolbar: Titanium.UI.Toolbar;
 
@@ -19,20 +18,20 @@ export class ToolbarComponent implements AfterContentInit {
         this.toolbar = el.nativeElement.titaniumView;
     }
 
-    ngAfterContentInit() {
+    ngAfterViewChecked() {
         const containerElement = <InvisibleElement>this.container.nativeElement;
-        console.log('ToolbarComponent.ngAfterContentInit ' + containerElement.constructor.name);
-        console.log('ToolbarComponent.ngAfterContentInit ' + containerElement.children.length);
         const items = [];
 
-        for (let itemElement of containerElement.children) {
-            if (itemElement instanceof TitaniumElement) {
-                if (itemElement.nodeName !== 'Button') {
+        for (let element of containerElement.children) {
+            if (element instanceof InvisibleElement) {
+                element = element.firstVisualChild;
+            }
+            if (element instanceof TitaniumElement) {
+                if (element.nodeName !== 'Button') {
                     throw new Error('Only Buttons are allowed as items in a Toolbar');
                 }
 
-                itemElement.remove();
-                items.push(itemElement.titaniumView);
+                items.push(element.titaniumView);
             }
         }
 

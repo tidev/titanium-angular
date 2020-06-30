@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ti:app 
+<ti:app
   xmlns:ti="http://ti.appcelerator.org">
   <id>com.appc.angular</id>
   <name>AngularDemo</name>
@@ -44,7 +44,7 @@
       </dict>
     </plist>
   </ios>
-  <android 
+  <android
     xmlns:android="http://schemas.android.com/apk/res/android">
     <manifest>
       <application android:theme="@style/TitaniumAngular"/>
@@ -53,5 +53,10 @@
   </android>
   <modules></modules>
   <plugins></plugins>
-  <sdk-version>7.1.1.GA</sdk-version>
+  <sdk-version>9.1.0</sdk-version>
+  <deployment-targets>
+    <target device="android">true</target>
+    <target device="ipad">false</target>
+    <target device="iphone">true</target>
+  </deployment-targets>
 </ti:app>

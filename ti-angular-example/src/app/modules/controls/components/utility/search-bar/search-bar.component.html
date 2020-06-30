@@ -1,0 +1,17 @@
+<base-window title="Search Bar">
+  <list-view
+    #listView
+    background-color="#fff"
+    default-item-template="simple"
+  >
+    <ng-template tiTemplateName="simple">
+      <view height="60">
+        <base-label
+          left="20"
+          bindId="name"
+        ></base-label>
+      </view>
+    </ng-template>
+    <list-section [items]="items"></list-section>
+  </list-view>
+</base-window>

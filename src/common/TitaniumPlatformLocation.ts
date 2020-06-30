@@ -4,12 +4,12 @@ import {
     PlatformLocation
 } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { NavigationManager } from 'titanium-navigator';
 
 import { HistoryStack } from './HistoryStack';
-import { NavigationManager } from '../router/NavigationManager';
 
 /**
- * 
+ *
  */
 @Injectable()
 export class TitaniumPlatformLocation extends PlatformLocation {
@@ -20,7 +20,7 @@ export class TitaniumPlatformLocation extends PlatformLocation {
 
     constructor(history: HistoryStack, navigationManager: NavigationManager) {
         super();
-        
+
         this._history = history;
         this.navigationManager = navigationManager;
     }
@@ -38,6 +38,22 @@ export class TitaniumPlatformLocation extends PlatformLocation {
         console.log('TitaniumPlatformLocation.onHashChange - not implemented');
     }
 
+    get protocol(): string {
+        return 'http';
+    }
+
+    get hostname(): string {
+        return 'localhost'
+    }
+
+    get href(): string {
+        return '';
+    }
+
+    get port(): string {
+        return '80';
+    }
+
     get pathname(): string {
         console.log('TitaniumPlatformLocation.pathname');
         const state = this._history.state;
@@ -52,6 +68,10 @@ export class TitaniumPlatformLocation extends PlatformLocation {
 
     get hash(): string {
         return '';
+    }
+
+    getState() {
+        return this._history.state;
     }
 
     replaceState(state: any, title: string, url: string): void {

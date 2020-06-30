@@ -11,11 +11,10 @@ import {
     QueryList
 } from '@angular/core';
 
-import { TitaniumElement } from '../vdom'
 import { BaseDialog, DialogAction } from '../facades/dialog';
 
 @Directive({
-    selector: 'DialogAction'
+    selector: 'dialog-actionw,DialogAction'
 })
 export class DialogActionDirective implements OnInit {
 
@@ -57,10 +56,10 @@ export class DialogActionDirective implements OnInit {
 }
 
 @Component({
-    selector: 'AlertDialog',
+    selector: 'alert-dialog,AlertDialog',
     template: `
         <ng-container>
-            <DetachedView #loader></DetachedView>
+            <loader detached #loader></loader>
             <ng-content></ng-content>
         </ng-container>
     `
@@ -96,5 +95,5 @@ export class AlertDialogDirective implements OnInit, AfterContentInit {
     ngAfterContentInit() {
         this.buttons.forEach(dialogAction => this.dialog.addAction(dialogAction.action));
     }
-    
+
 }

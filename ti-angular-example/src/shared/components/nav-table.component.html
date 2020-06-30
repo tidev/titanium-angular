@@ -1,0 +1,11 @@
+<TableView
+  [separatorStyle]="Ti.UI.TABLE_VIEW_SEPARATOR_STYLE_NONE"
+  [ios:selectionStyle]="Ti.UI.iOS?.TableViewCellSelectionStyle.NONE"
+  (click)="onItemClick($event)"
+>
+  <TableViewRow *ngFor="let item of items" [hasChild]="hasChild" class-name="item">
+    <horizontal-layout height="75">
+      <fa-icon icon="{{item.icon}}" iconStyle="{{item.iconStyle || 'solid'}}" fontSize="24" color="#1976d2"></fa-icon>
+    </horizontal-layout>
+  </TableViewRow>
+</TableView>

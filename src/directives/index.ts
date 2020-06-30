@@ -10,8 +10,7 @@ import {
   ListViewComponent,
   ListItemDirective,
   ListSectionDirective,
-  ListItemTemplateDirective,
-  ListRefreshControlDirective
+  ListItemTemplateDirective
 } from './list-view';
 import { NavigationWindowDirective } from './navigation-window';
 import {
@@ -22,6 +21,7 @@ import {
 import {
   PlatformFilterDirective
 } from './platform';
+import { RefreshControlDirective } from './refresh-control';
 import {
   ScrollableViewDirective
 } from './scrollable-view';
@@ -29,6 +29,11 @@ import {
   TabGroupDirective,
   TabDirective
 } from './tab-group';
+import {
+  TableViewDirective,
+  TableViewRowDirective,
+  TableViewSectionDirective
+} from './table-view';
 import {
   ToolbarComponent
 } from './toolbar';
@@ -39,8 +44,10 @@ export * from './list-view';
 export * from './navigation-window';
 export * from './picker';
 export * from './platform';
+export * from './refresh-control';
 export * from './scrollable-view';
 export * from './tab-group';
+export * from './table-view';
 export * from './toolbar';
 
 export const TITANIUM_DIRECTIVES = [
@@ -51,15 +58,18 @@ export const TITANIUM_DIRECTIVES = [
   ListItemDirective,
   ListSectionDirective,
   ListItemTemplateDirective,
-  ListRefreshControlDirective,
   NavigationWindowDirective,
   PickerDirective,
   PickerColumnDirective,
   PickerRowDirective,
   PlatformFilterDirective,
+  RefreshControlDirective,
   ScrollableViewDirective,
   TabGroupDirective,
   TabDirective,
+  TableViewDirective,
+  TableViewRowDirective,
+  TableViewSectionDirective,
   ToolbarComponent,
   VerticalLayoutComponent
 ];

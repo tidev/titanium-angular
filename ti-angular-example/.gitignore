@@ -1,7 +1,5 @@
 # Build dirs and files
 /build
-/i18n
-/platform
 /Resources
 
 # OS files
