@@ -27,7 +27,7 @@ function setProperty(target: any, name: string, value: any) {
 
 interface ListItemViewTemplate {
   type: String,
-  bindId: String,
+  bindId?: String,
   properties?: any,
   events?: any,
   childTemplates?: Array<ListItemViewTemplate>
@@ -111,11 +111,11 @@ export class ListViewComponent implements AfterViewInit {
     for (let node of nodes) {
       if (node instanceof TitaniumElement) {
         let meta = this._elementRegistry.getViewMetadata(node.nodeName);
-        let templateDefinition: ListItemViewTemplate = {
-          type: meta.typeName,
-          bindId: node.getElementAttribute('bindId'),
-          childTemplates: []
-        };
+        let templateDefinition: ListItemViewTemplate = { type: meta.typeName };
+        const bindId = node.getAttribute('bindId');
+        if (bindId) {
+          templateDefinition.bindId = bindId
+        }
         let properties = {};
         node.attributes.forEach((attributeValue, attributeName) => {
           if (attributeName === 'bindId') {
@@ -129,6 +129,7 @@ export class ListViewComponent implements AfterViewInit {
         // @todo: Map events
         templateDefinition.properties = properties;
         if (node.children.length > 0) {
+          templateDefinition.childTemplates = [];
           this.convertNodesToTemplatesRecursive(node.children, templateDefinition.childTemplates);
         }
         templates.push(templateDefinition);
@@ -144,7 +145,6 @@ export class ListViewComponent implements AfterViewInit {
             templates[templateName] = createTemplate();
         });
         this._element.setAttribute('templates', templates);
-        console.log('ListView ngAfterViewInit');
         this.listView = <Titanium.UI.ListView>this._element.titaniumView;
         const ownerElement = <TitaniumElement<Titanium.UI.View>>this._element.parentElement;
         const owner = ownerElement.titaniumView;
