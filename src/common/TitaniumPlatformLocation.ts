@@ -30,7 +30,6 @@ export class TitaniumPlatformLocation extends PlatformLocation {
     }
 
     onPopState(fn: LocationChangeListener): void {
-        console.log('TitaniumPlatformLocation.onPopState');
         this._history.onPopState(fn);
     }
 
@@ -85,12 +84,10 @@ export class TitaniumPlatformLocation extends PlatformLocation {
     }
 
     forward(): void {
-        console.log('TitaniumPlatformLocation.forward');
         throw new Error('Using forward() is not supported by the Titanium platform');
     }
 
     back(): void {
-        console.log('TitaniumPlatformLocation.back');
         this.navigationManager.locationBackNavigation = true;
         this._history.back();
     }

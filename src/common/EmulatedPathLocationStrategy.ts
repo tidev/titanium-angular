@@ -20,37 +20,30 @@ export class EmulatedPathLocationStrategy extends LocationStrategy {
     }
 
     path(includeHash?: boolean): string {
-        console.log('EmulatedPathLocationStrategy.path');
         return this._platformLocation.pathname;
     }
 
     prepareExternalUrl(internal: string): string {
-        console.log('EmulatedPathLocationStrategy.prepareExternalUrl');
         return internal;
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
-        console.log(`EmulatedPathLocationStrategy.pushState(${state}, ${title}, ${url}, ${queryParams})`);
         this._platformLocation.pushState(state, title, url);
     }
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
-        console.log(`EmulatedPathLocationStrategy.replaceState(${state}, ${title}, ${url}, ${queryParams})`);
         this._platformLocation.replaceState(state, title, url);
     }
 
     forward(): void {
-        console.log('EmulatedPathLocationStrategy.forward');
         throw new Error('Using forward() is not supported by the Titanium platform');
     }
 
     back(): void {
-        console.log('EmulatedPathLocationStrategy.back');
         this._platformLocation.back();
     }
 
     onPopState(fn: LocationChangeListener): void {
-        console.log('EmulatedPathLocationStrategy.onPopState');
         this._platformLocation.onPopState(fn);
     }
 
