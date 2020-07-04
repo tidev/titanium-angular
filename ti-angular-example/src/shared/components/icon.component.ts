@@ -31,6 +31,7 @@ const iconMap = {
     'fill-drip': 'f576',
     'fire': 'f06d',
     'flask': 'f0c3',
+    'grip-lines': 'f7a4',
     'heart': 'f004',
     'image': 'f03e',
     'layer': 'f5fd',
@@ -70,13 +71,9 @@ export class FontAwesomeIcon {
   }
 
   get unicodeValue() {
-    if (!this.icon) {
-      return '';
-    }
-
     if (!iconMap[this.iconStyle] || !iconMap[this.iconStyle][this.icon]) {
       console.warn(`FontAwesome style "${this.iconStyle}" has no icon named "${this.icon}"`);
-      return ''
+      return this.icon;
     }
 
     return String.fromCharCode(parseInt(iconMap[this.iconStyle][this.icon], 16));

@@ -1,7 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TitaniumCommonModule } from 'titanium-angular';
 
-import { ToolbarComponent } from './android/toolbar/toolbar.component';
+import { CardViewComponent } from './android/card-view/card-view.component';
 import { PlatformComponent } from './platform.component';
 import { PlatformRoutingModule } from './platform-routing.module';
 
@@ -9,14 +9,14 @@ import { SharedModule } from '@/shared/shared.module';
 
 const PLATFORM_COMPONENTS = [
   PlatformComponent,
-  ToolbarComponent
+  CardViewComponent
 ]
 
 @NgModule({
   imports: [
-    TitaniumCommonModule,
+    PlatformRoutingModule,
     SharedModule,
-    PlatformRoutingModule
+    TitaniumCommonModule
   ],
   declarations: [
     ...PLATFORM_COMPONENTS

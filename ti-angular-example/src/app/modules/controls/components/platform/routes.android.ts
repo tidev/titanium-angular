@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
-import { ToolbarComponent } from './android/toolbar/toolbar.component';
+import { CardViewComponent } from './android/card-view/card-view.component';
 
 export const platformRoutes: Routes = [
-  { path: 'toolbar', component: ToolbarComponent },
+  { path: 'card-view', component: CardViewComponent },
 ]

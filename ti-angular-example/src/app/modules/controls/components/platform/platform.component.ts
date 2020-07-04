@@ -21,9 +21,9 @@ export class PlatformComponent extends WithTiGlobal() implements OnInit  {
     if (this.device.runs('android')) {
       this.items = [
         {
-          id: 'toolbar',
-          icon: 'magic',
-          title: 'Toolbar (as ActionBar)'
+          id: 'card-view',
+          icon: 'square',
+          title: 'Card View'
         }
       ]
     } else {
