@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-// import { computed, observable } from 'mobx-angular';
 import { WithTiGlobal } from 'titanium-angular';
 
 @Component({

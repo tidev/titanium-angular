@@ -2,34 +2,38 @@
   title="Button Bar"
   layout="vertical"
 >
-  <base-label
-    left="20"
-    top="10"
-    fontWeight="bold"
-  >
-    Simple labels
-  </base-label>
-  <button-bar
-    top="20"
-    tint-color="#1976d2"
-    ios:selected-text-color="#fff"
-    [labels]="[ 'One', 'Two', 'Three' ]"
-    (click)="doSomething($event)"
-  ></button-bar>
+  <ng-container *ngIf="isIos">
+    <base-label
+      left="20"
+      top="10"
+      fontWeight="bold"
+    >
+      Simple labels
+    </base-label>
+    <button-bar
+      top="20"
+      tint-color="#1976d2"
+      ios:selected-text-color="#fff"
+      [labels]="[ 'One', 'Two', 'Three' ]"
+      (click)="doSomething($event)"
+    ></button-bar>
+  </ng-container>
 
-  <base-label
-    left="20"
-    top="30"
-    fontWeight="bold"
-  >
-    Advanced configuration
-  </base-label>
-  <button-bar
-    top="20"
-    tint-color="#1976d2"
-    ios:selected-text-color="#fff"
-    [labels]="[ 'One', { image: '/assets/images/icons/tab.png', width: 100 }, { enabled: false, title: 'Three' } ]"
-  ></button-bar>
+  <ng-container *ngIf="isIos">
+    <base-label
+      left="20"
+      top="30"
+      fontWeight="bold"
+    >
+      Advanced configuration
+    </base-label>
+    <button-bar
+      top="20"
+      tint-color="#1976d2"
+      ios:selected-text-color="#fff"
+      [labels]="[ 'One', { image: '/assets/images/icons/tab.png', width: 100 }, { enabled: false, title: 'Three' } ]"
+    ></button-bar>
+  </ng-container>
 
   <base-label
     left="20"
@@ -40,6 +44,8 @@
   </base-label>
   <tabbed-bar
     top="20"
+    left="40"
+    right="40"
     tint-color="#1976d2"
     ios:selected-text-color="#fff"
     [labels]="[ 'One', 'Two', 'Three' ]"

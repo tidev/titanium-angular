@@ -5,7 +5,10 @@
 >
   <TableViewRow *ngFor="let item of items" [hasChild]="hasChild" class-name="item">
     <horizontal-layout height="75">
-      <fa-icon icon="{{item.icon}}" iconStyle="{{item.iconStyle || 'solid'}}" fontSize="24" color="#1976d2"></fa-icon>
+      <view width="50" left=10>
+        <fa-icon icon="{{item.icon}}" iconStyle="{{item.iconStyle || 'solid'}}" fontSize="24" color="#1976d2"></fa-icon>
+      </view>
+      <base-label left="20" fontSize="18">{{ item.title }}</base-label>
     </horizontal-layout>
   </TableViewRow>
 </TableView>

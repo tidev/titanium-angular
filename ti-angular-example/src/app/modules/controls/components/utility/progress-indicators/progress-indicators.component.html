@@ -79,6 +79,7 @@
     <base-button
       top="20"
       (click)="downloadStuff()"
+      [enabled]="downloadState === 'Idle'"
     >
       Start download
     </base-button>

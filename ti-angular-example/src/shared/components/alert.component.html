@@ -1,30 +1,20 @@
 <View [height]="Ti.UI.SIZE">
   <View
-    background-color="#f8f8f8"
+    background-color="#f3f8fd"
     top="20"
     right="20"
     bottom="20"
     left="20"
     [height]="Ti.UI.SIZE"
-    [ios:clip-mode]="Ti.UI.iOS.CLIP_MODE_DISABLED"
+    [ios:clip-mode]="Ti.UI.iOS?.CLIP_MODE_DISABLED"
   >
     <View
       #borderView
       left="0"
-      width="4"
+      width="8"
       [background-color]="primaryColor"
       z-index="1"
-      [ios:clip-mode]="Ti.UI.iOS.CLIP_MODE_DISABLED"
     >
-      <View
-        [background-color]="primaryColor"
-        width="20"
-        height="20"
-        top="14"
-        border-radius="10"
-      >
-        <label color="#fff">!</label>
-      </View>
     </View>
     <View
       #contentView
