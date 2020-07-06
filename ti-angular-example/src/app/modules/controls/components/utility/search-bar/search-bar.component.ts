@@ -1,5 +1,5 @@
 import {
-  AfterViewChecked,
+  AfterViewInit,
   Component,
   OnInit,
   ViewChild,
@@ -9,7 +9,7 @@ import { ListViewComponent } from 'titanium-angular';
 @Component({
   templateUrl: 'search-bar.component.html'
 })
-export class SearchBarComponent implements OnInit, AfterViewChecked {
+export class SearchBarComponent implements OnInit, AfterViewInit {
   names = [
     'Sebastian',
     'Alexandra',
@@ -22,8 +22,6 @@ export class SearchBarComponent implements OnInit, AfterViewChecked {
 
   @ViewChild(ListViewComponent) listView: ListViewComponent
 
-  private tiListView?: Ti.UI.ListView
-
   ngOnInit() {
     this.items = this.names.map(name => {
       return {
@@ -35,10 +33,8 @@ export class SearchBarComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ngAfterViewChecked() {
-    if (this.listView.listView !== this.tiListView) {
-      this.tiListView = this.listView.listView
-      this.tiListView.searchView = Ti.UI.createSearchBar();
-    }
+  ngAfterViewInit() {
+    const listView = this.listView.listView
+    listView.searchView = Ti.UI.createSearchBar();
   }
 }

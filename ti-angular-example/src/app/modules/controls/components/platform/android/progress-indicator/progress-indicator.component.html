@@ -1,0 +1,11 @@
+<base-window title="Progress Indicator">
+  <base-button (click)="loadThat()" top="20">Load</base-button>
+
+  <progress-indicator
+    #dialog
+    message="Loading..."
+    [location]="Ti.UI.Android.PROGRESS_INDICATOR_DIALOG"
+    [type]="Ti.UI.Android.PROGRESS_INDICATOR_INDETERMINANT"
+    cancelable
+  ></progress-indicator>
+</base-window>

@@ -24,6 +24,16 @@ export class PlatformComponent extends WithTiGlobal() implements OnInit  {
           id: 'card-view',
           icon: 'square',
           title: 'Card View'
+        },
+        {
+          id: 'progress-indicator',
+          icon: 'spinner',
+          title: 'Progress Indicator'
+        },
+        {
+          id: 'search-view',
+          icon: 'search',
+          title: 'Search View'
         }
       ]
     } else {

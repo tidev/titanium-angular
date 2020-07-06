@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'base-window',
@@ -6,4 +6,5 @@ import { Component, Input } from '@angular/core';
 })
 export class BaseWindow {
   @Input() title: string
+  @ViewChild('win') winRef: ElementRef
 }

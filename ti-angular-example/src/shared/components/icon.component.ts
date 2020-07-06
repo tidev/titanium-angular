@@ -72,7 +72,7 @@ export class FontAwesomeIcon {
 
   get unicodeValue() {
     if (!iconMap[this.iconStyle] || !iconMap[this.iconStyle][this.icon]) {
-      console.warn(`FontAwesome style "${this.iconStyle}" has no icon named "${this.icon}"`);
+      // fallback to font ligatures
       return this.icon;
     }
 
