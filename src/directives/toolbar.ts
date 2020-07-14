@@ -1,5 +1,5 @@
-import { AfterContentInit, Component, ElementRef, ViewChild, AfterContentChecked, AfterViewChecked } from '@angular/core';
-import { InvisibleElement, TitaniumElement, findSingleVisualElementNoThrow } from 'titanium-vdom';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { InvisibleElement, TitaniumElement } from 'titanium-vdom';
 
 @Component({
     selector: 'toolbar,Toolbar',
@@ -9,7 +9,7 @@ import { InvisibleElement, TitaniumElement, findSingleVisualElementNoThrow } fro
         </DetachedView>
     `
 })
-export class ToolbarComponent implements AfterViewChecked {
+export class ToolbarComponent implements AfterViewInit {
     @ViewChild('container') container: ElementRef
 
     toolbar: Titanium.UI.Toolbar;
@@ -18,7 +18,7 @@ export class ToolbarComponent implements AfterViewChecked {
         this.toolbar = el.nativeElement.titaniumView;
     }
 
-    ngAfterViewChecked() {
+    ngAfterViewInit() {
         const containerElement = <InvisibleElement>this.container.nativeElement;
         const items = [];
 
