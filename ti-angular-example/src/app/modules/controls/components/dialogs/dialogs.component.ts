@@ -59,10 +59,10 @@ export class DialogsComponent extends WithTiGlobal() {
     }
 
     handleOkButton(event: any) {
-        console.log('Yep, coll stuff indeed!', event);
+        console.log('Yep, coll stuff indeed!', event.index, event.cancel);
     }
 
     handleCancelButton(event: any) {
-        console.log('You don\'t seem to be impressed, bummer.', event);
+        console.log('You don\'t seem to be impressed, bummer.', event.index, event.cancel);
     }
 }

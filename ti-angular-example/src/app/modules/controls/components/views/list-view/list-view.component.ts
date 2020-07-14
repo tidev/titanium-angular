@@ -19,7 +19,7 @@ export class ListViewComponent extends WithTiGlobal() {
     items: any[] = [
         {
             profileImage: {
-                image: 'http://via.placeholder.com/50x50/1976d2/ffffff'
+                image: 'https://picsum.photos/200'
             },
             name: {
                 text: 'Daisy Rey',
@@ -47,7 +47,7 @@ export class ListViewComponent extends WithTiGlobal() {
             template: 'ComponentTemplate'
         }, {
             profileImage: {
-                image: 'http://via.placeholder.com/50x50/1976d2/ffffff'
+                image: 'https://picsum.photos/200'
             },
             name: {
                 text: 'Frank',

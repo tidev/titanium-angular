@@ -1,7 +1,7 @@
 <base-window title="Blur View">
   <vertical-layout>
     <TabbedBar top="20" [labels]="blurLabels" (click)="applyBlurEffect($event)"></TabbedBar>
-    <ImageView top="20" image="/assets/images/angular.png">
+    <ImageView top="20" image="images/angular.png">
       <BlurView #blurView></BlurView>
     </ImageView>
   </vertical-layout>
