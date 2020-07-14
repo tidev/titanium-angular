@@ -58,7 +58,9 @@ class RouterStateSnapshot implements RouterStateSnapshotInterface {
    * Returns a string representation of this router state snapshot.
    */
   toString() {
-      return this.historyStack.map(state => state.url).join('/');
+      return `RouterStateSnapshot {
+  ${this.historyStack.map(state => state.url).join('\n  ')}
+}`;
   }
 }
 
