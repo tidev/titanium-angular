@@ -27,7 +27,7 @@ export class ToolbarComponent implements AfterViewInit {
                 element = element.firstVisualChild;
             }
             if (element instanceof TitaniumElement) {
-                if (element.nodeName !== 'Button') {
+                if (element.tagName !== 'BUTTON') {
                     throw new Error('Only Buttons are allowed as items in a Toolbar');
                 }
 

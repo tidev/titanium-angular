@@ -25,8 +25,8 @@
     "url": "https://github.com/appcelerator/titanium-angular/issues"
   },
   "dependencies": {
-    "titanium-navigator": "^0.2.0",
-    "titanium-vdom": "^0.3.2"
+    "titanium-navigator": "^0.3.0",
+    "titanium-vdom": "^0.4.1"
   },
   "peerDependencies": {
     "@angular/common": "~9.1.0",

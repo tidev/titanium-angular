@@ -28,7 +28,7 @@ export class TabDirective implements AfterContentInit, OnDestroy {
   ngAfterContentInit() {
       const candidateElement = this.element.firstElementChild;
       const windowElement = <TitaniumElement<Ti.UI.Window>>findSingleVisualElement(candidateElement);
-      if (windowElement.nodeName !== 'Window') {
+      if (windowElement.nodeName !== 'WINDOW') {
           throw new Error('The first child of a Tab always must be a Window');
       }
 
