@@ -21,8 +21,6 @@
         "@ngtools/webpack": "~9.1.0",
         "@titanium-sdk/webpack-plugin-angular": "^0.1.0",
         "@types/titanium": "^9.0.0",
-        "mobx": "^5.15.4",
-        "mobx-angular": "^4.1.0",
         "reflect-metadata": "^0.1.13",
         "rxjs": "^6.5.4",
         "titanium-angular": "file:..",
