@@ -1,5 +1,5 @@
 <base-window title="List View">
-    <list-view (itemclick)="handlelist-viewClick($event)">
+    <list-view (itemclick)="handleListViewClick($event)">
         <refresh-control #refresh (refreshstart)="fetchData($event)"></refresh-control>
 
         <ng-template tiTemplateName="InlineTemplate">
@@ -21,10 +21,22 @@
         <list-section headerTitle="Custom Item Templates" [items]="items"></list-section>
 
         <list-section #accessorySection headerTitle="Accessory Types">
-            <list-item title="No Accessory"></list-item>
-            <list-item title="Detail Accessory" [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_DETAILS"></list-item>
-            <list-item title="Disclosure Accessory" [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_DISCLOSURE"></list-item>
-            <list-item title="Checkmark Accessory" [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_CHECKMARK"></list-item>
+            <list-item title="No Accessory" color="#444"></list-item>
+            <list-item
+                title="Detail Accessory"
+                [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_DETAIL"
+                color="#444"
+            ></list-item>
+            <list-item
+                title="Disclosure Accessory"
+                [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_DISCLOSURE"
+                color="#444"
+            ></list-item>
+            <list-item
+                title="Checkmark Accessory"
+                [accessoryType]="Ti.UI.LIST_ACCESSORY_TYPE_CHECKMARK"
+                color="#444"
+            ></list-item>
         </list-section>
     </list-view>
 </base-window>
