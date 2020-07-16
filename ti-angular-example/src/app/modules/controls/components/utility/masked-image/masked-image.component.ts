@@ -42,7 +42,7 @@ export class MaskedImageComponent implements OnInit {
 
   @ViewChild('tintImage') tintImageRef: ElementRef;
 
-  @ViewChild('modeImage') modeImageRef: ElementRef;
+  @ViewChild('maskImage') maskImageRef: ElementRef;
 
   currentBlendModeIndex = 1;
 
@@ -62,16 +62,18 @@ export class MaskedImageComponent implements OnInit {
     this.blendModes = this.device.runs('ios') ? iosBlendModes : commonBlendModes;
   }
 
-  onPostLayout() {
+  fitTintImage() {
     const tintImage = this.tintImageRef.nativeElement.titaniumView as Titanium.UI.MaskedImage;
     const tintImageHeight = tintImage.size.height;
     tintImage.height = tintImageHeight - 20;
     tintImage.width = tintImageHeight - 20;
+  }
 
-    const modeImage = this.modeImageRef.nativeElement.titaniumView as Titanium.UI.MaskedImage;
-    const modeImageHeight = modeImage.size.height;
-    modeImage.height = modeImageHeight - 100
-    modeImage.width = modeImageHeight - 100;
+  fitMaskImage() {
+    const maskImage = this.maskImageRef.nativeElement.titaniumView as Titanium.UI.MaskedImage;
+    const maskImageHeight = maskImage.size.height;
+    maskImage.height = maskImageHeight - 100
+    maskImage.width = maskImageHeight - 100;
   }
 
   switchBlendMode() {

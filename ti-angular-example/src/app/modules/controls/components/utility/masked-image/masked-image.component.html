@@ -1,11 +1,11 @@
 <base-window
   title="Masked Image"
   layout="vertical"
-  (postlayout)="onPostLayout()"
 >
   <view
     layout="vertical"
     height="40%"
+    (postlayout)="fitTintImage()"
   >
     <base-label
       top="5"
@@ -32,6 +32,7 @@
   <view
     layout="vertical"
     height="60%"
+    (postlayout)="fitMaskImage()"
   >
     <base-label
       top="20"
@@ -41,11 +42,11 @@
       Two images
     </base-label>
     <masked-image
-      #modeImage
+      #maskImage
       top="20"
       mask="images/titanium-logo.png"
       image="images/angular.png"
-      [mode]="currentBlendMode"
+      [mode]="currentBlendMode",
     ></masked-image>
     <view>
       <base-button
