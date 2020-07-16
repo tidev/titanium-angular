@@ -6,7 +6,6 @@ export * from './platform/platform-titanium';
 export * from './platform/platform-titanium-dynamic';
 export * from './renderer';
 
-// export { TitaniumRouter, TitaniumRouterModule } from './router';
 export { TitaniumRouter } from './router/TitaniumRouter'
 export { TitaniumRouterModule } from './router/TitaniumRouterModule';
 

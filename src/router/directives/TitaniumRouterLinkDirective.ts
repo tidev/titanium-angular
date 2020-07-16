@@ -55,7 +55,6 @@ export class TitaniumRouterLinkDirective {
         };
         this.titaniumRouter.navigateByUrl(this.urlTree, options)
             .catch(e => {
-                console.log('RouterLinkDirectove onClick navigateByUrl');
                 this.logger.error(e);
             });
     }

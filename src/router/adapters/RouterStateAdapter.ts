@@ -104,7 +104,6 @@ export class RouterStateAdapter implements RouterStateAdapterInterface {
   updateRouterStateSnapshot(tab: Titanium.UI.Tab): void {
     const snapshot = this.createSnapshot();
     this.routerSnapshots.set(tab, snapshot);
-    console.log(`Updated router snapshot for tab ${tab.title} to: ${snapshot}`);
   }
 
   /**
@@ -125,11 +124,8 @@ export class RouterStateAdapter implements RouterStateAdapterInterface {
 
     const currentSnapshot = this.createSnapshot();
     if (storedSnapshot.isEqual(currentSnapshot)) {
-      console.log(`Router snapshot for tab ${tab.title} is equal to current snapshot, skipping restore.`);
       return;
     }
-
-    console.log(`Restoring router snapshot for tab ${tab.title} to: ${storedSnapshot}`);
 
     this.historyStack.restoreStack(storedSnapshot.historyStack);
     this.routeReuseStrategy.restoreHandlers(storedSnapshot.detachedRouteHandles);

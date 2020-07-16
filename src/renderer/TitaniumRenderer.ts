@@ -60,12 +60,10 @@ export class TitaniumRenderer extends Renderer2 {
     }
 
     createComment(value: string): CommentNode {
-        // this.logger.debug(`TitaniumRenderer.createComment: ${value}`);
         return new CommentNode(value);
     }
 
     createText(value: string): TextNode {
-        // this.logger.debug(`TitaniumRenderer.createText: ${value}`);
         return new TextNode(value);
     }
 

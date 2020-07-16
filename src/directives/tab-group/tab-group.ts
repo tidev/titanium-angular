@@ -12,7 +12,6 @@ export class TabGroupDirective {
   private _selectedTab = 0;
 
   constructor(el: ElementRef, private device: DeviceEnvironment) {
-    console.log('tabgroup create');
     this.tabGroup = el.nativeElement.titaniumView;
   }
 

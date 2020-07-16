@@ -1,5 +1,4 @@
 import {
-    ApplicationRef,
     Attribute,
     ChangeDetectorRef,
     ComponentFactory,
@@ -93,7 +92,6 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
      * is created.
      */
     ngOnInit(): void {
-        this.logger.trace('TitaniumRouterOutlet.ngOnInit');
         if (this.isActivated) {
             return;
         }
@@ -109,13 +107,10 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.logger.trace('TitaniumRouterOutlet.ngOnDestroy');
         this.parentContexts.onChildOutletDestroyed(this.name);
     }
 
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null) {
-        this.logger.trace(`TitaniumRouterOutlet.activateWith - ${activatedRoute.pathFromRoot.join(' -> ')}`);
-
         if (this.isActivated) {
             throw new Error('Cannot activate an already activated outlet');
         }
@@ -133,13 +128,10 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
         this.activated = loaderRef.instance.loadWithFactory(factory);
 
         if (this.isInitialRoute) {
-            // this.activated = this.location.createComponent(factory, this.location.length, injector);
             this.changeDetector.markForCheck();
             this.navigationManager.createAndOpenRootNavigator(this.activated);
             this.isInitialRoute = false;
         } else {
-            // const loaderRef = this.location.createComponent(this.detachedLoaderFactory, this.location.length, injector);
-            // this.activated = loaderRef.instance.loadWithFactory(factory);
             this.changeDetector.markForCheck();
             this.navigationManager.open(this.activated);
         }
@@ -148,8 +140,6 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
     }
 
     deactivate(): void {
-        this.logger.trace('TitaniumRouterOutlet.deactivate');
-
         if (!this.activated) {
             return;
         }
@@ -177,8 +167,6 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
      * @param activedRoute
      */
     attach(ref: ComponentRef<any>, activedRoute: ActivatedRoute) {
-        this.logger.trace('TitaniumRouterOutlet.attach');
-
         this.activated = ref;
         this._activatedRoute = activedRoute;
 
@@ -194,8 +182,6 @@ export class TitaniumRouterOutletDirective implements OnInit, OnDestroy {
      * Called when the `RouteReuseStrategy` instructs to detach the subtree
      */
     detach(): ComponentRef<any> {
-        this.logger.trace('TitaniumRouterOutlet.detach');
-
         if (!this.activated) {
             throw new Error('Outlet is not activated');
         }

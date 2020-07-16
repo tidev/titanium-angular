@@ -1,6 +1,5 @@
 import {
     LocationChangeListener,
-    LocationStrategy,
     PlatformLocation
 } from '@angular/common';
 import { Injectable } from '@angular/core';
@@ -54,10 +53,8 @@ export class TitaniumPlatformLocation extends PlatformLocation {
     }
 
     get pathname(): string {
-        console.log('TitaniumPlatformLocation.pathname');
         const state = this._history.state;
         const path = state ? state.url : '/';
-        console.log(`TitaniumPlatformLocation.path is ${path}`);
         return path;
     }
 
@@ -74,12 +71,10 @@ export class TitaniumPlatformLocation extends PlatformLocation {
     }
 
     replaceState(state: any, title: string, url: string): void {
-        console.log('TitaniumPlatformLocation.replaceState');
         this._history.replaceState(state, title, url, null);
     }
 
     pushState(state: any, title: string, url: string): void {
-        console.log('TitaniumPlatformLocation.pushState');
         this._history.pushState(state, title, url, null);
     }
 
