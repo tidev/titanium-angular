@@ -58,6 +58,8 @@ export class BaseDialog extends AbstractDialog {
         }
 
         const targetAction = this._actions[event.index];
-        targetAction.handler(event);
+        if (targetAction) {
+            targetAction.handler(event);
+        }
     }
 }
