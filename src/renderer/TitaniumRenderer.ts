@@ -52,7 +52,8 @@ export class TitaniumRenderer extends Renderer2 {
         name = namespace ? `${namespace}:${name}` : name;
         if (this.elementRegistry.hasElement(name)) {
             const elementEntry = this.elementRegistry.getElement(name)
-            const node = new TitaniumElement(name, elementEntry.resolveFactory(), elementEntry.meta)
+            const Element = elementEntry.elementClass || TitaniumElement;
+            const node = new Element(name, elementEntry.resolveFactory(), elementEntry.meta)
             return node;
         }
 

@@ -12,7 +12,6 @@ import {
   ListSectionDirective,
   ListItemTemplateDirective
 } from './list-view';
-import { NavigationWindowDirective } from './navigation-window';
 import {
   PickerDirective,
   PickerColumnDirective,
@@ -41,7 +40,6 @@ import {
 export * from './dialog';
 export * from './layout';
 export * from './list-view';
-export * from './navigation-window';
 export * from './picker';
 export * from './platform';
 export * from './refresh-control';
@@ -58,7 +56,6 @@ export const TITANIUM_DIRECTIVES = [
   ListItemDirective,
   ListSectionDirective,
   ListItemTemplateDirective,
-  NavigationWindowDirective,
   PickerDirective,
   PickerColumnDirective,
   PickerRowDirective,
