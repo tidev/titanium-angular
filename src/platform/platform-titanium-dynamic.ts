@@ -1,4 +1,4 @@
-import { createPlatformFactory, PlatformRef, StaticProvider } from '@angular/core';
+import { createPlatformFactory, PlatformRef } from '@angular/core';
 import { ɵplatformCoreDynamic as platformCoreDynamic } from '@angular/platform-browser-dynamic';
 
 import { TitaniumPlatformRef } from '../core/TitaniumPlatformRef';

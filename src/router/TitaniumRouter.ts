@@ -1,9 +1,9 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras, UrlTree } from '@angular/router';
+import { NavigationManager } from 'titanium-navigator';
 
 import { NavigationOptions } from './NavigationOptions';
-import { NavigationManager } from './NavigationManager';
 
 export type TitaniumNavigationOptions = NavigationOptions & NavigationExtras;
 

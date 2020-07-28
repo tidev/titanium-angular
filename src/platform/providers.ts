@@ -1,34 +1,34 @@
-import { Location, PlatformLocation } from '@angular/common';
 import { ElementSchemaRegistry, ResourceLoader } from '@angular/compiler';
-import { 
+import {
     COMPILER_OPTIONS,
-    InjectionToken,
-    Injector,
-    MissingTranslationStrategy,
     PLATFORM_INITIALIZER,
     Sanitizer,
-    StaticProvider,
-    ViewEncapsulation
 } from '@angular/core';
+import { registerTitaniumElements, TitaniumElementRegistry } from 'titanium-vdom';
 
-import { NavigationTransitionHandler, TransitionRegistry } from '../animation';
 import { TitaniumSanitizer } from '../core/TitaniumSanitizer';
 import { FileSystemResourceLoader, TitaniumElementSchemaRegistry } from '../compiler';
 import { Logger } from '../log';
-import { NavigationManager } from '../router/NavigationManager';
 import { DeviceEnvironment } from '../services';
-import { TitaniumDomAdapter, TitaniumElementRegistry } from '../vdom';
+import { TitaniumDomAdapter } from './TitaniumDomAdapter'
 
 export function initDomAdapter() {
     TitaniumDomAdapter.makeCurrent();
 }
 
+export function createElementRegistry(): TitaniumElementRegistry {
+    const registry = TitaniumElementRegistry.getInstance();
+    registry.defaultViewMetadata = {
+        detached: false
+    };
+    registerTitaniumElements(registry);
+    return registry;
+}
+
 export const COMMON_PROVIDERS = [
     { provide: Logger, useClass: Logger, deps: [] },
     { provide: DeviceEnvironment, useClass: DeviceEnvironment, deps: [] },
-    { provide: TransitionRegistry, useClass: TransitionRegistry, deps: [DeviceEnvironment] },
-    { provide: NavigationTransitionHandler, useClass: NavigationTransitionHandler, deps: [TransitionRegistry] },
-    { provide: TitaniumElementRegistry, useClass: TitaniumElementRegistry, deps: [Logger]},
+    { provide: TitaniumElementRegistry, useFactory: createElementRegistry, deps: []},
     { provide: PLATFORM_INITIALIZER, useValue: initDomAdapter, multi: true },
     { provide: Sanitizer, useClass: TitaniumSanitizer, deps: [] }
 ];

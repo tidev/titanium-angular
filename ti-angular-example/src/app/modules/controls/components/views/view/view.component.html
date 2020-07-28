@@ -1,0 +1,16 @@
+<base-window title="View" layout="vertical">
+    <View
+      *ngFor="let number of [1, 2, 3]"
+      height="33.333%"
+    >
+      <View
+        background-color="#ebebeb"
+        left="20"
+        right="20"
+        top="10"
+        bottom="10"
+      >
+        <Label>View {{ number }}</Label>
+      </View>
+    </View>
+</base-window>

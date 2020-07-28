@@ -1,8 +1,8 @@
 import { Directive, HostListener, Input } from '@angular/core';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
+import { NavigationTransition, TransitionType } from 'titanium-navigator';
 
 import { Logger } from '../../log';
-import { NavigationTransition, TransitionType } from '../../animation';
 import { capitalizeFirstLetter } from '../../utility/string';
 import { TitaniumNavigationOptions, TitaniumRouter } from '../TitaniumRouter';
 
@@ -13,7 +13,8 @@ export class TitaniumRouterLinkDirective {
 
     @Input() queryParams: { [k: string]: any };
     @Input() fragment: string;
-
+    @Input() replaceUrl: boolean;
+    @Input() clearHistory: boolean;
     @Input() transition: boolean | string | NavigationTransition = false;
 
     private router: Router;
@@ -51,11 +52,13 @@ export class TitaniumRouterLinkDirective {
         const options: TitaniumNavigationOptions = {
             queryParams: this.queryParams,
             fragment: this.fragment,
+            replaceUrl: this.replaceUrl,
+            clearHistory: this.clearHistory,
             transition: this.convertTransition()
         };
         this.titaniumRouter.navigateByUrl(this.urlTree, options)
             .catch(e => {
-                this.logger.error(e.message);
+                this.logger.error(e);
             });
     }
 

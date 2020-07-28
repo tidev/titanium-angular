@@ -1,4 +1,5 @@
 import {
+    NgZone,
     Renderer2,
     RendererStyleFlags2
 } from '@angular/core'
@@ -20,12 +21,11 @@ import {
     TitaniumElement,
     TitaniumElementRegistry,
     TextNode
-} from '../vdom';
+} from 'titanium-vdom';
 
 export interface TitaniumRendererConfiguration {
     elementRegistry: TitaniumElementRegistry,
-    logger: Logger,
-    device: DeviceEnvironment
+    logger: Logger
 }
 
 export class TitaniumRenderer extends Renderer2 {
@@ -33,14 +33,11 @@ export class TitaniumRenderer extends Renderer2 {
 
     private logger: Logger;
 
-    private device: DeviceEnvironment;
-
-    constructor(configuration: TitaniumRendererConfiguration) {
+    constructor(configuration: TitaniumRendererConfiguration, private zone: NgZone) {
         super();
 
         this.elementRegistry = configuration.elementRegistry;
         this.logger = configuration.logger;
-        this.device = configuration.device;
     }
 
     get data(): { [key: string]: any } {
@@ -51,13 +48,12 @@ export class TitaniumRenderer extends Renderer2 {
         this.logger.trace('TitaniumRenderer.destroy');
     }
 
-    createElement(name: string, namespace?: string | null): AbstractNode {
+    createElement(name: string, namespace?: string | null): ElementNode {
         name = namespace ? `${namespace}:${name}` : name;
-        this.logger.debug(`TitaniumRenderer.createElement ${name}`);
         if (this.elementRegistry.hasElement(name)) {
-            let createView = this.elementRegistry.getViewFactory(name);
-            const node = new TitaniumElement(name, createView, this.logger, this.device);
-            node.meta = this.elementRegistry.getViewMetadata(name);
+            const elementEntry = this.elementRegistry.getElement(name)
+            const Element = elementEntry.elementClass || TitaniumElement;
+            const node = new Element(name, elementEntry.resolveFactory(), elementEntry.meta)
             return node;
         }
 
@@ -65,17 +61,14 @@ export class TitaniumRenderer extends Renderer2 {
     }
 
     createComment(value: string): CommentNode {
-        this.logger.debug(`TitaniumRenderer.createComment: ${value}`);
         return new CommentNode(value);
     }
 
     createText(value: string): TextNode {
-        this.logger.debug(`TitaniumRenderer.createText: ${value}`);
         return new TextNode(value);
     }
 
-    appendChild(parent: AbstractNode, newChild: AbstractNode): void {
-        this.logger.debug(`TitaniumRenderer.appendChild ${newChild} -> ${parent}`);
+    appendChild(parent: ElementNode, newChild: ElementNode): void {
         if (!parent) {
             this.logger.debug(`No parent to add child ${newChild}, skipping.`);
             return;
@@ -84,8 +77,7 @@ export class TitaniumRenderer extends Renderer2 {
         parent.appendChild(newChild);
     }
 
-    insertBefore(parent: AbstractNode, newChild: AbstractNode, refChild: AbstractNode): void {
-        this.logger.debug(`TitaniumRenderer.insertBefore ${newChild} before ${refChild} in ${parent}`);
+    insertBefore(parent: ElementNode, newChild: AbstractNode, refChild: AbstractNode): void {
         if (!parent) {
             this.logger.debug(`No parent to insert child ${newChild}, skipping.`);
             return;
@@ -94,8 +86,7 @@ export class TitaniumRenderer extends Renderer2 {
         parent.insertBefore(newChild, refChild);
     }
 
-    removeChild(parent: AbstractNode, oldChild: AbstractNode): void {
-        this.logger.debug(`TitaniumRenderer.removeChild ${oldChild} from ${parent}`);
+    removeChild(parent: ElementNode, oldChild: AbstractNode): void {
         if (!parent) {
             this.logger.debug(`Child ${oldChild} has no parent, skipping.`);
             return;
@@ -105,67 +96,73 @@ export class TitaniumRenderer extends Renderer2 {
     }
 
     selectRootElement(selectorOrNode: string | any): ElementNode {
-        this.logger.debug(`TitaniumRenderer.selectRootElement ${selectorOrNode}`);
         return new EmulatedRootElement();
     }
 
-    parentNode(node: AbstractNode): any {
-        this.logger.debug(`TitaniumRenderer.parentNode(${node}) -> ${node.parentNode}`);
+    parentNode(node: AbstractNode): AbstractNode {
         return node.parentNode;
     }
 
-    nextSibling(node: AbstractNode): any {
-        this.logger.debug(`TitaniumRenderer.nextSibling(${node}) -> ${node.nextSibling}`);
+    nextSibling(node: AbstractNode): AbstractNode {
         return node.nextSibling;
     }
 
     setAttribute(el: ElementNode, name: string, value: string, namespace?: string | null): void {
-        this.logger.debug(`TitaniumRenderer.setAttribute(${el}, ${name}, ${value}, ${namespace})`);
-        el.setAttribute(name, value, namespace);
+        if (namespace) {
+            el.setAttributeNS(namespace, name, value);
+        } else {
+            el.setAttribute(name, value);
+        }
     }
 
     removeAttribute(el: ElementNode, name: string, namespace?: string | null): void {
-        this.logger.debug(`TitaniumRenderer.removeAttribute`);
+        if (namespace) {
+            el.removeAttributeNS(namespace, name);
+        } else {
+            el.removeAttribute(name);
+        }
     }
 
     addClass(el: any, name: string): void {
-        this.logger.debug(`TitaniumRenderer.addClass`);
+        this.logger.debug(`TitaniumRenderer.addClass not supported yet!`);
     }
 
     removeClass(el: any, name: string): void {
-        this.logger.debug(`TitaniumRenderer.removeClass`);
+        this.logger.debug(`TitaniumRenderer.removeClass not supported yet!`);
     }
 
     setStyle(el: any, style: string, value: any, flags?: RendererStyleFlags2): void {
-        this.logger.debug(`TitaniumRenderer.setStyle`);
+        this.logger.debug(`TitaniumRenderer.setStyle not supported yet!`);
     }
 
     removeStyle(el: any, style: string, flags?: RendererStyleFlags2): void {
-        this.logger.debug(`TitaniumRenderer.removeStyle`);
+        this.logger.debug(`TitaniumRenderer.removeStyle not supported yet!`);
     }
 
     setProperty(el: any, name: string, value: any): void {
-        this.logger.debug(`TitaniumRenderer.setProperty(${el}, ${name}, ${value})`);
         if (name.indexOf(':') !== -1) {
             const nameParts = name.split(':');
             const namespace = nameParts[0];
             name = nameParts[1];
-            el.setAttribute(name, value, namespace);
+            el.setAttributeNS(namespace, name, value);
         } else {
             el.setAttribute(name, value);
         }
     }
 
     setValue(node: AbstractNode, value: string): void {
-        this.logger.debug(`TitaniumRenderer.setValue(${node}, ${value})`);
         node.nodeValue = value;
     }
 
     listen(target: ElementNode, eventName: string, callback: (event: any) => boolean | void): () => void {
-        this.logger.debug(`TitaniumRenderer.listen ${eventName}`);
-
-        target.on(eventName, callback);
-
-        return () => target.off(eventName, callback);
+        // manually run callback inside the Angular zone since zone.js cannot auto
+        // patch our proxy event methods.
+        let zonedCallback = (...args) => {
+            this.zone.run(() => {
+                callback.apply(undefined, args);
+            });
+        }
+        target.on(eventName, zonedCallback);
+        return () => target.off(eventName, zonedCallback);
     }
 }

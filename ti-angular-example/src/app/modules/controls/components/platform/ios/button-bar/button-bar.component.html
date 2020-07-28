@@ -1,0 +1,16 @@
+<base-window title="Button Bar" layout="vertical">
+  <Label left="20" top="10">Simple Labels</Label>
+  <ButtonBar
+    top="20"
+    tint-color="#1976d2"
+    [labels]="[ 'One', 'Two', 'Three' ]"
+    (click)="doSomething($event)"
+  ></ButtonBar>
+
+  <Label left="20" top="20">Advanced Configuration</Label>
+  <ButtonBar
+    top="20"
+    tint-color="#1976d2"
+    [labels]="[ 'One', { image: '/images/icons/tab.png', width: 100 }, { enabled: false, title: 'Disabled' } ]"
+  ></ButtonBar>
+</base-window>

@@ -1,4 +1,4 @@
-import { AbstractDialog } from '.';
+import { AbstractDialog } from './AbstractDialog'
 
 export class BaseDialog extends AbstractDialog {
 
@@ -6,7 +6,7 @@ export class BaseDialog extends AbstractDialog {
 
     message: string;
 
-    private _alertDialog: any;
+    private _alertDialog: Ti.UI.AlertDialog;
 
     constructor(title: string, message: string) {
         super();
@@ -28,11 +28,11 @@ export class BaseDialog extends AbstractDialog {
      * @todo set view from template
      */
     set androidView(androidView: Titanium.UI.View) {
-        this._alertDialog.setAndroidView(androidView);
+        this._alertDialog.androidView = androidView;
     }
 
     set style(iosAlertStyle: number) {
-        this._alertDialog.setStyle(iosAlertStyle);
+        this._alertDialog.style = iosAlertStyle;
     }
 
     show(): void {
@@ -47,7 +47,7 @@ export class BaseDialog extends AbstractDialog {
             }
         });
         if (buttonNames.length > 0) {
-            this._alertDialog.setButtonNames(buttonNames);
+            this._alertDialog.buttonNames = buttonNames;
         }
         this._alertDialog.show();
     }
@@ -58,6 +58,8 @@ export class BaseDialog extends AbstractDialog {
         }
 
         const targetAction = this._actions[event.index];
-        targetAction.handler(event);
+        if (targetAction) {
+            targetAction.handler(event);
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { NavigationTransition } from '../animation';
+import { NavigationTransition } from 'titanium-navigator';
 
 export interface NavigationOptions {
     clearHistory?: boolean;

@@ -9,7 +9,7 @@ import {
 
 @Component({
     selector: 'DetachedView',
-    template: `<View #loader></View>`
+    template: `<View detached #loader></View>`
 })
 export class DetachedLoaderComponent {
     constructor(

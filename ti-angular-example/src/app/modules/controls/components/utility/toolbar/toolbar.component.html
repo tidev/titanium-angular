@@ -1,0 +1,11 @@
+<base-window title="Toolbar">
+    <vertical-layout [height]="Ti.UI.SIZE">
+        <base-label>Oh look, it's down there</base-label>
+        <fa-icon icon="arrow-down" fontSize="96" color="#e6e6e6" top="30"></fa-icon>
+    </vertical-layout>
+    <toolbar bottom="0" android:background-color="white" android:elevation="4" [width]="Ti.UI.FILL">
+        <button title="Send" (click)="send($event)"></button>
+        <button title="Camera" (click)="openCamera($event)"></button>
+        <button title="Cancel" (click)="cancel($event)"></button>
+    </toolbar>
+</base-window>

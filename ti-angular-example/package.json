@@ -1,0 +1,31 @@
+{
+    "name": "titanium-angular-dev-app",
+    "version": "0.1.0",
+    "description": "Test app for the Titanium Angular platform",
+    "main": "app/src/main.ts",
+    "scripts": {
+        "test": "echo 'No tests specified'",
+        "dev:ios": "ti build -p ios"
+    },
+    "author": "Axway Appcelerator",
+    "license": "Apache-2.0",
+    "repository": "https://github.com/appcelerator/titanium-angular",
+    "devDependencies": {
+        "@angular/common": "~9.1.0",
+        "@angular/compiler": "~9.1.0",
+        "@angular/compiler-cli": "~9.1.0",
+        "@angular/core": "~9.1.0",
+        "@angular/platform-browser": "~9.1.0",
+        "@angular/platform-browser-dynamic": "~9.1.0",
+        "@angular/router": "~9.1.0",
+        "@ngtools/webpack": "~9.1.0",
+        "@titanium-sdk/webpack-plugin-angular": "^0.1.1",
+        "@types/titanium": "^9.0.0",
+        "reflect-metadata": "^0.1.13",
+        "rxjs": "^6.5.4",
+        "titanium-angular": "file:..",
+        "typescript": "~3.8.0",
+        "webpack": "^4.43.0",
+        "zone.js": "^0.10.3"
+    }
+}

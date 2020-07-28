@@ -54,7 +54,7 @@ export class HistoryStack {
 
     /**
      * Pushes a new hitory entry to the top of the stack.
-     * 
+     *
      * @param state Custom state data associate with the history entry
      * @param title A short title for the new state
      * @param url The new history entry's URL
@@ -71,7 +71,7 @@ export class HistoryStack {
 
     /**
      * Replaces the topmost history entry with a new one.
-     * 
+     *
      * @param state Custom state data associate with the history entry
      * @param title A short title for the new state
      * @param url The new history entry's URL
@@ -79,20 +79,18 @@ export class HistoryStack {
      */
     replaceState(state: any, title: string, url: string, queryParams: string): void {
         if (this.states.length > 0) {
-            console.log(`replacing existing state`);
             this.state.state = state;
             this.state.title = title;
             this.state.url = url;
             this.state.queryString = queryParams;
         } else {
-            console.log('pushing new state');
             this.pushState(state, title, url, queryParams);
         }
     }
 
     /**
      * Removes the topmost history entry from the stack.
-     * 
+     *
      * Note that this does not notify any onpopstate listeners. This is for
      * internal modification of the history stack. For backwards navigation use
      * the back() method.
@@ -103,7 +101,7 @@ export class HistoryStack {
 
     /**
      * Registers a new handler function for the 'popstate' event
-     * 
+     *
      * @param fn Handler function
      */
     onPopState(fn: LocationChangeListener): void {
@@ -121,7 +119,7 @@ export class HistoryStack {
 
     /**
      * Replaces all history entries with the given entries.
-     * 
+     *
      * @param states List of history entries
      */
     restoreStack(states: Array<LocationState>): void {

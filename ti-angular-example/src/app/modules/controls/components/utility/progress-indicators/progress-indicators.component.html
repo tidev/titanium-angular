@@ -1,0 +1,87 @@
+<base-window
+  title="Progress Indicators"
+  layout="vertical"
+>
+  <view
+    [height]="Ti.UI.SIZE"
+    layout="vertical"
+    top="20"
+  >
+    <base-label
+      fontWeight="bold"
+      left="20"
+    >
+      Activity Indicator
+    </base-label>
+    <activity-indicator
+      #activityIndicator
+      message="Checking for updates"
+      top="20"
+      indicator-color="#2c3e50"
+    ></activity-indicator>
+    <base-button
+      top="20"
+      (click)="checkForUpdates()"
+    >
+      Check for updates!
+    </base-button>
+  </view>
+  <view
+    top="40"
+    layout="vertical"
+  >
+    <base-label
+      fontWeight="bold"
+      left="20"
+    >
+      Progress Bar
+    </base-label>
+    <view
+      top="10"
+      left="20"
+      right="20"
+      [height]="Ti.UI.SIZE"
+      layout="vertical"
+    >
+      <view [height]="Ti.UI.SIZE">
+        <base-label
+          left="0"
+          fontSize="14"
+        >
+          Some file to download
+        </base-label>
+        <base-label
+          right="0"
+          fontSize="14"
+          color="#7f8c8d"
+        >
+          {{ downloadState }}
+        </base-label>
+      </view>
+      <progress-bar
+        #progressBar
+        top="10"
+        width="100%"
+        min="0"
+        max="100"
+        tint-color="#dc222f"
+        track-tint-color="#f5f5f5"
+      ></progress-bar>
+      <base-label
+        top="10"
+        left="0"
+        fontSize="12"
+        color="#7f8c8d"
+      >
+        {{ bytesLoaded | formatBytes }} of {{ bytesTotal | formatBytes }}
+      </base-label>
+    </view>
+    <base-button
+      top="20"
+      (click)="downloadStuff()"
+      [enabled]="downloadState === 'Idle'"
+    >
+      Start download
+    </base-button>
+  </view>
+</base-window>

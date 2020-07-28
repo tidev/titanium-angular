@@ -1,0 +1,31 @@
+<Window title="Scrollable View" backgroundColor="#fafafa" ios:barColor="#1976d2" [ios:titleAttributes]="{ color: '#FFF' }" ios:navTintColor="#FFF">
+    <ScrollableView
+        [ios:showPagingControl]="true"
+        page-indicator-color="#ebebeb"
+        current-page-indicator-color="#1976d2"
+    >
+        <View *ngFor="let card of cards">
+            <vertical-layout [height]="Ti.UI.SIZE">
+            <View
+                width="50"
+                height="50"
+            >
+                <fa-icon
+                [icon]="card.icon"
+                fontSize="48"
+                color="#1976d2"
+                ></fa-icon>
+            </View>
+            <Label
+                top="30"
+                [font]="{ fontSize: 24 }"
+                color="#1976d2"
+            >{{ card.title }}</Label>
+            <Label
+                top="20"
+                color="#444"
+            >{{ card.text }}</Label>
+            </vertical-layout>
+        </View>
+    </ScrollableView>
+</Window>

@@ -1,0 +1,40 @@
+<base-window
+  title="Refresh Control"
+  layout="vertical"
+>
+  <alert>
+    <base-label>
+      Pull down the table view to refresh the currently displayed data. You can use a RefreshControl in TableView, ListView and ScrollView elements.
+    </base-label>
+  </alert>
+  <list-view default-item-template="custom">
+    <refresh-control
+      tint-color="#1976d2"
+      (refreshstart)="loadMore($event)"
+    ></refresh-control>
+    <ng-template tiTemplateName="custom">
+      <horizontal-layout height="60">
+        <fa-icon
+          icon="microphone"
+          left="20"
+          fontSize="32"
+          color="#2c3e50"
+        ></fa-icon>
+        <vertical-layout>
+          <base-label
+            bindId="name"
+            left="20"
+            top="10"
+          ></base-label>
+          <base-label
+            bindId="surname"
+            left="20"
+            color="#1976d2"
+            fontSize="14"
+          ></base-label>
+        </vertical-layout>
+      </horizontal-layout>
+    </ng-template>
+    <list-section [items]="items"></list-section>
+  </list-view>
+</base-window>

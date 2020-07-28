@@ -1,10 +1,5 @@
-import {
-    AbstractPresetDialog,
-    BaseDialog,
-    DialogAction,
-    PresetDialogInterface,
-    PresetDialogOptions
-} from '.';
+import { AbstractPresetDialog } from './AbstractPresetDialog';
+import { PresetDialogOptions } from './PresetDialogInterface';
 
 export interface AlertDialogOptions extends PresetDialogOptions {
     okButtonText?: string

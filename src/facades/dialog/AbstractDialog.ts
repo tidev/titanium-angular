@@ -1,7 +1,5 @@
-import {
-    DialogAction,
-    DialogInterface
-} from '.';
+import { DialogAction } from './DialogAction';
+import { DialogInterface } from './DialogInterface';
 
 export abstract class AbstractDialog implements DialogInterface {
     protected _actions: DialogAction[] = [];

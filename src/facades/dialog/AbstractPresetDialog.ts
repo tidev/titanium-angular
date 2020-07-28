@@ -1,9 +1,7 @@
-import {
-    BaseDialog,
-    DialogAction,
-    PresetDialogInterface,
-    PresetDialogOptions
-} from '.';
+import { BaseDialog } from './BaseDialog';
+import { DialogAction } from './DialogAction';
+import { PresetDialogInterface } from './PresetDialogInterface'
+import { PresetDialogOptions } from './PresetDialogInterface';
 
 export abstract class AbstractPresetDialog<T> implements PresetDialogInterface {
     protected _dialog: BaseDialog;

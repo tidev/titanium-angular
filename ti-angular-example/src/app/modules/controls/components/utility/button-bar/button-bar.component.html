@@ -1,0 +1,53 @@
+<base-window
+  title="Button Bar"
+  layout="vertical"
+>
+  <ng-container *platform="'ios'">
+    <base-label
+      left="20"
+      top="10"
+      fontWeight="bold"
+    >
+      Simple labels
+    </base-label>
+    <button-bar
+      top="20"
+      tint-color="#1976d2"
+      ios:selected-text-color="#fff"
+      [labels]="[ 'One', 'Two', 'Three' ]"
+      (click)="doSomething($event)"
+    ></button-bar>
+  </ng-container>
+
+  <ng-container *platform="'ios'">
+    <base-label
+      left="20"
+      top="30"
+      fontWeight="bold"
+    >
+      Advanced configuration
+    </base-label>
+    <button-bar
+      top="20"
+      tint-color="#1976d2"
+      ios:selected-text-color="#fff"
+      [labels]="[ 'One', { image: 'images/icons/tab.png', width: 100 }, { enabled: false, title: 'Three' } ]"
+    ></button-bar>
+  </ng-container>
+
+  <base-label
+    left="20"
+    top="30"
+    fontWeight="bold"
+  >
+    Tabbed bar (maintains state)
+  </base-label>
+  <tabbed-bar
+    top="20"
+    left="40"
+    right="40"
+    tint-color="#1976d2"
+    ios:selected-text-color="#fff"
+    [labels]="[ 'One', 'Two', 'Three' ]"
+  ></tabbed-bar>
+</base-window>

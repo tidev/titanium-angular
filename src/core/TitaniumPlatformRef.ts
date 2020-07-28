@@ -6,15 +6,17 @@ import {
     NgModuleRef,
     NgZone,
     PlatformRef,
-    Type
+    Type,
+    CompilerFactory
 } from '@angular/core';
 
-import { TransitionRegistry } from '../animation';
 import { Logger } from '../log';
-import { DeviceEnvironment } from '../services';
-import { TitaniumElementRegistry } from '../vdom';
-import { BootSequence, BootStep } from './booting';
-import { initializeTitaniumElements, initializeNavigationTransitions } from './booting/scripts';
+
+function compileNgModuleFactory<M>(injector: Injector, options: CompilerOptions, moduleType: Type<M>): Promise<NgModuleFactory<M>> {
+    const compilerFactory: CompilerFactory = injector.get(CompilerFactory);
+    const compiler = compilerFactory.createCompiler([options]);
+    return compiler.compileModuleAsync(moduleType);
+}
 
 type BootstrapFunction = () => Promise<NgModuleRef<any>>;
 export interface BootstrapOptions {
@@ -55,38 +57,20 @@ export class TitaniumPlatformRef extends PlatformRef {
         this._runBootstrap = () => this._platform.bootstrapModuleFactory(moduleFactory);
 
         this.logger.trace('Bootstrapping module using factory');
-        this.bootstrapApp();
-
-        return null;
+        return this.bootstrapApp<M>();
     }
 
     bootstrapModule<M>(moduleType: Type<M>, compilerOptions: CompilerOptions | CompilerOptions[] = []): Promise<NgModuleRef<M>> {
         this._runBootstrap = () => this._platform.bootstrapModule(moduleType, compilerOptions);
 
         this.logger.trace('Bootstrapping module');
-        this.bootstrapApp();
-
-        return null;
+        return this.bootstrapApp<M>();
     }
 
-    bootstrapApp(): void {
-        const bootSequence = this.buildPlatformBootSequence();
-        bootSequence.invoke(this);
+    bootstrapApp<M>(): Promise<NgModuleRef<M>> {
+        // @todo: is this still needed? Is there any bootstrapping left?
 
-        this._runBootstrap().then(moduleRef => {
-            this.logger.info('ANGULAR BOOTSTRAP DONE!');
-        }, err => {
-            this.logger.error('ERROR BOOTSTRAPPING ANGULAR!');
-            const errorMessage = err.message + "\n\n" + err.stack;
-            this.logger.error(errorMessage);
-        });
-    }
-
-    buildPlatformBootSequence(): BootSequence {
-        const sequence = new BootSequence();
-        sequence.addStep(new BootStep('titanium.elements', initializeTitaniumElements));
-        sequence.addStep(new BootStep('titanium.transitions', initializeNavigationTransitions));
-        return sequence;
+        return this._runBootstrap();
     }
 
     onDestroy(callback: () => void): void {

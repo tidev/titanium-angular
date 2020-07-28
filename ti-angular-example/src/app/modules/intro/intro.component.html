@@ -1,0 +1,41 @@
+<Window #window backgroundColor="#fafafa">
+    <vertical-layout>
+        <View height="300">
+            <View #gradient [backgroundGradient]="skyGradient" top="-40" height="260" width="120%"></View>
+            <horizontal-layout top="0">
+                <View width="50%">
+                    <ImageView #imageView image="images/angular.png" width="180" right="0"></ImageView>
+                </View>
+                <View width="50%">
+                    <Label color="white" [font]="{ fontSize: 32 }" top="100" left="10">Now on Titanium</Label>
+                </View>
+            </horizontal-layout>
+        </View>
+        <View height="200">
+            <View *platform="'ios'" backgroundColor="white" top="5" left="40" right="40" bottom="5" borderRadius="4" viewShadowColor="#5510141f" [viewShadowOffset]="{x: 0, y: 2}" viewShadowRadius="2">
+                <vertical-layout top="10" left="10" right="10" bottom="10">
+                    <Label top="5" [font]="{ fontSize: 18, fontWeight: 'bold' }" color="#1976d2" textAlign="center">Titanium Angular</Label>
+                    <Label top="15" color="black">Welcome to the Titanium Angular KitchenSink application!</Label>
+                </vertical-layout>
+            </View>
+            <View *platform="'android'">
+                <CardView padding="10" top="5" left="40" right="40" bottom="5" borderRadius="4">
+                    <vertical-layout>
+                        <Label top="5" [font]="{ fontSize: 18, fontWeight: 'bold' }" color="#1976d2" textAlign="center">Titanium Angular</Label>
+                        <Label top="15" color="black">Welcome to the Titanium Angular KitchenSink application!</Label>
+                    </vertical-layout>
+                </CardView>
+            </View>
+        </View>
+        <Label top="5" right="40" color="#999" [font]="{ fontSize: 14 }">Powered by Angular v{{angularVersion}}</Label>
+        <View>
+            <base-button
+                tiRouterLink="/home"
+                [clearHistory]="true"
+                transition="slideLeft"
+                bottom="40"
+                width="150"
+            >LET'S GO</base-button>
+        </View>
+    </vertical-layout>
+</Window>
