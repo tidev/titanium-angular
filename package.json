@@ -24,6 +24,9 @@
   "bugs": {
     "url": "https://github.com/appcelerator/titanium-angular/issues"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "titanium-navigator": "^0.3.1",
     "titanium-vdom": "^0.4.4"
