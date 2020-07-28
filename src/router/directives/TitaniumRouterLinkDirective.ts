@@ -13,7 +13,8 @@ export class TitaniumRouterLinkDirective {
 
     @Input() queryParams: { [k: string]: any };
     @Input() fragment: string;
-
+    @Input() replaceUrl: boolean;
+    @Input() clearHistory: boolean;
     @Input() transition: boolean | string | NavigationTransition = false;
 
     private router: Router;
@@ -51,6 +52,8 @@ export class TitaniumRouterLinkDirective {
         const options: TitaniumNavigationOptions = {
             queryParams: this.queryParams,
             fragment: this.fragment,
+            replaceUrl: this.replaceUrl,
+            clearHistory: this.clearHistory,
             transition: this.convertTransition()
         };
         this.titaniumRouter.navigateByUrl(this.urlTree, options)
