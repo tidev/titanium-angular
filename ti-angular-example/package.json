@@ -23,7 +23,7 @@
         "@types/titanium": "^9.0.0",
         "reflect-metadata": "^0.1.13",
         "rxjs": "^6.5.4",
-        "titanium-angular": "file:..",
+        "titanium-angular": "^0.2.0",
         "typescript": "~3.8.0",
         "webpack": "^4.43.0",
         "zone.js": "^0.10.3"

@@ -53,7 +53,7 @@
   </android>
   <modules></modules>
   <plugins></plugins>
-  <sdk-version>9.1.0</sdk-version>
+  <sdk-version>9.2.1.GA</sdk-version>
   <deployment-targets>
     <target device="android">true</target>
     <target device="ipad">false</target>
