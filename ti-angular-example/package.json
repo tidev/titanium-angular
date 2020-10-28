@@ -20,12 +20,12 @@
         "@angular/router": "~9.1.0",
         "@ngtools/webpack": "~9.1.0",
         "@titanium-sdk/webpack-plugin-angular": "^0.1.1",
-        "@types/titanium": "^9.0.0",
+        "@types/titanium": "^9.2.0",
         "reflect-metadata": "^0.1.13",
         "rxjs": "^6.5.4",
         "titanium-angular": "^0.2.0",
         "typescript": "~3.8.0",
         "webpack": "^4.43.0",
-        "zone.js": "^0.10.3"
+        "zone.js": "^0.11.2"
     }
 }
