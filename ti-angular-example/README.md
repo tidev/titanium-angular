@@ -12,7 +12,7 @@ npm i
 
 and then build and run
 
-```
+```sh
 # appc-cli
 appc run -p [android | ios]
 
